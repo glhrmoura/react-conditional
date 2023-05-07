@@ -1,6 +1,6 @@
 {
   "name": "@glhrm/react-conditional",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "The React Conditional library is a powerful tool that assists in conditional rendering of components in React applications.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
