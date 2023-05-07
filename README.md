@@ -13,7 +13,7 @@ The React Conditional library is a powerful tool that assists in conditional ren
 
 ### Basic usage
 
-The basic use of the library is very simple, we just need to wrap the flow control components with a `Condition` component, which will be responsible for managing which component will be rendered.
+The basic use of the library is very simple, we just need to wrap the flow control components with a `<Condition>` component, which will be responsible for managing which component will be rendered.
 
 ```jsx
 import { Condition, If, Else } from '@glhrm/react-conditional';
@@ -30,9 +30,9 @@ const App = ({ isLogged }) => (
 );
 ```
 
-### The <ElseIf> component
+### The `<ElseIf>` component
 
-We have the option of using the <ElseIf> flow control component, which will be rendered if the condition, provided to the <If> component, is not met.
+We have the option of using the `<ElseIf>` flow control component, which will be rendered if the condition, provided to the `<If>` component, is not met.
 
 ```jsx
 import { Condition, If, ElseIf, Else } from '@glhrm/react-conditional';
@@ -71,9 +71,9 @@ const App = ({ user }) => (
 );
 ```
 
-### Just the <If> component
+### Just the `<If>` component
 
-We have the option of using the <If> component alone, without having to wrap it in a <Condition> component, as a more convenient way of handling simpler conditionals.
+We have the option of using the `<If>` component alone, without having to wrap it in a `<Condition>` component, as a more convenient way of handling simpler conditionals.
 
 ```jsx
 import { If } from '@glhrm/react-conditional';
