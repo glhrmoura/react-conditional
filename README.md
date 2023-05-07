@@ -5,13 +5,13 @@
 	/>
 </p>
 
-# React Conditional
+## React Conditional
 
 The React Conditional library is a powerful tool that assists in conditional rendering of components in React applications. With this library, developers can easily define conditions for displaying certain components in their applications.
 
-## Usage
+### Usage
 
-### Basic usage
+#### Basic usage
 
 The basic use of the library is very simple, we just need to wrap the flow control components with a `<Condition>` component, which will be responsible for managing which component will be rendered.
 
@@ -30,7 +30,7 @@ const App = ({ isLogged }) => (
 );
 ```
 
-### The `<ElseIf>` component
+#### The `<ElseIf>` component
 
 We have the option of using the `<ElseIf>` flow control component, which will be rendered if the condition, provided to the `<If>` component, is not met.
 
@@ -52,7 +52,7 @@ const App = ({ isLogged, isLoading }) => (
 );
 ```
 
-### Function as a child
+#### Function as a child
 
 We can pass a function as a child to the flow control components, this is useful when we need to render some property of a more complex structure, where we are not sure that it will exist at runtime.
 
@@ -71,7 +71,7 @@ const App = ({ user }) => (
 );
 ```
 
-### Just the `<If>` component
+#### Just the `<If>` component
 
 We have the option of using the `<If>` component alone, without having to wrap it in a `<Condition>` component, as a more convenient way of handling simpler conditionals.
 
