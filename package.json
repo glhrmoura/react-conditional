@@ -26,7 +26,8 @@
   },
   "keywords": [
     "react",
-    "typescript"
+    "typescript",
+    "javascript"
   ],
   "files": [
     "dist",
