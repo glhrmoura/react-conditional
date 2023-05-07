@@ -1,7 +1,7 @@
 import React from 'react';
 
 export interface ElseIfProps {
-  condition?: boolean;
+  condition: any;
   children: React.ReactNode | (() => React.ReactNode);
 }
 
