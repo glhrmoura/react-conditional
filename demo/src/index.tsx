@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
 import ReactDOM from 'react-dom/client';
-import { If, ElseIf, Else, Condition } from '../../dist/cjs';
+import { If, ElseIf, Else, Condition } from '@glhrm/react-conditional';
 
 const App = () => {
-  const [isLogged] = useState();
-  const [isLoading] = useState();
+  const [isLogged] = useState(true);
+  const [isLoading] = useState(false);
 
   return (
     <React.StrictMode>
