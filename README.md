@@ -52,6 +52,31 @@ const App = ({ isLogged, isLoading }) => (
 );
 ```
 
+#### Passing multiple `<ElseIf>` components
+
+We have the option of passing multiple `<ElseIf>` components that obey the rendering order defined in the template.
+
+```jsx
+import { Condition, If, ElseIf, Else } from '@glhrm/react-conditional';
+
+const App = ({ isBasicUser, isVIPUser, isAdminUser }) => (
+  <Condition>
+    <If condition={isBasicUser}>
+      <h2>The user is a basic user</h2>
+    </If>
+    <ElseIf condition={isVIPUser}>
+      <h2>The user is a vip user</h2>
+    </ElseIf>
+    <ElseIf condition={isAdminUser}>
+      <h2>The user is a admin user</h2>
+    </ElseIf>
+    <Else>
+      <h2>The user does not exist</h2>
+    </Else>
+  </Condition>
+);
+```
+
 #### Function as a child
 
 We can pass a function as a child to the flow control components, this is useful when we need to render some property of a more complex structure, where we are not sure that it will exist at runtime.
