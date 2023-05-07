@@ -35,8 +35,6 @@ const App = ({ isLogged }) => (
 We have the option of using the `<ElseIf>` flow control component, which will be rendered if the condition, provided to the `<If>` component, is not met.
 
 ```jsx
-import { Condition, If, ElseIf, Else } from '@glhrm/react-conditional';
-
 const App = ({ isLogged, isLoading }) => (
 	<Condition>
 		<If condition={isLogged}>
