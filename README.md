@@ -19,14 +19,14 @@ The basic use of the library is very simple, we just need to wrap the flow contr
 import { Condition, If, Else } from '@glhrm/react-conditional';
 
 const App = ({ isLogged }) => (
-	<Condition>
-		<If condition={isLogged}>
-			<h2>The user is logged</h2>
-		</If>
-		<Else>
-			<h2>The user is not logged</h2>
-		</Else>
-	</Condition>
+  <Condition>
+    <If condition={isLogged}>
+      <h2>The user is logged</h2>
+    </If>
+    <Else>
+      <h2>The user is not logged</h2>
+    </Else>
+  </Condition>
 );
 ```
 
@@ -38,17 +38,17 @@ We have the option of using the `<ElseIf>` flow control component, which will be
 import { Condition, If, ElseIf, Else } from '@glhrm/react-conditional';
 
 const App = ({ isLogged, isLoading }) => (
-	<Condition>
-		<If condition={isLogged}>
-			<h2>The user is logged</h2>
-		</If>
-		<ElseIf condition={isLoading}>
-			<h2>Carregando...</h2>
-		</ElseIf>
-		<Else>
-			<h2>The user is not logged</h2>
-		</Else>
-	</Condition>
+  <Condition>
+    <If condition={isLogged}>
+      <h2>The user is logged</h2>
+    </If>
+    <ElseIf condition={isLoading}>
+      <h2>Carregando...</h2>
+    </ElseIf>
+    <Else>
+      <h2>The user is not logged</h2>
+    </Else>
+  </Condition>
 );
 ```
 
@@ -79,9 +79,9 @@ We have the option of using the `<If>` component alone, without having to wrap i
 import { If } from '@glhrm/react-conditional';
 
 const App = ({ title }) => (
-	<If condition={title}>
-		{title}
-	</If>
+  <If condition={title}>
+    {title}
+  </If>
 );
 ```
 
