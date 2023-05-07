@@ -35,6 +35,8 @@ const App = ({ isLogged }) => (
 We have the option of using the `<ElseIf>` flow control component, which will be rendered if the condition, provided to the `<If>` component, is not met.
 
 ```jsx
+import { Condition, If, ElseIf, Else } from '@glhrm/react-conditional';
+
 const App = ({ isLogged, isLoading }) => (
 	<Condition>
 		<If condition={isLogged}>
@@ -58,14 +60,14 @@ We can pass a function as a child to the flow control components, this is useful
 import { Condition, If, Else } from '@glhrm/react-conditional';
 
 const App = ({ user }) => (
-	<Condition>
-		<If condition={user}>
-			{() => <h2>Username: {user.name}</h2>}
-		</If>
-		<Else>
-			<h2>User does not exist</h2>
-		</Else>
-	</Condition>
+  <Condition>
+    <If condition={user}>
+      {() => <h2>Username: {user.name}</h2>}
+    </If>
+    <Else>
+      <h2>User does not exist</h2>
+    </Else>
+  </Condition>
 );
 ```
 
