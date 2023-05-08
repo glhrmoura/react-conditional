@@ -1,6 +1,6 @@
 {
   "name": "@glhrm/react-conditional",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "The React Conditional library is a powerful tool that assists in conditional rendering of components in React applications.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -24,16 +24,6 @@
     "prepublishOnly": "npm run lint",
     "lint": "eslint \"{**/*,*}.{js,ts,jsx,tsx}\""
   },
-  "keywords": [
-    "react",
-    "typescript",
-    "javascript"
-  ],
-  "files": [
-    "dist",
-    "LICENSE",
-    "README.md"
-  ],
   "peerDependencies": {
     "react": ">=16"
   },
@@ -48,5 +38,15 @@
     "react-dom": "^18.2.0",
     "typescript": "^5.0.4",
     "tslib": "^2.5.0"
-  }
+  },
+  "keywords": [
+    "React",
+    "TypeScript",
+    "JavaScript"
+  ],
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ]
 }

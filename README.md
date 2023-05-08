@@ -14,7 +14,7 @@ The React Conditional library is a powerful tool that assists in conditional ren
 
 ### Usage
 
-#### Basic usage
+#### Basic
 
 The basic use of the library is very simple, we just need to wrap the flow control components with a `<Condition>` component, which will be responsible for managing which component will be rendered.
 
