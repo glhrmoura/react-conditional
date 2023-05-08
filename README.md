@@ -12,6 +12,18 @@
 
 The React Conditional library is a powerful tool that assists in conditional rendering of components in React applications. With this library, developers can easily define conditions for displaying certain components in their applications.
 
+### Install
+
+```bash
+$ npm install @glhrm/react-conditional --save
+```
+
+or
+
+```bash
+$ yarn add @glhrm/react-conditional
+```
+
 ### Usage
 
 #### Basic
