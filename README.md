@@ -7,8 +7,8 @@
 
 ## React Conditional
 
-[![npm version](https://img.shields.io/npm/v/@glhrm/react-conditional.svg?style=flat-square)](https://www.npmjs.com/package/@glhrm/react-conditional)
-[![license](https://img.shields.io/npm/l/@glhrm/react-conditional.svg?style=flat-square)](https://github.com/glhrmoura/react-conditional/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/@glhrm/react-conditional.svg?style=for-the-badge)](https://www.npmjs.com/package/@glhrm/react-conditional)
+[![license](https://img.shields.io/npm/l/@glhrm/react-conditional.svg?style=for-the-badge)](https://github.com/glhrmoura/react-conditional/blob/main/LICENSE)
 
 The React Conditional library is a powerful tool that assists in conditional rendering of components in React applications. With this library, developers can easily define conditions for displaying certain components in their applications.
 
