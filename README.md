@@ -7,21 +7,21 @@
 
 ## React Conditional
 
-[![NPM Version](https://img.shields.io/npm/v/@glhrm/react-conditional.svg?style=for-the-badge)](https://www.npmjs.com/package/@glhrm/react-conditional)
-[![License](https://img.shields.io/npm/l/@glhrm/react-conditional.svg?style=for-the-badge)](https://github.com/glhrmoura/react-conditional/blob/main/LICENSE)
+[![NPM Version](https://img.shields.io/npm/v/@glhrmoura/react-conditional.svg?style=for-the-badge)](https://www.npmjs.com/package/@glhrmoura/react-conditional)
+[![License](https://img.shields.io/npm/l/@glhrmoura/react-conditional.svg?style=for-the-badge)](https://github.com/glhrmoura/react-conditional/blob/main/LICENSE)
 
 The React Conditional library is a powerful tool that assists in conditional rendering of components in React applications. With this library, developers can easily define conditions for displaying certain components in their applications.
 
 ### Install
 
 ```bash
-$ npm install @glhrm/react-conditional --save
+$ npm install @glhrmoura/react-conditional --save
 ```
 
 or
 
 ```bash
-$ yarn add @glhrm/react-conditional
+$ yarn add @glhrmoura/react-conditional
 ```
 
 ### Usage
@@ -31,7 +31,7 @@ $ yarn add @glhrm/react-conditional
 The basic use of the library is very simple, we just need to wrap the flow control components with a `<Condition>` component, which will be responsible for managing which component will be rendered.
 
 ```jsx
-import { Condition, If, Else } from '@glhrm/react-conditional';
+import { Condition, If, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged }) => (
   <Condition>
@@ -50,7 +50,7 @@ const App = ({ isLogged }) => (
 We have the option of using the `<ElseIf>` flow control component, which will be rendered if the condition, provided to the `<If>` component, is not met.
 
 ```jsx
-import { Condition, If, ElseIf, Else } from '@glhrm/react-conditional';
+import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged, isLoading }) => (
   <Condition>
@@ -72,7 +72,7 @@ const App = ({ isLogged, isLoading }) => (
 We have the option of passing multiple `<ElseIf>` components that obey the rendering order defined in the template.
 
 ```jsx
-import { Condition, If, ElseIf, Else } from '@glhrm/react-conditional';
+import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isBasicUser, isVIPUser, isAdminUser }) => (
   <Condition>
@@ -97,7 +97,7 @@ const App = ({ isBasicUser, isVIPUser, isAdminUser }) => (
 We can pass a function as a child to the flow control components, this is useful when we need to render some property of a more complex structure, where we are not sure that it will exist at runtime.
 
 ```jsx
-import { Condition, If, Else } from '@glhrm/react-conditional';
+import { Condition, If, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ user }) => (
   <Condition>
@@ -116,7 +116,7 @@ const App = ({ user }) => (
 We have the option of using the `<If>` component alone, without having to wrap it in a `<Condition>` component, as a more convenient way of handling simpler conditionals.
 
 ```jsx
-import { If } from '@glhrm/react-conditional';
+import { If } from '@glhrmoura/react-conditional';
 
 const App = ({ title }) => (
   <If condition={title}>

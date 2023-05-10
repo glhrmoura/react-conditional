@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import ReactDOM from 'react-dom/client';
-import { If, ElseIf, Else, Condition } from '@glhrm/react-conditional';
+import { If, ElseIf, Else, Condition } from '@glhrmoura/react-conditional';
 
 const App = () => {
   const [isLogged] = useState(true);
