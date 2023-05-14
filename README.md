@@ -14,7 +14,7 @@ The React Conditional library is a powerful tool that assists in conditional ren
 
 ### Demo
 
-[React Conditional](https://snazzy-duckanoo-1674ec.netlify.app)
+[**React Conditional**](https://snazzy-duckanoo-1674ec.netlify.app)
 
 ### Install
 
