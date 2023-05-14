@@ -120,7 +120,7 @@ import { If } from '@glhrmoura/react-conditional';
 
 const App = ({ title }) => (
   <If condition={title}>
-    {title}
+    <h2>{title}</h2>
   </If>
 );
 ```
