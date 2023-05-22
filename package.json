@@ -1,6 +1,6 @@
 {
   "name": "@glhrmoura/react-conditional",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "The React Conditional library is a powerful tool that assists in conditional rendering of components in React applications.",
   "main": "./dist/index.js",
   "author": "Guilherme Moura <mouraggui@gmail.com>",
@@ -17,7 +17,8 @@
   "scripts": {
     "dev": "webpack server --config src/config/webpack.config.dev.js",
     "build:declaration": "tsc src/lib/index.ts --declaration --outFile out.js",
-    "build": "webpack --config src/config/webpack.config.prod.js && rm dist/index.js.LICENSE.txt"
+    "build": "webpack --config src/config/webpack.config.prod.js && rm dist/index.js.LICENSE.txt",
+    "prepare": "yarn build"
   },
   "peerDependencies": {
     "react": ">=16"
