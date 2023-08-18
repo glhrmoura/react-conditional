@@ -18,13 +18,13 @@ The React Conditional library is a powerful tool that assists in conditional ren
 
 ### Install
 
-```bash
+```
 $ yarn add @glhrmoura/react-conditional
 ```
 
 or
 
-```bash
+```
 $ npm install @glhrmoura/react-conditional
 ```
 
