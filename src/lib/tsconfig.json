@@ -14,7 +14,6 @@
     "lib": ["dom", "esnext"],
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "declaration": true,
     "paths": {
       "@/*": ["../../src/*"]
     },

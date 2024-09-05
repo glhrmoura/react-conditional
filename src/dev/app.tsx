@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent } from 'react';
 
-import { If, ElseIf, Else, Condition } from '@/lib';
+import { Condition } from '@/lib';
 
 const userTypes = [
   {
@@ -33,13 +33,11 @@ const App = () => {
       <h3>
         User types:
       </h3>
-
       {userTypes.map((type) => (
         <div key={type.value}>
           <label htmlFor={`user-role-${type.value}`}>
             {type.label}:
           </label>
-
           <input
             type="radio"
             id={`user-role-${type.value}`}
@@ -50,22 +48,20 @@ const App = () => {
           /> 
         </div>
       ))}
-
       <hr />
-
       <Condition>
-        <If condition={userType === 'basic'}>
+        <div rc-if={userType === 'basic'}>
           <h2>The user is a basic user</h2>
-        </If>
-        <ElseIf condition={userType === 'vip'}>
+        </div>
+        <div rc-else-if={userType === 'vip'}>
           <h2>The user is a vip user</h2>
-        </ElseIf>
-        <ElseIf condition={userType === 'admin'}>
+        </div>
+        <div rc-else-if={userType === 'admin'}>
           <h2>The user is a admin user</h2>
-        </ElseIf>
-        <Else>
+        </div>
+        <div rc-else>
           <h2>The user is not logged</h2>
-        </Else>
+        </div>
       </Condition>
     </React.StrictMode>
   );

@@ -1,26 +1,42 @@
-import React from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 
 export interface ConditionProps {
-  children?: React.ReactNode;
-}
-
-export enum ConditionChild {
-  If = 'If',
-  ElseIf = 'ElseIf',
-  Else = 'Else',
+  children: ReactNode;
 }
 
 const Condition: React.FC<ConditionProps> = ({ children }) => {
-  const groups = React.Children.toArray(children).reduce((groups: any, childItem: any) => {
-    if (childItem?.type?.displayName in groups) groups[childItem?.type?.displayName].push(childItem);
-    else groups.Else.push(childItem);
+  let elementToRender: ReactElement | null = null;
 
-    return groups;
-  }, { If: [], ElseIf: [], Else: [] });
+  React.Children.forEach(children, (child) => {
+    if (React.isValidElement(child)) {
+      const {
+        'rc-if': rcIf,
+        'rc-else': rcElse,
+        'rc-else-if': rcElseIf,
+      } = child.props;
 
-  return [...groups.If, ...groups.ElseIf, ...groups.Else].find((childItem: any) => {
-    return childItem.props.condition || childItem.type.displayName === ConditionChild.Else;
-  }) || null;
+      const override = {
+        'rc-if': null,
+        'rc-else': null,
+        'rc-else-if': null,
+      };
+
+      const props = {
+        ...child.props,
+        ...override,
+      };
+
+      if (rcIf) {
+        elementToRender = React.cloneElement(child, props);
+      } else if (rcElseIf && !elementToRender) {
+        elementToRender = React.cloneElement(child, props);
+      } else if (rcElse && !elementToRender) {
+        elementToRender = React.cloneElement(child, props);
+      }
+    }
+  });
+
+  return elementToRender;
 };
 
-export default Condition;
+export { Condition };
