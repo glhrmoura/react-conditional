@@ -1,8 +1,8 @@
 <p align="center">
   <img
-		style="object: contain; height: 150px"
-		src="https://raw.githubusercontent.com/glhrmoura/react-conditional/main/src/lib/static/images/logo.png"
-	/>
+    style="object: contain; height: 150px"
+    src="https://raw.githubusercontent.com/glhrmoura/react-conditional/main/src/lib/static/images/logo.png"
+  />
 </p>
 
 ## React Conditional
@@ -18,114 +18,59 @@ The React Conditional library is a powerful tool that assists in conditional ren
 
 ### Install
 
-```
-$ yarn add @glhrmoura/react-conditional
+To add React Conditional to your project, use one of the following commands:
+
+```bash
+yarn add @glhrmoura/react-conditional
 ```
 
 or
 
-```
-$ npm install @glhrmoura/react-conditional
+```bash
+npm install @glhrmoura/react-conditional
 ```
 
 ### Usage
 
-#### Basic
-
-The basic use of the library is very simple, we just need to wrap the flow control components with a `<Condition>` component, which will be responsible for managing which component will be rendered.
+The basic use of the library is very simple. Just wrap your conditional components with a <Condition> component, which will be responsible for managing which component will be rendered.
 
 ```jsx
-import { Condition, If, Else } from '@glhrmoura/react-conditional';
+import { Condition } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged }) => (
   <Condition>
-    <If condition={isLogged}>
-      <h2>The user is logged</h2>
-    </If>
-    <Else>
-      <h2>The user is not logged</h2>
-    </Else>
+    <div rc-if={isLogged}>The user is logged in</div>
+    <div rc-else>The user is not logged in</div>
   </Condition>
 );
 ```
 
-#### The `<ElseIf>` component
-
-We have the option of using the `<ElseIf>` flow control component, which will be rendered if the condition, provided to the `<If>` component, is not met.
+You can use the `rc-else-if` attribute to specify additional conditions that will be checked if the condition provided to the `rc-if` attribute is not met.
 
 ```jsx
-import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
+import { Condition } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged, isLoading }) => (
   <Condition>
-    <If condition={isLogged}>
-      <h2>The user is logged</h2>
-    </If>
-    <ElseIf condition={isLoading}>
-      <h2>Carregando...</h2>
-    </ElseIf>
-    <Else>
-      <h2>The user is not logged</h2>
-    </Else>
+    <div rc-if={isLogged}>The user is logged in</div>
+    <div rc-else-if={isLoading}>Loading...</div>
+    <div rc-else>The user is not logged in</div>
   </Condition>
 );
 ```
 
-#### Passing multiple `<ElseIf>` components
-
-We have the option of passing multiple `<ElseIf>` components that obey the rendering order defined in the template.
+You can pass multiple `rc-else-if` components that obey the rendering order defined in the template.
 
 ```jsx
-import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
+import { Condition } from '@glhrmoura/react-conditional';
 
 const App = ({ isBasicUser, isVIPUser, isAdminUser }) => (
   <Condition>
-    <If condition={isBasicUser}>
-      <h2>The user is a basic user</h2>
-    </If>
-    <ElseIf condition={isVIPUser}>
-      <h2>The user is a vip user</h2>
-    </ElseIf>
-    <ElseIf condition={isAdminUser}>
-      <h2>The user is a admin user</h2>
-    </ElseIf>
-    <Else>
-      <h2>The user does not exist</h2>
-    </Else>
+    <div rc-if={isBasicUser}>The user is a basic user</div>
+    <div rc-else-if={isVIPUser}>The user is a VIP user</div>
+    <div rc-else-if={isAdminUser}>The user is an admin user</div>
+    <div rc-else>The user does not exist</div>
   </Condition>
-);
-```
-
-#### Function as a child
-
-We can pass a function as a child to the flow control components, this is useful when we need to render some property of a more complex structure, where we are not sure that it will exist at runtime.
-
-```jsx
-import { Condition, If, Else } from '@glhrmoura/react-conditional';
-
-const App = ({ user }) => (
-  <Condition>
-    <If condition={user}>
-      {() => <h2>Username: {user.name}</h2>}
-    </If>
-    <Else>
-      <h2>User does not exist</h2>
-    </Else>
-  </Condition>
-);
-```
-
-#### Just the `<If>` component
-
-We have the option of using the `<If>` component alone, without having to wrap it in a `<Condition>` component, as a more convenient way of handling simpler conditionals.
-
-```jsx
-import { If } from '@glhrmoura/react-conditional';
-
-const App = ({ title }) => (
-  <If condition={title}>
-    <h2>{title}</h2>
-  </If>
 );
 ```
 
