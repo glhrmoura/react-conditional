@@ -23,10 +23,10 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@glhrmoura/react-conditional@0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@glhrmoura/react-conditional/-/react-conditional-0.1.5.tgz#b569f11b56d4fa612e9ddb6c036d1740d447ca8f"
-  integrity sha512-gNiJsGHLxQC1H94Y2lPCgQ8rNpKp6U12ByWynI+zZITFABI4WdP7pJSbyKGl+PvWI44MDnLVPzJrXAkSURI6rg==
+"@glhrmoura/react-conditional@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@glhrmoura/react-conditional/-/react-conditional-0.2.0.tgz#12e7b204d5121b737ecfb312527b1bf5fca42160"
+  integrity sha512-aefioVSwHYbcJSRjDfmgoqPXYcO+XfDn4G7znpz6E+X95krevNTTJ9Z8i1aYbJFbrKGDeYEQGM12mxiCjBh4QA==
 
 "@jridgewell/gen-mapping@^0.3.0":
   version "0.3.3"
