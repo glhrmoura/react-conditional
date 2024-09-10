@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+* {
+  user-select: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 0px 16px;
+}
+
+.container {
+  max-width: 400px;
+  margin: 50px auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  padding: 20px 30px;
+}
+
+h3 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.user-type-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.user-type {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.user-type input[type='radio'] {
+  display: none;
+}
+
+.user-type label {
+  color: #555;
+  cursor: pointer;
+  padding-left: 28px;
+  position: relative;
+}
+
+.user-type label::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border: 1px solid #aaa;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+}
+
+.user-type input[type='radio']:checked + label::before {
+  background-color: #007bff;
+  border-color: #007bff;
+  content: '✓';
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-type input[type='radio']:checked + label {
+  color: #007bff;
+}
+
+hr {
+  margin: 30px 0;
+  border: none;
+  height: 1px;
+  background-color: #ddd;
+}
+
+.result-container {
+  text-align: center;
+  background-color: #f8f8f8;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.result-container h2 {
+  margin: 0;
+  color: #555;
+}
