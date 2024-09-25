@@ -1,3 +1,3 @@
-import { Condition } from '@/lib/components/Condition';
+import { Condition } from './components/Condition';
 
 export { Condition };

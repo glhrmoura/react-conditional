@@ -13,9 +13,7 @@
     "importHelpers": true,
     "lib": ["dom", "esnext"],
     "esModuleInterop": true,
-    "moduleResolution": "node",
-    "paths": {
-      "@/*": ["../../src/*"]
-    },
+    "declaration": true,
+    "moduleResolution": "node"
   },
 }
