@@ -1,7 +1,7 @@
 <p align="center">
   <img
     style="object: contain; height: 150px"
-    src="https://raw.githubusercontent.com/glhrmoura/react-conditional/main/src/lib/static/images/logo.png"
+    src="https://i.imgur.com/t2AeIFw.png"
   />
 </p>
 
