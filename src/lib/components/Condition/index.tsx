@@ -5,12 +5,12 @@ export interface ConditionProps {
 }
 
 export interface IfProps {
-  condition: boolean;
+  case: boolean;
   children: ReactNode;
 }
 
 export interface ElseIfProps {
-  condition: boolean;
+  case: boolean;
   children: ReactNode;
 }
 
@@ -19,33 +19,20 @@ export interface ElseProps {
 }
 
 const Condition: React.FC<ConditionProps> = ({ children }) => {
-  let renderedChild: ReactNode = null;
   const childrenArray = React.Children.toArray(children);
+  let renderedChild: ReactNode = null;
   
   for (const child of childrenArray) {
-    if (React.isValidElement(child) && child.type === If) {
-      if (child.props.condition) {
-        renderedChild = child.props.children;
-        break;
-      }
-    }
-  }
-  
-  if (renderedChild === null) {
-    for (const child of childrenArray) {
-      if (React.isValidElement(child) && child.type === ElseIf) {
-        if (child.props.condition) {
+    if (React.isValidElement(child)) {
+      if (child.type === If || child.type === ElseIf) {
+        if (child.props.case) {
           renderedChild = child.props.children;
           break;
         }
-      }
-    }
-  }
-  
-  if (renderedChild === null) {
-    for (const child of childrenArray) {
-      if (React.isValidElement(child) && child.type === Else) {
-        renderedChild = child.props.children;
+      } else if (child.type === Else) {
+        if (renderedChild === null) {
+          renderedChild = child.props.children;
+        }
         break;
       }
     }
@@ -54,11 +41,11 @@ const Condition: React.FC<ConditionProps> = ({ children }) => {
   return <>{renderedChild}</>;
 };
 
-const If: React.FC<IfProps> = ({ condition, children }) => {
+const If: React.FC<IfProps> = ({ case: condition, children }) => {
   return condition ? <>{children}</> : null;
 };
 
-const ElseIf: React.FC<ElseIfProps> = ({ condition, children }) => {
+const ElseIf: React.FC<ElseIfProps> = ({ case: condition, children }) => {
   return condition ? <>{children}</> : null;
 };
 
