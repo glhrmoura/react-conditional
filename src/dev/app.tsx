@@ -6,11 +6,8 @@ const App = () => {
   const [userType, setUserType] = useState('basic');
 
   const onSelectUserType = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    console.log('User type changed to:', value);
     setUserType(value);
   };
-
-  console.log('Current user type:', userType);
 
   return (
     <React.StrictMode>
@@ -62,22 +59,6 @@ const App = () => {
       <hr />
       
       <div>
-        <h3>Current user type: {userType || 'none'}</h3>
-        
-        <h4>Simple test:</h4>
-        {userType === 'basic' && <div style={{ color: 'green' }}>✅ Basic user</div>}
-        {userType === 'vip' && <div style={{ color: 'blue' }}>💎 VIP user</div>}
-        {userType === 'admin' && <div style={{ color: 'red' }}>👑 Admin user</div>}
-        {!userType && <div style={{ color: 'gray' }}>❌ Not logged in</div>}
-        
-        <h4>Conditional rendering test:</h4>
-        <Condition>
-          <If case={true}>
-            <div style={{ color: 'purple' }}>🔧 Always show this (test)</div>
-          </If>
-        </Condition>
-        
-        <h4>Full conditional rendering:</h4>
         <Condition>
           <If case={userType === 'basic'}>
             <div style={{ color: 'green' }}>✅ The user is a basic user</div>
