@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     dts({
-      insertTypesEntry: true,
+      insertTypesEntry: false,
       exclude: ['src/dev/**'],
     }),
   ],
@@ -30,10 +30,22 @@ export default defineConfig({
           react: 'React',
           'react-dom': 'ReactDOM',
         },
+        compact: true,
+        minifyInternalExports: true,
       },
     },
     outDir: 'dist',
     emptyOutDir: true,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+      format: {
+        comments: false,
+      },
+    },
   },
   server: {
     port: 3000,
