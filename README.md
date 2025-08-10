@@ -41,7 +41,7 @@ import { Condition, If, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged }) => (
   <Condition>
-    <If condition={isLogged}>
+    <If case={isLogged}>
       The user is logged in
     </If>
     <Else>
@@ -60,10 +60,10 @@ import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged, isLoading }) => (
   <Condition>
-    <If condition={isLogged}>
+    <If case={isLogged}>
       The user is logged in
     </If>
-    <ElseIf condition={isLoading}>
+    <ElseIf case={isLoading}>
       Loading...
     </ElseIf>
     <Else>
@@ -82,13 +82,13 @@ import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isBasicUser, isVIPUser, isAdminUser }) => (
   <Condition>
-    <If condition={isBasicUser}>
+    <If case={isBasicUser}>
       The user is a basic user
     </If>
-    <ElseIf condition={isVIPUser}>
+    <ElseIf case={isVIPUser}>
       The user is a VIP user
     </ElseIf>
-    <ElseIf condition={isAdminUser}>
+    <ElseIf case={isAdminUser}>
       The user is an admin user
     </ElseIf>
     <Else>
@@ -108,10 +108,10 @@ import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 const App = ({ isLogged }) => (
   <Condition>
     <Else>Fallback content</Else>
-    <If condition={isLogged}>
+    <If case={isLogged}>
       User is logged in
     </If>
-    <ElseIf condition={false}>
+    <ElseIf case={false}>
       This won't render
     </ElseIf>
   </Condition>
@@ -124,18 +124,18 @@ const App = ({ isLogged }) => (
 The main wrapper component that manages conditional rendering.
 
 #### `If`
-Renders children when the condition is true. Has the highest precedence.
+Renders children when the case is true. Has the highest precedence.
 
 **Props:**
-- `condition: boolean` - The condition to evaluate
-- `children: ReactNode` - The content to render when condition is true
+- `case: boolean` - The case to evaluate
+- `children: ReactNode` - The content to render when case is true
 
 #### `ElseIf`
-Renders children when the condition is true and no previous `If` or `ElseIf` has been rendered.
+Renders children when the case is true and no previous `If` or `ElseIf` has been rendered.
 
 **Props:**
-- `condition: boolean` - The condition to evaluate
-- `children: ReactNode` - The content to render when condition is true
+- `case: boolean` - The case to evaluate
+- `children: ReactNode` - The content to render when case is true
 
 #### `Else`
 Renders children when no `If` or `ElseIf` conditions have been met.
