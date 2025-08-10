@@ -12,7 +12,6 @@ const App = () => {
   return (
     <React.StrictMode>
       <h1>React Conditional Test</h1>
-      
       <div>
         <label>
           <input
