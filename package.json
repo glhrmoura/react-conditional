@@ -1,5 +1,5 @@
 {
-  "name": "demo",
+  "name": "@glhrmoura/react-conditional/demo",
   "description": "Demo page of @glhrmoura/react-conditional",
   "scripts": {
     "dev": "vite",
@@ -7,7 +7,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@glhrmoura/react-conditional": "0.3.0",
+    "@glhrmoura/react-conditional": "0.3.1",
     "@types/node": "^24.2.1",
     "@types/react": "^18.2.5",
     "@types/react-dom": "^18.2.4",
