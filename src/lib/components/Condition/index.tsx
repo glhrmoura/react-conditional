@@ -23,16 +23,29 @@ const Condition: React.FC<ConditionProps> = ({ children }) => {
   let renderedChild: ReactNode = null;
   
   for (const child of childrenArray) {
-    if (React.isValidElement(child)) {
-      if (child.type === If || child.type === ElseIf) {
+    if (React.isValidElement(child) && child.type === If) {
+      if (child.props.case) {
+        renderedChild = child.props.children;
+        break;
+      }
+    }
+  }
+  
+  if (renderedChild === null) {
+    for (const child of childrenArray) {
+      if (React.isValidElement(child) && child.type === ElseIf) {
         if (child.props.case) {
           renderedChild = child.props.children;
           break;
         }
-      } else if (child.type === Else) {
-        if (renderedChild === null) {
-          renderedChild = child.props.children;
-        }
+      }
+    }
+  }
+  
+  if (renderedChild === null) {
+    for (const child of childrenArray) {
+      if (React.isValidElement(child) && child.type === Else) {
+        renderedChild = child.props.children;
         break;
       }
     }
