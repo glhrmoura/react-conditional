@@ -8,6 +8,7 @@ export default defineConfig({
     react(),
     dts({
       insertTypesEntry: true,
+      exclude: ['src/dev/**'],
     }),
   ],
   resolve: {
@@ -31,6 +32,8 @@ export default defineConfig({
         },
       },
     },
+    outDir: 'dist',
+    emptyOutDir: true,
   },
   server: {
     port: 3000,
