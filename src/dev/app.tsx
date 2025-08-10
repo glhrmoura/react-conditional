@@ -62,14 +62,30 @@ const App = () => {
       <hr />
       
       <div>
+        <h3>Current user type: {userType || 'none'}</h3>
+        
+        <h4>Simple test:</h4>
+        {userType === 'basic' && <div style={{ color: 'green' }}>✅ Basic user</div>}
+        {userType === 'vip' && <div style={{ color: 'blue' }}>💎 VIP user</div>}
+        {userType === 'admin' && <div style={{ color: 'red' }}>👑 Admin user</div>}
+        {!userType && <div style={{ color: 'gray' }}>❌ Not logged in</div>}
+        
+        <h4>Conditional rendering test:</h4>
         <Condition>
-          <If condition={userType === 'basic'}>
+          <If case={true}>
+            <div style={{ color: 'purple' }}>🔧 Always show this (test)</div>
+          </If>
+        </Condition>
+        
+        <h4>Full conditional rendering:</h4>
+        <Condition>
+          <If case={userType === 'basic'}>
             <div style={{ color: 'green' }}>✅ The user is a basic user</div>
           </If>
-          <ElseIf condition={userType === 'vip'}>
+          <ElseIf case={userType === 'vip'}>
             <div style={{ color: 'blue' }}>💎 The user is a vip user</div>
           </ElseIf>
-          <ElseIf condition={userType === 'admin'}>
+          <ElseIf case={userType === 'admin'}>
             <div style={{ color: 'red' }}>👑 The user is an admin user</div>
           </ElseIf>
           <Else>
