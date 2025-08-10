@@ -1,68 +1,82 @@
 import React, { useState, ChangeEvent } from 'react';
 
-import { Condition } from '@/lib';
-
-const userTypes = [
-  {
-    label: 'Basic',
-    value: 'basic',
-  },
-  {
-    label: 'VIP',
-    value: 'vip',
-  },
-  {
-    label: 'Admin',
-    value: 'admin',
-  },
-  {
-    label: 'Logged out',
-    value: '',
-  }
-];
+import { Condition, If, ElseIf, Else } from '@/lib';
 
 const App = () => {
   const [userType, setUserType] = useState('basic');
 
   const onSelectUserType = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    console.log('User type changed to:', value);
     setUserType(value);
   };
 
+  console.log('Current user type:', userType);
+
   return (
     <React.StrictMode>
-      <h3>
-        User types:
-      </h3>
-      {userTypes.map((type) => (
-        <div key={type.value}>
-          <label htmlFor={`user-role-${type.value}`}>
-            {type.label}:
-          </label>
+      <h1>React Conditional Test</h1>
+      
+      <div>
+        <label>
           <input
             type="radio"
-            id={`user-role-${type.value}`}
             name="user-type"
-            value={type.value}
+            value="basic"
             onChange={onSelectUserType}
-            checked={type.value === userType}
-          /> 
-        </div>
-      ))}
+            checked={userType === 'basic'}
+          />
+          Basic
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="user-type"
+            value="vip"
+            onChange={onSelectUserType}
+            checked={userType === 'vip'}
+          />
+          VIP
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="user-type"
+            value="admin"
+            onChange={onSelectUserType}
+            checked={userType === 'admin'}
+          />
+          Admin
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="user-type"
+            value=""
+            onChange={onSelectUserType}
+            checked={userType === ''}
+          />
+          Logged out
+        </label>
+      </div>
+
       <hr />
-      <Condition>
-        <div rc-if={userType === 'basic'}>
-          <h2>The user is a basic user</h2>
-        </div>
-        <div rc-else-if={userType === 'vip'}>
-          <h2>The user is a vip user</h2>
-        </div>
-        <div rc-else-if={userType === 'admin'}>
-          <h2>The user is a admin user</h2>
-        </div>
-        <div rc-else>
-          <h2>The user is not logged</h2>
-        </div>
-      </Condition>
+      
+      <div>
+        <Condition>
+          <If condition={userType === 'basic'}>
+            <div style={{ color: 'green' }}>✅ The user is a basic user</div>
+          </If>
+          <ElseIf condition={userType === 'vip'}>
+            <div style={{ color: 'blue' }}>💎 The user is a vip user</div>
+          </ElseIf>
+          <ElseIf condition={userType === 'admin'}>
+            <div style={{ color: 'red' }}>👑 The user is an admin user</div>
+          </ElseIf>
+          <Else>
+            <div style={{ color: 'gray' }}>❌ The user is not logged in</div>
+          </Else>
+        </Condition>
+      </div>
     </React.StrictMode>
   );
 };
