@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from 'react';
 
 import ReactDOM from 'react-dom/client';
-import { Condition } from '@glhrmoura/react-conditional';
+import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 import './styles.css';
 
@@ -41,10 +41,18 @@ const App = () => {
         <hr />
         <div className="result-container">
           <Condition>
-            <h2 rc-if={userType === 'basic'}>The user is a basic</h2>
-            <h2 rc-else-if={userType === 'vip'}>The user is a vip</h2>
-            <h2 rc-else-if={userType === 'admin'}>The user is an admin</h2>
-            <h2 rc-else>There is no user</h2>
+            <If case={userType === 'basic'}>
+              <h2>The user is a basic</h2>
+            </If>
+            <ElseIf case={userType === 'vip'}>
+              <h2>The user is a vip</h2>
+            </ElseIf>
+            <ElseIf case={userType === 'admin'}>
+              <h2>The user is an admin</h2>
+            </ElseIf>
+            <Else>
+              <h2>There is no user</h2>
+            </Else>
           </Condition>
         </div>
       </div>
