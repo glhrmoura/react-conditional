@@ -2,14 +2,19 @@
   "name": "demo",
   "description": "Demo page of @glhrmoura/react-conditional",
   "scripts": {
-    "dev": "parcel src/index.html --no-source-maps",
-    "build": "parcel build src/index.html --no-source-maps"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "@glhrmoura/react-conditional": "0.2.0",
-    "parcel": "^2.8.3",
-    "process": "^0.11.10",
+    "@glhrmoura/react-conditional": "0.3.0",
+    "@types/node": "^24.2.1",
+    "@types/react": "^18.2.5",
+    "@types/react-dom": "^18.2.4",
+    "@vitejs/plugin-react": "^4.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "typescript": "^5.0.4",
+    "vite": "^4.4.0"
   }
 }
