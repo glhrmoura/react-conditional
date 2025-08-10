@@ -1,5 +1,5 @@
 {
-  "name": "@glhrmoura/react-conditional/demo",
+  "name": "glhrmoura-react-conditional-demo",
   "description": "Demo page of @glhrmoura/react-conditional",
   "scripts": {
     "dev": "vite",
