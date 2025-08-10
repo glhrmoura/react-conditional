@@ -1,42 +1,69 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 export interface ConditionProps {
   children: ReactNode;
 }
 
+export interface IfProps {
+  condition: boolean;
+  children: ReactNode;
+}
+
+export interface ElseIfProps {
+  condition: boolean;
+  children: ReactNode;
+}
+
+export interface ElseProps {
+  children: ReactNode;
+}
+
 const Condition: React.FC<ConditionProps> = ({ children }) => {
-  let elementToRender: ReactElement | null = null;
-
-  React.Children.forEach(children, (child) => {
-    if (React.isValidElement(child)) {
-      const {
-        'rc-if': rcIf,
-        'rc-else': rcElse,
-        'rc-else-if': rcElseIf,
-      } = child.props;
-
-      const override = {
-        'rc-if': null,
-        'rc-else': null,
-        'rc-else-if': null,
-      };
-
-      const props = {
-        ...child.props,
-        ...override,
-      };
-
-      if (rcIf) {
-        elementToRender = React.cloneElement(child, props);
-      } else if (rcElseIf && !elementToRender) {
-        elementToRender = React.cloneElement(child, props);
-      } else if (rcElse && !elementToRender) {
-        elementToRender = React.cloneElement(child, props);
+  let renderedChild: ReactNode = null;
+  const childrenArray = React.Children.toArray(children);
+  
+  for (const child of childrenArray) {
+    if (React.isValidElement(child) && child.type === If) {
+      if (child.props.condition) {
+        renderedChild = child.props.children;
+        break;
       }
     }
-  });
-
-  return elementToRender;
+  }
+  
+  if (renderedChild === null) {
+    for (const child of childrenArray) {
+      if (React.isValidElement(child) && child.type === ElseIf) {
+        if (child.props.condition) {
+          renderedChild = child.props.children;
+          break;
+        }
+      }
+    }
+  }
+  
+  if (renderedChild === null) {
+    for (const child of childrenArray) {
+      if (React.isValidElement(child) && child.type === Else) {
+        renderedChild = child.props.children;
+        break;
+      }
+    }
+  }
+  
+  return <>{renderedChild}</>;
 };
 
-export { Condition };
+const If: React.FC<IfProps> = ({ condition, children }) => {
+  return condition ? <>{children}</> : null;
+};
+
+const ElseIf: React.FC<ElseIfProps> = ({ condition, children }) => {
+  return condition ? <>{children}</> : null;
+};
+
+const Else: React.FC<ElseProps> = ({ children }) => {
+  return <>{children}</>;
+};
+
+export { Condition, If, ElseIf, Else };
