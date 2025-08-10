@@ -10,7 +10,7 @@
 [![NPM Version](https://img.shields.io/npm/v/@glhrmoura/react-conditional.svg?style=for-the-badge)](https://www.npmjs.com/package/@glhrmoura/react-conditional)
 [![License](https://img.shields.io/npm/l/@glhrmoura/react-conditional.svg?style=for-the-badge)](https://github.com/glhrmoura/react-conditional/blob/main/LICENSE)
 
-The React Conditional library is a powerful tool that assists in conditional rendering of components in React applications. With this library, developers can easily define conditions for displaying certain components in their applications.
+The React Conditional library is a powerful tool that assists in conditional rendering of components in React applications. With this library, developers can easily define conditions for displaying certain components in their applications using a clean and intuitive React Slots API.
 
 ### Demo
 
@@ -32,47 +32,116 @@ npm install @glhrmoura/react-conditional
 
 ### Usage
 
-The basic use of the library is very simple. Just wrap your conditional components with a <Condition> component, which will be responsible for managing which component will be rendered.
+The library provides a clean React Slots API with `Condition`, `If`, `ElseIf`, and `Else` components. The order of precedence is always: `If` → `ElseIf` → `Else`, regardless of the order in the children list.
+
+#### Basic Usage
 
 ```jsx
-import { Condition } from '@glhrmoura/react-conditional';
+import { Condition, If, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged }) => (
   <Condition>
-    <div rc-if={isLogged}>The user is logged in</div>
-    <div rc-else>The user is not logged in</div>
+    <If condition={isLogged}>
+      The user is logged in
+    </If>
+    <Else>
+      The user is not logged in
+    </Else>
   </Condition>
 );
 ```
 
-You can use the `rc-else-if` attribute to specify additional conditions that will be checked if the condition provided to the `rc-if` attribute is not met.
+#### Multiple Conditions
+
+You can use the `ElseIf` component to specify additional conditions that will be checked if the previous conditions are not met.
 
 ```jsx
-import { Condition } from '@glhrmoura/react-conditional';
+import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged, isLoading }) => (
   <Condition>
-    <div rc-if={isLogged}>The user is logged in</div>
-    <div rc-else-if={isLoading}>Loading...</div>
-    <div rc-else>The user is not logged in</div>
+    <If condition={isLogged}>
+      The user is logged in
+    </If>
+    <ElseIf condition={isLoading}>
+      Loading...
+    </ElseIf>
+    <Else>
+      The user is not logged in
+    </Else>
   </Condition>
 );
 ```
 
-You can pass multiple `rc-else-if` components that obey the rendering order defined in the template.
+#### Complex Conditions
+
+You can pass multiple `ElseIf` components that follow the rendering order defined by the library's precedence rules.
 
 ```jsx
-import { Condition } from '@glhrmoura/react-conditional';
+import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isBasicUser, isVIPUser, isAdminUser }) => (
   <Condition>
-    <div rc-if={isBasicUser}>The user is a basic user</div>
-    <div rc-else-if={isVIPUser}>The user is a VIP user</div>
-    <div rc-else-if={isAdminUser}>The user is an admin user</div>
-    <div rc-else>The user does not exist</div>
+    <If condition={isBasicUser}>
+      The user is a basic user
+    </If>
+    <ElseIf condition={isVIPUser}>
+      The user is a VIP user
+    </ElseIf>
+    <ElseIf condition={isAdminUser}>
+      The user is an admin user
+    </ElseIf>
+    <Else>
+      The user does not exist
+    </Else>
   </Condition>
 );
 ```
+
+#### Order Independence
+
+The components work regardless of their order in the children list. The precedence is always maintained:
+
+```jsx
+import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
+
+const App = ({ isLogged }) => (
+  <Condition>
+    <Else>Fallback content</Else>
+    <If condition={isLogged}>
+      User is logged in
+    </If>
+    <ElseIf condition={false}>
+      This won't render
+    </ElseIf>
+  </Condition>
+);
+```
+
+### API Reference
+
+#### `Condition`
+The main wrapper component that manages conditional rendering.
+
+#### `If`
+Renders children when the condition is true. Has the highest precedence.
+
+**Props:**
+- `condition: boolean` - The condition to evaluate
+- `children: ReactNode` - The content to render when condition is true
+
+#### `ElseIf`
+Renders children when the condition is true and no previous `If` or `ElseIf` has been rendered.
+
+**Props:**
+- `condition: boolean` - The condition to evaluate
+- `children: ReactNode` - The content to render when condition is true
+
+#### `Else`
+Renders children when no `If` or `ElseIf` conditions have been met.
+
+**Props:**
+- `children: ReactNode` - The fallback content to render
 
 ### License
 
