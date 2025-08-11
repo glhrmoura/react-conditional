@@ -69,7 +69,7 @@ const App = () => {
             <div style={{ color: 'red' }}>👑 The user is an admin user</div>
           </ElseIf>
           <Else>
-            <div style={{ color: 'gray' }}>❌ The user is not logged in</div>
+            {() => <div style={{ color: 'gray' }}>❌ The user is not logged in</div>}
           </Else>
         </Condition>
       </div>
