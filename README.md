@@ -118,6 +118,51 @@ const App = ({ isLogged }) => (
 );
 ```
 
+#### Function Children
+
+You can pass functions as children to any component. This is useful for lazy evaluation or when you need to perform calculations before rendering:
+
+```jsx
+import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
+
+const App = ({ userType }) => (
+  <Condition>
+    <If case={userType === 'basic'}>
+      {() => <div style={{ color: 'green' }}>✅ The user is a basic user</div>}
+    </If>
+    <ElseIf case={userType === 'vip'}>
+      {() => <div style={{ color: 'blue' }}>💎 The user is a vip user</div>}
+    </ElseIf>
+    <ElseIf case={userType === 'admin'}>
+      {() => <div style={{ color: 'red' }}>👑 The user is an admin user</div>}
+    </ElseIf>
+    <Else>
+      {() => <div style={{ color: 'gray' }}>❌ The user is not logged in</div>}
+    </Else>
+  </Condition>
+);
+```
+
+You can also mix regular ReactNode and function children:
+
+```jsx
+import { Condition, If, Else } from '@glhrmoura/react-conditional';
+
+const App = ({ isLogged }) => (
+  <Condition>
+    <If case={isLogged}>
+      <div>User is logged in</div>
+    </If>
+    <Else>
+      {() => {
+        const message = 'User is not logged in';
+        return <div style={{ color: 'red' }}>{message}</div>;
+      }}
+    </Else>
+  </Condition>
+);
+```
+
 ### API Reference
 
 #### `Condition`
@@ -128,20 +173,20 @@ Renders children when the case is true. Has the highest precedence.
 
 **Props:**
 - `case: boolean` - The case to evaluate
-- `children: ReactNode` - The content to render when case is true
+- `children: ReactNode | (() => ReactNode)` - The content to render when case is true
 
 #### `ElseIf`
 Renders children when the case is true and no previous `If` or `ElseIf` has been rendered.
 
 **Props:**
 - `case: boolean` - The case to evaluate
-- `children: ReactNode` - The content to render when case is true
+- `children: ReactNode | (() => ReactNode)` - The content to render when case is true
 
 #### `Else`
 Renders children when no `If` or `ElseIf` conditions have been met.
 
 **Props:**
-- `children: ReactNode` - The fallback content to render
+- `children: ReactNode | (() => ReactNode)` - The fallback content to render
 
 ### License
 
