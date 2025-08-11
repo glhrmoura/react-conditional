@@ -7,7 +7,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@glhrmoura/react-conditional": "0.3.2",
+    "@glhrmoura/react-conditional": "0.4.0",  
     "@types/node": "^24.2.1",
     "@types/react": "^18.2.5",
     "@types/react-dom": "^18.2.4",
