@@ -3,7 +3,7 @@ import React, { useState, ChangeEvent, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 import Prism from 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css';
+import 'prismjs/themes/prism-okaidia.css';
 import 'prismjs/components/prism-jsx';
 import 'prismjs/components/prism-typescript';
 

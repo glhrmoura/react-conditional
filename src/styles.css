@@ -71,8 +71,8 @@ h3 {
 }
 
 .code-example pre {
-  background-color: #2d3748;
-  color: #e2e8f0;
+  background-color: #272822;
+  color: #f8f8f2;
   padding: 20px;
   border-radius: 6px;
   overflow-x: auto;
