@@ -6,16 +6,16 @@ export interface ConditionProps {
 
 export interface IfProps {
   case: boolean;
-  children: ReactNode;
+  children: ReactNode | (() => ReactNode);
 }
 
 export interface ElseIfProps {
   case: boolean;
-  children: ReactNode;
+  children: ReactNode | (() => ReactNode);
 }
 
 export interface ElseProps {
-  children: ReactNode;
+  children: ReactNode | (() => ReactNode);
 }
 
 const Condition: React.FC<ConditionProps> = ({ children }) => {
@@ -25,7 +25,9 @@ const Condition: React.FC<ConditionProps> = ({ children }) => {
   for (const child of childrenArray) {
     if (React.isValidElement(child) && child.type === If) {
       if (child.props.case) {
-        renderedChild = child.props.children;
+        renderedChild = typeof child.props.children === 'function' 
+          ? child.props.children() 
+          : child.props.children;
         break;
       }
     }
@@ -35,7 +37,9 @@ const Condition: React.FC<ConditionProps> = ({ children }) => {
     for (const child of childrenArray) {
       if (React.isValidElement(child) && child.type === ElseIf) {
         if (child.props.case) {
-          renderedChild = child.props.children;
+          renderedChild = typeof child.props.children === 'function' 
+            ? child.props.children() 
+            : child.props.children;
           break;
         }
       }
@@ -45,7 +49,9 @@ const Condition: React.FC<ConditionProps> = ({ children }) => {
   if (renderedChild === null) {
     for (const child of childrenArray) {
       if (React.isValidElement(child) && child.type === Else) {
-        renderedChild = child.props.children;
+        renderedChild = typeof child.props.children === 'function' 
+          ? child.props.children() 
+          : child.props.children;
         break;
       }
     }
@@ -55,15 +61,17 @@ const Condition: React.FC<ConditionProps> = ({ children }) => {
 };
 
 const If: React.FC<IfProps> = ({ case: condition, children }) => {
-  return condition ? <>{children}</> : null;
+  if (!condition) return null;
+  return <>{typeof children === 'function' ? children() : children}</>;
 };
 
 const ElseIf: React.FC<ElseIfProps> = ({ case: condition, children }) => {
-  return condition ? <>{children}</> : null;
+  if (!condition) return null;
+  return <>{typeof children === 'function' ? children() : children}</>;
 };
 
 const Else: React.FC<ElseProps> = ({ children }) => {
-  return <>{children}</>;
+  return <>{typeof children === 'function' ? children() : children}</>;
 };
 
 export { Condition, If, ElseIf, Else };
