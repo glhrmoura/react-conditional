@@ -16,5 +16,9 @@
     "react-dom": "^18.2.0",
     "typescript": "^5.0.4",
     "vite": "^4.4.0"
+  },
+  "dependencies": {
+    "@types/prismjs": "^1.26.5",
+    "prismjs": "^1.30.0"
   }
 }

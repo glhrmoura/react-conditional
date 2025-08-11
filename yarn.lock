@@ -278,10 +278,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.18.20.tgz#786c5f41f043b07afb1af37683d7c33668858f6d"
   integrity sha512-kTdfRcSiDfQca/y9QIkng02avJ+NCaQvrMejlsB3RRv5sE9rRoeBPISaZpKxHELzRxZyLvNts1P27W3wV+8geQ==
 
-"@glhrmoura/react-conditional@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@glhrmoura/react-conditional/-/react-conditional-0.3.0.tgz#00971fe813757a3c590ef090cb2e6625211a9dae"
-  integrity sha512-/i3SsMIhThs3GwK68wOAC+cTEUkRZqCWXzvcGf/NeY+MjQSegWnBGRvb0kxiv5zbPxuCNgEus87TBTGkBIyGQQ==
+"@glhrmoura/react-conditional@0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@glhrmoura/react-conditional/-/react-conditional-0.3.2.tgz#da7372e89080950db183400c4606a802a56e53e2"
+  integrity sha512-weMqd8WjA52mWMcsafwa+nTNRPXgLUId5BlkWaiM2bRy0p5a5xVVTsGWTklPXCpodpHwiLr9j02FNDLr+lw3xA==
 
 "@jridgewell/gen-mapping@^0.3.12", "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.12"
@@ -353,6 +353,11 @@
   integrity sha512-DRh5K+ka5eJic8CjH7td8QpYEV6Zo10gfRkjHCO3weqZHWDtAaSTFtl4+VMqOJ4N5jcuhZ9/l+yy8rVgw7BQeQ==
   dependencies:
     undici-types "~7.10.0"
+
+"@types/prismjs@^1.26.5":
+  version "1.26.5"
+  resolved "https://registry.yarnpkg.com/@types/prismjs/-/prismjs-1.26.5.tgz#72499abbb4c4ec9982446509d2f14fb8483869d6"
+  integrity sha512-AUZTa7hQ2KY5L7AmtSiqxlhWxb4ina0yd8hNbl4TWuqnv/pFP0nDMb3YrfSBf4hJVGLh2YEIBfKaBW/9UEl6IQ==
 
 "@types/prop-types@*":
   version "15.7.15"
@@ -521,6 +526,11 @@ postcss@^8.4.27:
     nanoid "^3.3.11"
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
+
+prismjs@^1.30.0:
+  version "1.30.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.30.0.tgz#d9709969d9d4e16403f6f348c63553b19f0975a9"
+  integrity sha512-DEvV2ZF2r2/63V+tK8hQvrR2ZGn10srHbXviTlcv7Kpzw8jWiNTqbVgjO3IY8RxrrOUF8VPMQQFysYYYv0YZxw==
 
 react-dom@^18.2.0:
   version "18.2.0"
