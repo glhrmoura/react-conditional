@@ -1,7 +1,7 @@
-import React, { useState, ChangeEvent, useEffect, useRef } from 'react';
-
+import React, { useState, useEffect, useRef, type ComponentType } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
+import { User, Star, Shield, LogOut, GitBranch, Copy, Check } from 'lucide-react';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-okaidia.css';
 import 'prismjs/components/prism-jsx';
@@ -9,22 +9,72 @@ import 'prismjs/components/prism-typescript';
 
 import './styles.css';
 
-const userTypes = [
-  { label: '👤 Basic', value: 'basic' },
-  { label: '⭐ VIP', value: 'vip' },
-  { label: '👑 Admin', value: 'admin' },
-  { label: '🚪 Logout', value: '' }
+type UserType = 'basic' | 'vip' | 'admin' | '';
+
+type UserOption = {
+  label: string;
+  value: UserType;
+  description: string;
+  icon: ComponentType<{ className?: string; strokeWidth?: number }>;
+  accent: string;
+  soft: string;
+  border: string;
+  dot: string;
+};
+
+const userTypes: UserOption[] = [
+  {
+    label: 'Basic',
+    value: 'basic',
+    description: 'Standard access',
+    icon: User,
+    accent: 'text-accent',
+    soft: 'bg-accent-soft',
+    border: 'border-accent/50',
+    dot: 'bg-accent',
+  },
+  {
+    label: 'VIP',
+    value: 'vip',
+    description: 'Priority privileges',
+    icon: Star,
+    accent: 'text-gold',
+    soft: 'bg-gold-soft',
+    border: 'border-gold/50',
+    dot: 'bg-gold',
+  },
+  {
+    label: 'Admin',
+    value: 'admin',
+    description: 'Full control',
+    icon: Shield,
+    accent: 'text-admin',
+    soft: 'bg-admin-soft',
+    border: 'border-admin/50',
+    dot: 'bg-admin',
+  },
+  {
+    label: 'Logout',
+    value: '',
+    description: 'No active session',
+    icon: LogOut,
+    accent: 'text-rose',
+    soft: 'bg-rose-soft',
+    border: 'border-rose/50',
+    dot: 'bg-rose',
+  },
 ];
 
-interface SnippetProps {
+type SnippetProps = {
   title: string;
   code: string;
   description: string;
   language?: string;
-}
+};
 
-export function Snippet({ title, code, description, language = 'jsx' }: SnippetProps) {
+function Snippet({ title, code, description, language = 'jsx' }: SnippetProps) {
   const codeRef = useRef<HTMLElement>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (codeRef.current) {
@@ -32,71 +82,186 @@ export function Snippet({ title, code, description, language = 'jsx' }: SnippetP
     }
   }, [code]);
 
+  const onCopy = async () => {
+    await navigator.clipboard.writeText(code);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1600);
+  };
+
   return (
-    <div className="code-example">
-      <h3>{title}</h3>
-      <p>{description}</p>
-      <pre>
-        <code ref={codeRef} className={`language-${language}`}>
-          {code}
-        </code>
-      </pre>
+    <article className="overflow-hidden rounded-2xl border border-line bg-surface transition duration-300 hover:border-line-strong">
+      <div className="flex items-start justify-between gap-4 border-b border-line px-5 py-4 sm:px-6">
+        <div>
+          <h3 className="font-display text-lg font-semibold tracking-tight text-text">{title}</h3>
+          <p className="mt-1 text-sm leading-relaxed text-muted">{description}</p>
+        </div>
+        <button
+          type="button"
+          onClick={onCopy}
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-line bg-surface-raised px-2.5 py-1.5 text-xs font-medium text-muted transition hover:border-accent/40 hover:text-accent"
+          aria-label="Copy code"
+        >
+          {copied ? <Check className="h-3.5 w-3.5" strokeWidth={2.25} /> : <Copy className="h-3.5 w-3.5" strokeWidth={2.25} />}
+          {copied ? 'Copied' : 'Copy'}
+        </button>
+      </div>
+      <div className="bg-canvas">
+        <div className="flex items-center gap-1.5 border-b border-line px-5 py-3">
+          <span className="h-2.5 w-2.5 rounded-full border border-rose/60 bg-rose/30" />
+          <span className="h-2.5 w-2.5 rounded-full border border-gold/60 bg-gold/30" />
+          <span className="h-2.5 w-2.5 rounded-full border border-accent/60 bg-accent/30" />
+          <span className="ml-3 font-mono text-[11px] tracking-wide text-muted/70">{language}</span>
+        </div>
+        <pre>
+          <code ref={codeRef} className={`language-${language}`}>
+            {code}
+          </code>
+        </pre>
+      </div>
+    </article>
+  );
+}
+
+function ResultPanel({ userType }: { userType: UserType }) {
+  const active = userTypes.find((type) => type.value === userType) ?? userTypes[3];
+  const Icon = active.icon;
+
+  return (
+    <div className={`relative overflow-hidden rounded-2xl border ${active.border} ${active.soft} px-6 py-8 text-center`}>
+      <div className="pointer-events-none absolute inset-0 demo-grid opacity-30" />
+      <div className="relative mx-auto flex max-w-md flex-col items-center gap-4">
+        <div
+          className={`flex h-14 w-14 items-center justify-center rounded-2xl border ${active.border} bg-surface ${active.accent} animate-border-pulse`}
+        >
+          <Icon className="h-6 w-6" strokeWidth={1.75} />
+        </div>
+        <Condition>
+          <If case={userType === 'basic'}>
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+              <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-accent">The user is basic</h2>
+            </div>
+          </If>
+          <ElseIf case={userType === 'vip'}>
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+              <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-gold">The user is VIP</h2>
+            </div>
+          </ElseIf>
+          <ElseIf case={userType === 'admin'}>
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+              <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-admin">The user is admin</h2>
+            </div>
+          </ElseIf>
+          <Else>
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+              <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-rose">There is no user</h2>
+            </div>
+          </Else>
+        </Condition>
+      </div>
     </div>
   );
 }
 
-export default function App() {
-  const [userType, setUserType] = useState('basic');
-
-  const onSelectUserType = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    setUserType(value);
-  };
+function App() {
+  const [userType, setUserType] = useState<UserType>('basic');
 
   return (
-    <React.StrictMode>
-      <div className="container">
-        <h1>React Conditional Library</h1>
-        
-        <section className="demo-section">
-          <h2>Interactive Demo</h2>
-          <h3>User types:</h3>
-          <div className="user-type-container">
-            {userTypes.map((type) => (
-              <div className="user-type" key={type.value}>
-                <input
-                  type="radio"
-                  id={`user-role-${type.value}`}
-                  name="user-type"
-                  value={type.value}
-                  onChange={onSelectUserType}
-                  checked={type.value === userType}
-                />
-                <label htmlFor={`user-role-${type.value}`}>{type.label}</label>
-              </div>
-            ))}
-          </div>
-          <hr />
-          <div className="result-container">
-            <Condition>
-              <If case={userType === 'basic'}>
-                <h2>👤 The user is a basic</h2>
-              </If>
-              <ElseIf case={userType === 'vip'}>
-                <h2>⭐ The user is a vip</h2>
-              </ElseIf>
-              <ElseIf case={userType === 'admin'}>
-                <h2>👑 The user is an admin</h2>
-              </ElseIf>
-              <Else>
-                <h2>🚪 There is no user</h2>
-              </Else>
-            </Condition>
-          </div>
-        </section>
+    <div className="mx-auto min-h-screen w-full max-w-3xl px-4 py-10 sm:px-6 sm:py-16 lg:py-20">
+      <header className="animate-rise mb-10 text-center sm:mb-14">
+        <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-medium text-muted">
+          <GitBranch className="h-3.5 w-3.5 text-accent" strokeWidth={2.25} />
+          Conditional rendering for React
+        </div>
+        <h1 className="font-display text-4xl font-bold tracking-tight text-text sm:text-5xl">
+          React Conditional
+        </h1>
+        <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+          Declarative <code className="rounded-md border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent">If</code>,{' '}
+          <code className="rounded-md border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent">ElseIf</code>, and{' '}
+          <code className="rounded-md border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent">Else</code> components
+          with clear precedence and readable JSX.
+        </p>
+      </header>
 
-        <section className="usage-section">
-          <h2>Usage Examples</h2>
-          
+      <section className="animate-rise-delay-1 mb-12 overflow-hidden rounded-[1.75rem] border border-line bg-surface p-5 sm:p-8">
+        <div className="mb-6 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Live playground</p>
+            <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-text">Interactive Demo</h2>
+          </div>
+        </div>
+
+        <div className="mb-3">
+          <p className="mb-3 text-sm font-medium text-muted">Select a user type</p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {userTypes.map((type) => {
+              const Icon = type.icon;
+              const selected = type.value === userType;
+
+              return (
+                <label
+                  key={type.label}
+                  className={`group relative flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3.5 transition duration-200 ${
+                    selected
+                      ? `${type.border} ${type.soft}`
+                      : 'border-line bg-surface-raised hover:border-line-strong'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="user-type"
+                    value={type.value}
+                    checked={selected}
+                    onChange={() => setUserType(type.value)}
+                    className="sr-only"
+                  />
+                  <span
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl border transition ${
+                      selected
+                        ? `${type.border} bg-surface ${type.accent}`
+                        : 'border-line bg-canvas text-muted group-hover:text-text'
+                    }`}
+                  >
+                    <Icon className="h-5 w-5" strokeWidth={1.75} />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className={`block text-sm font-semibold ${selected ? type.accent : 'text-text'}`}>
+                      {type.label}
+                    </span>
+                    <span className="block text-xs text-muted">{type.description}</span>
+                  </span>
+                  <span
+                    className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition ${
+                      selected ? `${type.border} bg-surface` : 'border-line-strong bg-canvas'
+                    }`}
+                  >
+                    {selected ? <span className={`h-2 w-2 rounded-full ${type.dot}`} /> : null}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="my-6 h-px bg-line" />
+
+        <ResultPanel userType={userType} />
+      </section>
+
+      <section className="animate-rise-delay-2">
+        <div className="mb-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Documentation</p>
+          <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-text">Usage Examples</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
+            Patterns you can drop into real apps — from simple toggles to loading, permission, and role branches.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-5">
           <Snippet
             title="Basic Usage"
             description="Simple conditional rendering with If and Else components."
@@ -214,10 +379,18 @@ const UserDashboard = ({ user, isLoading, hasPermission }) => (
   </div>
 );`}
           />
-        </section>
-      </div>
-    </React.StrictMode>
+        </div>
+      </section>
+
+      <footer className="mt-14 border-t border-line pt-6 text-center text-xs text-muted">
+        @glhrmoura/react-conditional
+      </footer>
+    </div>
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<App />);
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
