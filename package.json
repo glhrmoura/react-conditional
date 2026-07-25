@@ -1,6 +1,9 @@
 {
   "name": "glhrmoura-react-conditional-demo",
   "description": "Demo page of @glhrmoura/react-conditional",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
