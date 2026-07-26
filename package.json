@@ -17,6 +17,7 @@
     "type": "git",
     "url": "git+https://github.com/glhrmoura/react-conditional.git"
   },
+  "homepage": "https://glhrmoura-react-conditional.netlify.app/",
   "license": "MIT",
   "private": false,
   "publishConfig": {
@@ -26,8 +27,12 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/build.js",
+    "bump": "node scripts/bump-version.mjs",
+    "pre-push": "node scripts/up-version.js",
     "preview": "vite preview",
-    "prepare": "yarn build"
+    "prepare": "husky",
+    "prepublishOnly": "yarn build",
+    "publish:npm": "npm publish"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -42,6 +47,7 @@
     "eslint": "^8.40.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^9.1.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "terser": "^5.43.1",
