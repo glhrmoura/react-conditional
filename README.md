@@ -12,7 +12,7 @@
 
 The React Conditional library is a powerful tool that assists in conditional rendering of components in React applications. With this library, developers can easily define conditions for displaying certain components in their applications using a clean and intuitive React Slots API.
 
-### Demo
+### Documentation
 
 [**React Conditional**](https://glhrmoura-react-conditional.netlify.app)
 
