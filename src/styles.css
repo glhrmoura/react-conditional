@@ -34,11 +34,6 @@
     font-family: var(--font-sans);
     color: var(--color-text);
     background-color: var(--color-canvas);
-    background-image:
-      radial-gradient(ellipse 80% 50% at 12% -8%, rgba(45, 212, 191, 0.12), transparent 55%),
-      radial-gradient(ellipse 70% 45% at 88% 0%, rgba(224, 179, 90, 0.08), transparent 50%),
-      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(42, 51, 68, 0.45), transparent 55%);
-    background-attachment: fixed;
   }
 
   ::selection {
