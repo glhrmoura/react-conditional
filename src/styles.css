@@ -42,17 +42,6 @@
   }
 }
 
-@keyframes rise-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes border-pulse {
   0%,
   100% {
@@ -61,18 +50,6 @@
   50% {
     border-color: color-mix(in srgb, var(--color-accent) 20%, var(--color-line));
   }
-}
-
-.animate-rise {
-  animation: rise-in 0.55s ease-out both;
-}
-
-.animate-rise-delay-1 {
-  animation: rise-in 0.55s ease-out 0.08s both;
-}
-
-.animate-rise-delay-2 {
-  animation: rise-in 0.55s ease-out 0.16s both;
 }
 
 .animate-border-pulse {

@@ -173,7 +173,7 @@ function App() {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-10 sm:px-6 sm:py-16 lg:py-20">
-      <header className="animate-rise mb-10 text-center sm:mb-14">
+      <header className="mb-10 text-center sm:mb-14">
         <h1 className="font-display text-4xl font-bold tracking-tight text-text sm:text-5xl">
           React Conditional
         </h1>
@@ -199,7 +199,7 @@ function App() {
         </a>
       </header>
 
-      <section className="animate-rise-delay-1 mb-12">
+      <section className="mb-12">
         <div className="mb-6">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Getting started</p>
           <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-text">Install</h2>
@@ -224,7 +224,7 @@ function App() {
         </div>
       </section>
 
-      <section className="animate-rise-delay-1 mb-12 overflow-hidden rounded-[1.75rem] border border-line bg-surface p-5 sm:p-8">
+      <section className="mb-12 overflow-hidden rounded-[1.75rem] border border-line bg-surface p-5 sm:p-8">
         <div className="mb-6 flex items-end justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Live playground</p>
@@ -289,7 +289,7 @@ function App() {
         <ResultPanel userType={userType} />
       </section>
 
-      <section className="animate-rise-delay-2">
+      <section>
         <div className="mb-6">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Documentation</p>
           <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-text">Usage Examples</h2>
