@@ -187,10 +187,15 @@ function App() {
           href="https://www.npmjs.com/package/@glhrmoura/react-conditional"
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-6 inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/50 hover:text-accent"
+          className="group mt-6 inline-flex max-w-full items-center gap-3 rounded-2xl border border-line bg-surface-raised px-3 py-2.5 transition duration-200 hover:border-accent/45 hover:bg-accent-soft"
         >
-          View on npm
-          <ExternalLink className="h-3.5 w-3.5" strokeWidth={2.25} />
+          <span className="shrink-0 rounded-md border border-[#9b2c2c] bg-[#cb3837] px-2 py-1 font-mono text-[11px] font-bold leading-none tracking-wide text-white">
+            npm
+          </span>
+          <span className="min-w-0 truncate font-mono text-sm text-text transition group-hover:text-accent">
+            @glhrmoura/react-conditional
+          </span>
+          <ExternalLink className="h-3.5 w-3.5 shrink-0 text-muted transition group-hover:text-accent" strokeWidth={2.25} />
         </a>
       </header>
 
