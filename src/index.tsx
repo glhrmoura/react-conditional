@@ -6,6 +6,7 @@ import Prism from 'prismjs';
 import 'prismjs/themes/prism-okaidia.css';
 import 'prismjs/components/prism-jsx';
 import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-bash';
 
 import './styles.css';
 
@@ -192,6 +193,31 @@ function App() {
           <ExternalLink className="h-3.5 w-3.5" strokeWidth={2.25} />
         </a>
       </header>
+
+      <section className="animate-rise-delay-1 mb-12">
+        <div className="mb-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Getting started</p>
+          <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-text">Install</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
+            Add React Conditional to your project with yarn or npm.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-5">
+          <Snippet
+            title="Yarn"
+            description="Install the package using yarn."
+            language="bash"
+            code={`yarn add @glhrmoura/react-conditional`}
+          />
+          <Snippet
+            title="npm"
+            description="Install the package using npm."
+            language="bash"
+            code={`npm install @glhrmoura/react-conditional`}
+          />
+        </div>
+      </section>
 
       <section className="animate-rise-delay-1 mb-12 overflow-hidden rounded-[1.75rem] border border-line bg-surface p-5 sm:p-8">
         <div className="mb-6 flex items-end justify-between gap-4">
