@@ -1,7 +1,7 @@
 {
   "name": "@glhrmoura/react-conditional",
   "version": "0.5.12",
-  "description": "The React Conditional library is a powerful tool that assists in conditional rendering of components in React applications.",
+  "description": "Declarative conditional rendering for React with Condition/If/ElseIf/Else and Switch/Match/Default",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -59,7 +59,11 @@
   "keywords": [
     "react",
     "typescript",
-    "javascript"
+    "javascript",
+    "conditional-rendering",
+    "switch",
+    "match",
+    "slots"
   ],
   "files": [
     "dist",
