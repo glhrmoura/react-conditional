@@ -30,7 +30,8 @@
     "bump": "node scripts/bump-version.mjs",
     "preview": "vite preview",
     "prepublishOnly": "yarn bump && yarn build",
-    "publish:npm": "npm publish"
+    "publish:npm": "npm publish",
+    "mcp:build": "npm run build --prefix mcp/release"
   },
   "peerDependencies": {
     "react": ">=16"
