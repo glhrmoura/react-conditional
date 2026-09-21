@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import { resolveChildren } from '../../utils/resolve-children';
+import { resolveChildren } from '@/lib/utils/resolve-children';
 
 export interface PortalProps {
   case: boolean;
