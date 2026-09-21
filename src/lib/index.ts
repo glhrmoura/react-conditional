@@ -1,37 +1,37 @@
-import { Condition, If, ElseIf, Else } from './components/Condition';
-import type { ConditionProps, IfProps, ElseIfProps, ElseProps } from './components/Condition';
-import { Switch, Match, Default } from './components/Switch';
-import type { SwitchProps, MatchProps, DefaultProps, MatchWhen } from './components/Switch';
-import { Unless } from './components/Unless';
-import type { UnlessProps } from './components/Unless';
-import { Show } from './components/Show';
-import type { ShowProps } from './components/Show';
-import { Guard, When } from './components/Guard';
-import type { GuardProps, WhenProps } from './components/Guard';
-import { Exists } from './components/Exists';
-import type { ExistsProps } from './components/Exists';
-import { Empty } from './components/Empty';
-import type { EmptyProps } from './components/Empty';
-import { Every } from './components/Every';
-import type { EveryProps } from './components/Every';
-import { Some } from './components/Some';
-import type { SomeProps } from './components/Some';
-import { Fallback } from './components/Fallback';
-import type { FallbackProps } from './components/Fallback';
-import { Either, Then, Otherwise } from './components/Either';
-import type { EitherProps, ThenProps, OtherwiseProps } from './components/Either';
-import { Toggle } from './components/Toggle';
-import type { ToggleProps } from './components/Toggle';
-import { Compare } from './components/Compare';
-import type { CompareProps } from './components/Compare';
-import { Includes } from './components/Includes';
-import type { IncludesProps } from './components/Includes';
-import { Once } from './components/Once';
-import type { OnceProps } from './components/Once';
-import { Lazy } from './components/Lazy';
-import type { LazyProps } from './components/Lazy';
-import { Portal } from './components/Portal';
-import type { PortalProps } from './components/Portal';
+import { Condition, If, ElseIf, Else } from '@/lib/components/Condition';
+import type { ConditionProps, IfProps, ElseIfProps, ElseProps } from '@/lib/components/Condition';
+import { Switch, Match, Default } from '@/lib/components/Switch';
+import type { SwitchProps, MatchProps, DefaultProps, MatchWhen } from '@/lib/components/Switch';
+import { Unless } from '@/lib/components/Unless';
+import type { UnlessProps } from '@/lib/components/Unless';
+import { Show } from '@/lib/components/Show';
+import type { ShowProps } from '@/lib/components/Show';
+import { Guard, When } from '@/lib/components/Guard';
+import type { GuardProps, WhenProps } from '@/lib/components/Guard';
+import { Exists } from '@/lib/components/Exists';
+import type { ExistsProps } from '@/lib/components/Exists';
+import { Empty } from '@/lib/components/Empty';
+import type { EmptyProps } from '@/lib/components/Empty';
+import { Every } from '@/lib/components/Every';
+import type { EveryProps } from '@/lib/components/Every';
+import { Some } from '@/lib/components/Some';
+import type { SomeProps } from '@/lib/components/Some';
+import { Fallback } from '@/lib/components/Fallback';
+import type { FallbackProps } from '@/lib/components/Fallback';
+import { Either, Then, Otherwise } from '@/lib/components/Either';
+import type { EitherProps, ThenProps, OtherwiseProps } from '@/lib/components/Either';
+import { Toggle } from '@/lib/components/Toggle';
+import type { ToggleProps } from '@/lib/components/Toggle';
+import { Compare } from '@/lib/components/Compare';
+import type { CompareProps } from '@/lib/components/Compare';
+import { Includes } from '@/lib/components/Includes';
+import type { IncludesProps } from '@/lib/components/Includes';
+import { Once } from '@/lib/components/Once';
+import type { OnceProps } from '@/lib/components/Once';
+import { Lazy } from '@/lib/components/Lazy';
+import type { LazyProps } from '@/lib/components/Lazy';
+import { Portal } from '@/lib/components/Portal';
+import type { PortalProps } from '@/lib/components/Portal';
 import {
   useShow,
   useMatch,
@@ -39,7 +39,7 @@ import {
   useEmpty,
   useIncludes,
   useCompare,
-} from './hooks';
+} from '@/lib/hooks';
 
 export {
   Condition,
