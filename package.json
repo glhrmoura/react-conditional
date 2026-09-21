@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@glhrmoura/react-conditional": "0.8.0",
+    "@glhrmoura/react-conditional": "0.9.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^24.2.1",
     "@types/react": "^18.2.5",
