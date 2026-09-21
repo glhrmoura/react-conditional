@@ -10,7 +10,9 @@
 [![NPM Version](https://img.shields.io/npm/v/@glhrmoura/react-conditional.svg?style=for-the-badge)](https://www.npmjs.com/package/@glhrmoura/react-conditional)
 [![License](https://img.shields.io/npm/l/@glhrmoura/react-conditional.svg?style=for-the-badge)](https://github.com/glhrmoura/react-conditional/blob/main/LICENSE)
 
-The React Conditional library is a powerful tool that assists in conditional rendering of components in React applications. With this library, developers can easily define conditions for displaying certain components in their applications using a clean and intuitive React Slots API.
+Declarative conditional rendering for React with a slots API.
+
+Use `Condition`, `If`, `ElseIf`, and `Else` for boolean branches, or `Switch`, `Match`, and `Default` to match against a value.
 
 ### Documentation
 
@@ -18,13 +20,9 @@ The React Conditional library is a powerful tool that assists in conditional ren
 
 ### Install
 
-To add React Conditional to your project, use one of the following commands:
-
 ```bash
 yarn add @glhrmoura/react-conditional
 ```
-
-or
 
 ```bash
 npm install @glhrmoura/react-conditional
@@ -32,12 +30,12 @@ npm install @glhrmoura/react-conditional
 
 ### Usage
 
-The library provides a clean React Slots API with `Condition`, `If`, `ElseIf`, and `Else` components. The order of precedence is always: `If` → `ElseIf` → `Else`, regardless of the order in the children list.
+#### Condition
 
-#### Basic Usage
+The precedence order is always `If` → `ElseIf` → `Else`, regardless of the children order.
 
 ```jsx
-import { Condition, If, Else } from "@glhrmoura/react-conditional";
+import { Condition, If, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged }) => (
   <Condition>
@@ -49,10 +47,8 @@ const App = ({ isLogged }) => (
 
 #### Multiple Conditions
 
-You can use the `ElseIf` component to specify additional conditions that will be checked if the previous conditions are not met.
-
 ```jsx
-import { Condition, If, ElseIf, Else } from "@glhrmoura/react-conditional";
+import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged, isLoading }) => (
   <Condition>
@@ -65,10 +61,8 @@ const App = ({ isLogged, isLoading }) => (
 
 #### Complex Conditions
 
-You can pass multiple `ElseIf` components that follow the rendering order defined by the library's precedence rules.
-
 ```jsx
-import { Condition, If, ElseIf, Else } from "@glhrmoura/react-conditional";
+import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isBasicUser, isVIPUser, isAdminUser }) => (
   <Condition>
@@ -82,10 +76,8 @@ const App = ({ isBasicUser, isVIPUser, isAdminUser }) => (
 
 #### Order Independence
 
-The components work regardless of their order in the children list. The precedence is always maintained:
-
 ```jsx
-import { Condition, If, ElseIf, Else } from "@glhrmoura/react-conditional";
+import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged }) => (
   <Condition>
@@ -98,44 +90,24 @@ const App = ({ isLogged }) => (
 
 #### Function Children
 
-You can pass functions as children to any component. This is useful for lazy evaluation or when you need to perform calculations before rendering:
+Children can be a function for lazy evaluation:
 
 ```jsx
-import { Condition, If, ElseIf, Else } from "@glhrmoura/react-conditional";
+import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ userType }) => (
   <Condition>
-    <If case={userType === "basic"}>
-      {() => <div style={{ color: "green" }}>✅ The user is a basic user</div>}
+    <If case={userType === 'basic'}>
+      {() => <div style={{ color: 'green' }}>The user is a basic user</div>}
     </If>
-    <ElseIf case={userType === "vip"}>
-      {() => <div style={{ color: "blue" }}>💎 The user is a vip user</div>}
+    <ElseIf case={userType === 'vip'}>
+      {() => <div style={{ color: 'blue' }}>The user is a vip user</div>}
     </ElseIf>
-    <ElseIf case={userType === "admin"}>
-      {() => <div style={{ color: "red" }}>👑 The user is an admin user</div>}
+    <ElseIf case={userType === 'admin'}>
+      {() => <div style={{ color: 'red' }}>The user is an admin user</div>}
     </ElseIf>
     <Else>
-      {() => <div style={{ color: "gray" }}>❌ The user is not logged in</div>}
-    </Else>
-  </Condition>
-);
-```
-
-You can also mix regular ReactNode and function children:
-
-```jsx
-import { Condition, If, Else } from "@glhrmoura/react-conditional";
-
-const App = ({ isLogged }) => (
-  <Condition>
-    <If case={isLogged}>
-      <div>User is logged in</div>
-    </If>
-    <Else>
-      {() => {
-        const message = "User is not logged in";
-        return <div style={{ color: "red" }}>{message}</div>;
-      }}
+      {() => <div style={{ color: 'gray' }}>The user is not logged in</div>}
     </Else>
   </Condition>
 );
@@ -143,17 +115,31 @@ const App = ({ isLogged }) => (
 
 #### Switch Matching
 
-Use `Switch`, `Match`, and `Default` to render based on a value. `when` accepts an exact value or a predicate function:
+Use `Switch`, `Match`, and `Default` to render based on a value. `when` accepts an exact value or a predicate. The first matching `Match` wins; otherwise `Default` is rendered.
 
 ```jsx
-import { Switch, Match, Default } from "@glhrmoura/react-conditional";
+import { Switch, Match, Default } from '@glhrmoura/react-conditional';
 
 const App = ({ status }) => (
   <Switch value={status}>
-    <Match when="loading">Loading...</Match>
-    <Match when="error">Something went wrong</Match>
-    <Match when={(value) => value === "success"}>Done</Match>
+    <Match when='loading'>Loading...</Match>
+    <Match when='error'>Something went wrong</Match>
+    <Match when={(value) => value === 'success'}>Done</Match>
     <Default>Unknown status</Default>
+  </Switch>
+);
+```
+
+`Match` and `Default` can appear in any order; matching still prefers the first successful `Match`, then `Default`.
+
+```jsx
+import { Switch, Match, Default } from '@glhrmoura/react-conditional';
+
+const App = ({ role }) => (
+  <Switch value={role}>
+    <Default>Guest</Default>
+    <Match when='admin'>Administrator</Match>
+    <Match when={(value) => value === 'editor'}>Editor</Match>
   </Switch>
 );
 ```
@@ -162,41 +148,45 @@ const App = ({ status }) => (
 
 #### `Condition`
 
-The main wrapper component that manages conditional rendering.
+Boolean conditional wrapper that renders the first matching branch.
+
+**Props:**
+
+- `children: ReactNode` - `If`, `ElseIf`, and `Else` slots
 
 #### `If`
 
-Renders children when the case is true. Has the highest precedence.
+Renders children when `case` is true. Highest precedence inside `Condition`.
 
 **Props:**
 
-- `case: boolean` - The case to evaluate
-- `children: ReactNode | (() => ReactNode)` - The content to render when case is true
+- `case: boolean`
+- `children: ReactNode | (() => ReactNode)`
 
 #### `ElseIf`
 
-Renders children when the case is true and no previous `If` or `ElseIf` has been rendered.
+Renders children when `case` is true and no previous `If` or `ElseIf` matched.
 
 **Props:**
 
-- `case: boolean` - The case to evaluate
-- `children: ReactNode | (() => ReactNode)` - The content to render when case is true
+- `case: boolean`
+- `children: ReactNode | (() => ReactNode)`
 
 #### `Else`
 
-Renders children when no `If` or `ElseIf` conditions have been met.
+Fallback when no `If` or `ElseIf` matched.
 
 **Props:**
 
-- `children: ReactNode | (() => ReactNode)` - The fallback content to render
+- `children: ReactNode | (() => ReactNode)`
 
 #### `Switch`
 
-Renders the first matching `Match` for a given value, or `Default` when nothing matches.
+Value-based conditional wrapper that renders the first matching `Match`, or `Default`.
 
 **Props:**
 
-- `value: unknown` - The value to match against
+- `value: unknown`
 - `children: ReactNode` - `Match` and `Default` slots
 
 #### `Match`
@@ -205,16 +195,16 @@ Renders children when `when` matches the parent `Switch` value.
 
 **Props:**
 
-- `when: unknown | ((value: unknown) => boolean)` - Exact value match or predicate
-- `children: ReactNode | (() => ReactNode)` - The content to render when matched
+- `when: unknown | ((value: unknown) => boolean)` - exact match via `Object.is`, or predicate
+- `children: ReactNode | (() => ReactNode)`
 
 #### `Default`
 
-Renders children when no `Match` has matched inside `Switch`.
+Fallback when no `Match` matched inside `Switch`.
 
 **Props:**
 
-- `children: ReactNode | (() => ReactNode)` - The fallback content to render
+- `children: ReactNode | (() => ReactNode)`
 
 ### License
 
