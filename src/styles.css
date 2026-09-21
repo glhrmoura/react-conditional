@@ -36,9 +36,11 @@
     background-color: var(--color-canvas);
   }
 
-  ::selection {
-    background: color-mix(in srgb, var(--color-accent) 35%, transparent);
-    color: var(--color-text);
+  button,
+  a,
+  label,
+  [role='button'] {
+    cursor: pointer;
   }
 }
 
