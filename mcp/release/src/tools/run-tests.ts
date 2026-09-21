@@ -1,13 +1,13 @@
-import { z } from "zod";
-import { runCommand } from "../utils/exec.js";
+import { z } from 'zod';
+import { runCommand } from '../utils/exec.js';
 import {
   assertDir,
   detectPackageManager,
   readPackageJson,
   resolveCwd,
   toPackageInfo,
-} from "../utils/package.js";
-import { markTests } from "../utils/gates.js";
+} from '../utils/package.js';
+import { markTests } from '../utils/gates.js';
 
 export const runTestsSchema = {
   cwd: z.string().optional(),
@@ -20,7 +20,7 @@ export const runTestsSchema = {
 export async function runTests(args: { cwd?: string; script?: string }) {
   const cwd = await resolveCwd(args.cwd);
   await assertDir(cwd);
-  const script = args.script || "test";
+  const script = args.script || 'test';
   const info = toPackageInfo(await readPackageJson(cwd));
   const pm = await detectPackageManager(cwd);
 
@@ -35,11 +35,11 @@ export async function runTests(args: { cwd?: string; script?: string }) {
   }
 
   const command =
-    pm === "yarn"
-      ? ["yarn", script]
-      : pm === "pnpm"
-        ? ["pnpm", "run", script]
-        : ["npm", "run", script];
+    pm === 'yarn'
+      ? ['yarn', script]
+      : pm === 'pnpm'
+        ? ['pnpm', 'run', script]
+        : ['npm', 'run', script];
 
   const result = await runCommand(command[0], command.slice(1), cwd);
   const gates = markTests(cwd, result.ok);
