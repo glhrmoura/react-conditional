@@ -1,4 +1,4 @@
-import type { GateState } from "../types/index.js";
+import type { GateState } from '../types/index.js';
 
 const gates = new Map<string, GateState>();
 
@@ -85,16 +85,16 @@ export function markRelease(cwd: string, tag: string): GateState {
 
 export function assertReadyForRelease(state: GateState): string[] {
   const missing: string[] = [];
-  if (!state.inspected) missing.push("inspect_package");
-  if (!state.testsPassed) missing.push("run_tests");
-  if (!state.buildPassed) missing.push("run_build");
-  if (!state.previewPassed) missing.push("preview_package");
-  if (!state.bumped) missing.push("bump_version");
+  if (!state.inspected) missing.push('inspect_package');
+  if (!state.testsPassed) missing.push('run_tests');
+  if (!state.buildPassed) missing.push('run_build');
+  if (!state.previewPassed) missing.push('preview_package');
+  if (!state.bumped) missing.push('bump_version');
   return missing;
 }
 
 export function assertReadyForPublish(state: GateState): string[] {
   const missing = assertReadyForRelease(state);
-  if (!state.releaseCreated) missing.push("create_release");
+  if (!state.releaseCreated) missing.push('create_release');
   return missing;
 }
