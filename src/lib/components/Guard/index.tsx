@@ -1,18 +1,19 @@
 import React, { ReactNode } from 'react';
-import { resolveChildren } from '../../utils/resolve-children';
+import { renderResolved } from '../../utils/render-resolved';
 
 export interface GuardProps {
   when: unknown;
   children: ReactNode | (() => ReactNode);
   fallback?: ReactNode | (() => ReactNode);
+  asChild?: boolean;
 }
 
-const Guard: React.FC<GuardProps> = ({ when, children, fallback }) => {
+const Guard: React.FC<GuardProps> = ({ when, children, fallback, asChild }) => {
   if (when) {
-    return <>{resolveChildren(children)}</>;
+    return <>{renderResolved(children, asChild)}</>;
   }
   if (fallback !== undefined) {
-    return <>{resolveChildren(fallback)}</>;
+    return <>{renderResolved(fallback, asChild)}</>;
   }
   return null;
 };
