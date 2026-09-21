@@ -1,6 +1,6 @@
 {
   "name": "@glhrmoura/react-conditional",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Declarative conditional rendering for React with slots, helpers, and hooks",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
