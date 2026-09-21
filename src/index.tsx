@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef, type ComponentType } from 'react';
+import React, { useState, useEffect, useRef, type ComponentType, type ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Condition, If, ElseIf, Else, Switch, Match, Default } from '@glhrmoura/react-conditional';
-import { User, Star, Shield, LogOut, Copy, Check, ExternalLink, Mail } from 'lucide-react';
+import { User, Star, Shield, LogOut, Copy, Check, ExternalLink, Mail, Menu, X } from 'lucide-react';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-okaidia.css';
 import 'prismjs/components/prism-jsx';
@@ -11,6 +11,41 @@ import 'prismjs/components/prism-bash';
 import './styles.css';
 
 type UserType = 'basic' | 'vip' | 'admin' | '';
+type TopicId = 'overview' | 'install' | 'playground' | 'condition' | 'switch';
+
+type NavItem = {
+  id: TopicId;
+  label: string;
+  description: string;
+};
+
+type NavGroup = {
+  title: string;
+  items: NavItem[];
+};
+
+const navGroups: NavGroup[] = [
+  {
+    title: 'Start',
+    items: [
+      { id: 'overview', label: 'Overview', description: 'What this library does' },
+      { id: 'install', label: 'Install', description: 'Add it to your project' },
+    ],
+  },
+  {
+    title: 'Try it',
+    items: [
+      { id: 'playground', label: 'Playground', description: 'Compare both APIs live' },
+    ],
+  },
+  {
+    title: 'API',
+    items: [
+      { id: 'condition', label: 'Condition', description: 'If, ElseIf, Else' },
+      { id: 'switch', label: 'Switch', description: 'Match, Default' },
+    ],
+  },
+];
 
 type UserOption = {
   label: string;
@@ -123,6 +158,24 @@ function Snippet({ title, code, description, language = 'jsx' }: SnippetProps) {
   );
 }
 
+function TopicHeader({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="mb-8">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">{eyebrow}</p>
+      <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-text">{title}</h2>
+      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">{description}</p>
+    </div>
+  );
+}
+
 function ApiResultCard({
   apiLabel,
   apiHint,
@@ -132,7 +185,7 @@ function ApiResultCard({
   apiLabel: string;
   apiHint: string;
   userType: UserType;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const active = userTypes.find((type) => type.value === userType) ?? userTypes[3];
   const Icon = active.icon;
@@ -158,221 +211,235 @@ function ApiResultCard({
   );
 }
 
-function ResultPanel({ userType }: { userType: UserType }) {
+function UserTypePicker({
+  userType,
+  onChange,
+}: {
+  userType: UserType;
+  onChange: (value: UserType) => void;
+}) {
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
-      <ApiResultCard
-        apiLabel="Condition"
-        apiHint="If → ElseIf → Else"
-        userType={userType}
-      >
-        <Condition>
-          <If case={userType === 'basic'}>
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-accent">The user is basic</h3>
-            </div>
-          </If>
-          <ElseIf case={userType === 'vip'}>
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-gold">The user is VIP</h3>
-            </div>
-          </ElseIf>
-          <ElseIf case={userType === 'admin'}>
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-admin">The user is admin</h3>
-            </div>
-          </ElseIf>
-          <Else>
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-rose">There is no user</h3>
-            </div>
-          </Else>
-        </Condition>
-      </ApiResultCard>
+    <div className="grid gap-3 sm:grid-cols-2">
+      {userTypes.map((type) => {
+        const Icon = type.icon;
+        const selected = type.value === userType;
 
-      <ApiResultCard
-        apiLabel="Switch"
-        apiHint="Match → Default"
-        userType={userType}
-      >
-        <Switch value={userType}>
-          <Match when="basic">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
-              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-accent">Matched basic</h3>
-            </div>
-          </Match>
-          <Match when="vip">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
-              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-gold">Matched VIP</h3>
-            </div>
-          </Match>
-          <Match when={(value: unknown) => value === 'admin'}>
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
-              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-admin">Matched admin</h3>
-            </div>
-          </Match>
-          <Default>
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
-              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-rose">Default branch</h3>
-            </div>
-          </Default>
-        </Switch>
-      </ApiResultCard>
+        return (
+          <label
+            key={type.label}
+            className={`group relative flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3.5 transition duration-200 ${
+              selected
+                ? `${type.border} ${type.soft}`
+                : 'border-line bg-surface-raised hover:border-line-strong'
+            }`}
+          >
+            <input
+              type="radio"
+              name="user-type"
+              value={type.value}
+              checked={selected}
+              onChange={() => onChange(type.value)}
+              className="sr-only"
+            />
+            <span
+              className={`flex h-10 w-10 items-center justify-center rounded-xl border transition ${
+                selected
+                  ? `${type.border} bg-surface ${type.accent}`
+                  : 'border-line bg-canvas text-muted group-hover:text-text'
+              }`}
+            >
+              <Icon className="h-5 w-5" strokeWidth={1.75} />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className={`block text-sm font-semibold ${selected ? type.accent : 'text-text'}`}>
+                {type.label}
+              </span>
+              <span className="block text-xs text-muted">{type.description}</span>
+            </span>
+            <span
+              className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition ${
+                selected ? `${type.border} bg-surface` : 'border-line-strong bg-canvas'
+              }`}
+            >
+              {selected ? <span className={`h-2 w-2 rounded-full ${type.dot}`} /> : null}
+            </span>
+          </label>
+        );
+      })}
     </div>
   );
 }
 
-function App() {
-  const [userType, setUserType] = useState<UserType>('basic');
-
+function OverviewTopic() {
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <div className="mx-auto w-full max-w-3xl flex-1 px-4 py-10 sm:px-6 sm:py-16 lg:py-20">
-      <header className="mb-10 text-center sm:mb-14">
-        <h1 className="font-display text-4xl font-bold tracking-tight text-text sm:text-5xl">
-          React Conditional
-        </h1>
-        <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-          Declarative{' '}
-          <code className="rounded-md border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent">Condition</code>
-          {' '}and{' '}
-          <code className="rounded-md border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent">Switch</code>
-          {' '}APIs with{' '}
-          <code className="rounded-md border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent">If</code>,{' '}
-          <code className="rounded-md border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent">Match</code>, and readable JSX.
-        </p>
-        <a
-          href="https://www.npmjs.com/package/@glhrmoura/react-conditional"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group mt-6 inline-flex max-w-full items-center gap-3 rounded-2xl border border-line bg-surface-raised px-3 py-2.5 transition duration-200 hover:border-accent/45 hover:bg-accent-soft"
-        >
-          <span className="shrink-0 rounded-md border border-[#9b2c2c] bg-[#cb3837] px-2 py-1 font-mono text-[11px] font-bold leading-none tracking-wide text-white">
-            npm
-          </span>
-          <span className="min-w-0 truncate font-mono text-sm text-text transition group-hover:text-accent">
-            @glhrmoura/react-conditional
-          </span>
-          <ExternalLink className="h-3.5 w-3.5 shrink-0 text-muted transition group-hover:text-accent" strokeWidth={2.25} />
-        </a>
-      </header>
-
-      <section className="mb-12">
-        <div className="mb-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Getting started</p>
-          <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-text">Install</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
-            Add React Conditional to your project with yarn or npm.
+    <div>
+      <TopicHeader
+        eyebrow="Start"
+        title="Overview"
+        description="Declarative conditional rendering for React with a slots API. Use Condition for boolean branches, or Switch to match against a value."
+      />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <article className="rounded-2xl border border-line bg-surface p-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Condition</p>
+          <h3 className="mt-3 font-display text-xl font-semibold text-text">Boolean branches</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            Compose <code className="font-mono text-accent">If</code>,{' '}
+            <code className="font-mono text-accent">ElseIf</code>, and{' '}
+            <code className="font-mono text-accent">Else</code> with clear precedence.
           </p>
-        </div>
-
-        <div className="flex flex-col gap-5">
-          <Snippet
-            title="Yarn"
-            description="Install the package using yarn."
-            language="bash"
-            code={`yarn add @glhrmoura/react-conditional`}
-          />
-          <Snippet
-            title="npm"
-            description="Install the package using npm."
-            language="bash"
-            code={`npm install @glhrmoura/react-conditional`}
-          />
-        </div>
-      </section>
-
-      <section className="mb-12">
-        <div className="mb-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Live playground</p>
-          <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-text">Interactive Demo</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
-            One input drives both APIs side by side — boolean branches with Condition, value matching with Switch.
+        </article>
+        <article className="rounded-2xl border border-line bg-surface p-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Switch</p>
+          <h3 className="mt-3 font-display text-xl font-semibold text-text">Value matching</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            Match a value with <code className="font-mono text-accent">Match</code> and fall back to{' '}
+            <code className="font-mono text-accent">Default</code>.
           </p>
+        </article>
+      </div>
+      <a
+        href="https://www.npmjs.com/package/@glhrmoura/react-conditional"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group mt-8 inline-flex max-w-full items-center gap-3 rounded-2xl border border-line bg-surface-raised px-3 py-2.5 transition duration-200 hover:border-accent/45 hover:bg-accent-soft"
+      >
+        <span className="shrink-0 rounded-md border border-[#9b2c2c] bg-[#cb3837] px-2 py-1 font-mono text-[11px] font-bold leading-none tracking-wide text-white">
+          npm
+        </span>
+        <span className="min-w-0 truncate font-mono text-sm text-text transition group-hover:text-accent">
+          @glhrmoura/react-conditional
+        </span>
+        <ExternalLink className="h-3.5 w-3.5 shrink-0 text-muted transition group-hover:text-accent" strokeWidth={2.25} />
+      </a>
+    </div>
+  );
+}
+
+function InstallTopic() {
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="Start"
+        title="Install"
+        description="Add React Conditional to your project with yarn or npm."
+      />
+      <div className="flex flex-col gap-5">
+        <Snippet
+          title="Yarn"
+          description="Install the package using yarn."
+          language="bash"
+          code={`yarn add @glhrmoura/react-conditional`}
+        />
+        <Snippet
+          title="npm"
+          description="Install the package using npm."
+          language="bash"
+          code={`npm install @glhrmoura/react-conditional`}
+        />
+      </div>
+    </div>
+  );
+}
+
+function PlaygroundTopic({
+  userType,
+  onChange,
+}: {
+  userType: UserType;
+  onChange: (value: UserType) => void;
+}) {
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="Try it"
+        title="Playground"
+        description="One shared input drives Condition and Switch side by side so you can compare both APIs."
+      />
+      <div className="overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="border-b border-line p-5 sm:p-8">
+          <p className="mb-3 text-sm font-medium text-muted">Shared input</p>
+          <UserTypePicker userType={userType} onChange={onChange} />
         </div>
+        <div className="p-5 sm:p-8">
+          <p className="mb-4 text-sm font-medium text-muted">API output</p>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <ApiResultCard apiLabel="Condition" apiHint="If → ElseIf → Else" userType={userType}>
+              <Condition>
+                <If case={userType === 'basic'}>
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-accent">The user is basic</h3>
+                  </div>
+                </If>
+                <ElseIf case={userType === 'vip'}>
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-gold">The user is VIP</h3>
+                  </div>
+                </ElseIf>
+                <ElseIf case={userType === 'admin'}>
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-admin">The user is admin</h3>
+                  </div>
+                </ElseIf>
+                <Else>
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-rose">There is no user</h3>
+                  </div>
+                </Else>
+              </Condition>
+            </ApiResultCard>
 
-        <div className="overflow-hidden rounded-[1.75rem] border border-line bg-surface">
-          <div className="border-b border-line p-5 sm:p-8">
-            <p className="mb-3 text-sm font-medium text-muted">Shared input</p>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {userTypes.map((type) => {
-                const Icon = type.icon;
-                const selected = type.value === userType;
-
-                return (
-                  <label
-                    key={type.label}
-                    className={`group relative flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3.5 transition duration-200 ${
-                      selected
-                        ? `${type.border} ${type.soft}`
-                        : 'border-line bg-surface-raised hover:border-line-strong'
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="user-type"
-                      value={type.value}
-                      checked={selected}
-                      onChange={() => setUserType(type.value)}
-                      className="sr-only"
-                    />
-                    <span
-                      className={`flex h-10 w-10 items-center justify-center rounded-xl border transition ${
-                        selected
-                          ? `${type.border} bg-surface ${type.accent}`
-                          : 'border-line bg-canvas text-muted group-hover:text-text'
-                      }`}
-                    >
-                      <Icon className="h-5 w-5" strokeWidth={1.75} />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className={`block text-sm font-semibold ${selected ? type.accent : 'text-text'}`}>
-                        {type.label}
-                      </span>
-                      <span className="block text-xs text-muted">{type.description}</span>
-                    </span>
-                    <span
-                      className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition ${
-                        selected ? `${type.border} bg-surface` : 'border-line-strong bg-canvas'
-                      }`}
-                    >
-                      {selected ? <span className={`h-2 w-2 rounded-full ${type.dot}`} /> : null}
-                    </span>
-                  </label>
-                );
-              })}
-            </div>
+            <ApiResultCard apiLabel="Switch" apiHint="Match → Default" userType={userType}>
+              <Switch value={userType}>
+                <Match when="basic">
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-accent">Matched basic</h3>
+                  </div>
+                </Match>
+                <Match when="vip">
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-gold">Matched VIP</h3>
+                  </div>
+                </Match>
+                <Match when={(value: unknown) => value === 'admin'}>
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-admin">Matched admin</h3>
+                  </div>
+                </Match>
+                <Default>
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-rose">Default branch</h3>
+                  </div>
+                </Default>
+              </Switch>
+            </ApiResultCard>
           </div>
-
-          <div className="p-5 sm:p-8">
-            <p className="mb-4 text-sm font-medium text-muted">API output</p>
-            <ResultPanel userType={userType} />
-          </div>
         </div>
-      </section>
+      </div>
+    </div>
+  );
+}
 
-      <section>
-        <div className="mb-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Documentation</p>
-          <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-text">Usage Examples</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
-            Patterns you can drop into real apps — boolean branches with Condition, or value matching with Switch.
-          </p>
-        </div>
-
-        <div className="flex flex-col gap-5">
-          <Snippet
-            title="Basic Usage"
-            description="Simple conditional rendering with If and Else components."
-            code={`import { Condition, If, Else } from '@glhrmoura/react-conditional';
+function ConditionTopic() {
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Condition"
+        description="Boolean conditional rendering. Precedence is always If → ElseIf → Else, regardless of children order."
+      />
+      <div className="flex flex-col gap-5">
+        <Snippet
+          title="Basic Usage"
+          description="Simple conditional rendering with If and Else components."
+          code={`import { Condition, If, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged }) => (
   <Condition>
@@ -384,41 +451,11 @@ const App = ({ isLogged }) => (
     </Else>
   </Condition>
 );`}
-          />
-
-          <Snippet
-            title="Switch Matching"
-            description="Match against a value with Switch, Match, and Default. when accepts an exact value or a predicate."
-            code={`import { Switch, Match, Default } from '@glhrmoura/react-conditional';
-
-const App = ({ status }) => (
-  <Switch value={status}>
-    <Match when='loading'>Loading...</Match>
-    <Match when='error'>Something went wrong</Match>
-    <Match when={(value) => value === 'success'}>Done</Match>
-    <Default>Unknown status</Default>
-  </Switch>
-);`}
-          />
-
-          <Snippet
-            title="Switch Order Independence"
-            description="Match and Default can appear in any order. The first matching Match wins, then Default."
-            code={`import { Switch, Match, Default } from '@glhrmoura/react-conditional';
-
-const App = ({ role }) => (
-  <Switch value={role}>
-    <Default>Guest</Default>
-    <Match when='admin'>Administrator</Match>
-    <Match when={(value) => value === 'editor'}>Editor</Match>
-  </Switch>
-);`}
-          />
-
-          <Snippet
-            title="Multiple Conditions"
-            description="Using ElseIf for additional conditional branches."
-            code={`import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
+        />
+        <Snippet
+          title="Multiple Conditions"
+          description="Using ElseIf for additional conditional branches."
+          code={`import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ userRole }) => (
   <Condition>
@@ -436,12 +473,11 @@ const App = ({ userRole }) => (
     </Else>
   </Condition>
 );`}
-          />
-
-          <Snippet
-            title="Loading States"
-            description="Common pattern for handling loading and error states."
-            code={`import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
+        />
+        <Snippet
+          title="Loading States"
+          description="Common pattern for handling loading and error states."
+          code={`import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ data, isLoading, error }) => (
   <Condition>
@@ -456,12 +492,11 @@ const App = ({ data, isLoading, error }) => (
     </Else>
   </Condition>
 );`}
-          />
-
-          <Snippet
-            title="Order Independence"
-            description="Components work regardless of their order in JSX. Precedence is always maintained."
-            code={`import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
+        />
+        <Snippet
+          title="Order Independence"
+          description="Components work regardless of their order in JSX. Precedence is always maintained."
+          code={`import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged }) => (
   <Condition>
@@ -473,15 +508,12 @@ const App = ({ isLogged }) => (
       This won't render
     </ElseIf>
   </Condition>
-);
-
-// Precedence: If → ElseIf → Else`}
-          />
-
-          <Snippet
-            title="Complex User Interface"
-            description="Real-world example with multiple conditions and complex UI."
-            code={`import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
+);`}
+        />
+        <Snippet
+          title="Complex User Interface"
+          description="Real-world example with multiple conditions and complex UI."
+          code={`import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const UserDashboard = ({ user, isLoading, hasPermission }) => (
   <div className="dashboard">
@@ -514,13 +546,168 @@ const UserDashboard = ({ user, isLoading, hasPermission }) => (
     </Condition>
   </div>
 );`}
-          />
+        />
+      </div>
+    </div>
+  );
+}
+
+function SwitchTopic() {
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Switch"
+        description="Value-based matching. The first matching Match wins; otherwise Default is rendered. when accepts an exact value or a predicate."
+      />
+      <div className="flex flex-col gap-5">
+        <Snippet
+          title="Switch Matching"
+          description="Match against a value with Switch, Match, and Default."
+          code={`import { Switch, Match, Default } from '@glhrmoura/react-conditional';
+
+const App = ({ status }) => (
+  <Switch value={status}>
+    <Match when='loading'>Loading...</Match>
+    <Match when='error'>Something went wrong</Match>
+    <Match when={(value) => value === 'success'}>Done</Match>
+    <Default>Unknown status</Default>
+  </Switch>
+);`}
+        />
+        <Snippet
+          title="Order Independence"
+          description="Match and Default can appear in any order. The first matching Match still wins."
+          code={`import { Switch, Match, Default } from '@glhrmoura/react-conditional';
+
+const App = ({ role }) => (
+  <Switch value={role}>
+    <Default>Guest</Default>
+    <Match when='admin'>Administrator</Match>
+    <Match when={(value) => value === 'editor'}>Editor</Match>
+  </Switch>
+);`}
+        />
+      </div>
+    </div>
+  );
+}
+
+function SidebarNav({
+  topic,
+  onSelect,
+}: {
+  topic: TopicId;
+  onSelect: (id: TopicId) => void;
+}) {
+  return (
+    <nav className="flex flex-col gap-6" aria-label="Topics">
+      {navGroups.map((group) => (
+        <div key={group.title}>
+          <p className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
+            {group.title}
+          </p>
+          <ul className="flex flex-col gap-1">
+            {group.items.map((item) => {
+              const active = topic === item.id;
+              return (
+                <li key={item.id}>
+                  <button
+                    type="button"
+                    onClick={() => onSelect(item.id)}
+                    className={`w-full rounded-xl px-3 py-2.5 text-left transition ${
+                      active
+                        ? 'bg-accent-soft text-accent'
+                        : 'text-muted hover:bg-surface-raised hover:text-text'
+                    }`}
+                  >
+                    <span className="block text-sm font-semibold">{item.label}</span>
+                    <span className={`mt-0.5 block text-xs ${active ? 'text-accent/80' : 'text-muted/80'}`}>
+                      {item.description}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
         </div>
-      </section>
+      ))}
+    </nav>
+  );
+}
+
+function App() {
+  const [topic, setTopic] = useState<TopicId>('overview');
+  const [userType, setUserType] = useState<UserType>('basic');
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  const onSelectTopic = (id: TopicId) => {
+    setTopic(id);
+    setMobileNavOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <div className="flex min-h-screen w-full flex-col">
+      <div className="mx-auto flex w-full max-w-6xl flex-1 gap-0 px-4 py-6 sm:px-6 lg:gap-10 lg:py-10">
+        <aside className="hidden w-60 shrink-0 lg:block">
+          <div className="sticky top-8">
+            <div className="mb-8">
+              <p className="font-display text-lg font-bold tracking-tight text-text">React Conditional</p>
+              <p className="mt-1 text-xs text-muted">Docs & playground</p>
+            </div>
+            <SidebarNav topic={topic} onSelect={onSelectTopic} />
+          </div>
+        </aside>
+
+        <div className="min-w-0 flex-1">
+          <div className="mb-6 flex items-center justify-between gap-3 lg:hidden">
+            <div>
+              <p className="font-display text-lg font-bold tracking-tight text-text">React Conditional</p>
+              <p className="text-xs text-muted">Docs & playground</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setMobileNavOpen((open) => !open)}
+              className="inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 text-sm text-muted"
+              aria-expanded={mobileNavOpen}
+              aria-label="Toggle topics"
+            >
+              {mobileNavOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              Topics
+            </button>
+          </div>
+
+          {mobileNavOpen ? (
+            <div className="mb-6 rounded-2xl border border-line bg-surface p-4 lg:hidden">
+              <SidebarNav topic={topic} onSelect={onSelectTopic} />
+            </div>
+          ) : null}
+
+          <main>
+            <Condition>
+              <If case={topic === 'overview'}>
+                <OverviewTopic />
+              </If>
+              <ElseIf case={topic === 'install'}>
+                <InstallTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'playground'}>
+                <PlaygroundTopic userType={userType} onChange={setUserType} />
+              </ElseIf>
+              <ElseIf case={topic === 'condition'}>
+                <ConditionTopic />
+              </ElseIf>
+              <Else>
+                <SwitchTopic />
+              </Else>
+            </Condition>
+          </main>
+        </div>
       </div>
 
       <footer className="mt-auto w-full border-t border-line">
-        <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-3 px-4 py-6 text-xs text-muted sm:flex-row sm:justify-center sm:gap-6 sm:px-6">
+        <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-3 px-4 py-6 text-xs text-muted sm:flex-row sm:justify-center sm:gap-6 sm:px-6">
           <a
             href="mailto:mouraggui@gmail.com"
             className="inline-flex items-center gap-1.5 transition hover:text-accent"
