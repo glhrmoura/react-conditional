@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { resolveChildren } from '../../utils/resolve-children';
+import { resolveChildren } from '@/lib/utils/resolve-children';
 
 export interface SomeProps {
   cases: boolean[];
