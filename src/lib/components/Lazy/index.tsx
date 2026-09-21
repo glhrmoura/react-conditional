@@ -1,6 +1,6 @@
 import React, { ReactNode, useRef } from 'react';
-import { resolveChildren } from '../../utils/resolve-children';
-import { renderResolved } from '../../utils/render-resolved';
+import { resolveChildren } from '@/lib/utils/resolve-children';
+import { renderResolved } from '@/lib/utils/render-resolved';
 
 export interface LazyProps {
   case: boolean;
