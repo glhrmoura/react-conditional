@@ -178,10 +178,13 @@ function App() {
           React Conditional
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-          Declarative <code className="rounded-md border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent">If</code>,{' '}
-          <code className="rounded-md border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent">ElseIf</code>, and{' '}
-          <code className="rounded-md border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent">Else</code> components
-          with clear precedence and readable JSX.
+          Declarative{' '}
+          <code className="rounded-md border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent">Condition</code>
+          {' '}and{' '}
+          <code className="rounded-md border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent">Switch</code>
+          {' '}APIs with{' '}
+          <code className="rounded-md border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent">If</code>,{' '}
+          <code className="rounded-md border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.85em] text-accent">Match</code>, and readable JSX.
         </p>
         <a
           href="https://www.npmjs.com/package/@glhrmoura/react-conditional"
@@ -294,7 +297,7 @@ function App() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Documentation</p>
           <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-text">Usage Examples</h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
-            Patterns you can drop into real apps — from simple toggles to loading, permission, and role branches.
+            Patterns you can drop into real apps — boolean branches with Condition, or value matching with Switch.
           </p>
         </div>
 
@@ -313,6 +316,35 @@ const App = ({ isLogged }) => (
       <h1>Please log in</h1>
     </Else>
   </Condition>
+);`}
+          />
+
+          <Snippet
+            title="Switch Matching"
+            description="Match against a value with Switch, Match, and Default. when accepts an exact value or a predicate."
+            code={`import { Switch, Match, Default } from '@glhrmoura/react-conditional';
+
+const App = ({ status }) => (
+  <Switch value={status}>
+    <Match when='loading'>Loading...</Match>
+    <Match when='error'>Something went wrong</Match>
+    <Match when={(value) => value === 'success'}>Done</Match>
+    <Default>Unknown status</Default>
+  </Switch>
+);`}
+          />
+
+          <Snippet
+            title="Switch Order Independence"
+            description="Match and Default can appear in any order. The first matching Match wins, then Default."
+            code={`import { Switch, Match, Default } from '@glhrmoura/react-conditional';
+
+const App = ({ role }) => (
+  <Switch value={role}>
+    <Default>Guest</Default>
+    <Match when='admin'>Administrator</Match>
+    <Match when={(value) => value === 'editor'}>Editor</Match>
+  </Switch>
 );`}
           />
 
