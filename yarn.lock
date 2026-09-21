@@ -305,10 +305,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.21.5.tgz#acad351d582d157bb145535db2a6ff53dd514b5c"
   integrity sha512-tQd/1efJuzPC6rCFwEvLtci/xNFcTZknmXs98FYDfGE4wP9ClFV98nyKrzJKVPMhdDnjzLhdUyMX4PsQAPjwIw==
 
-"@glhrmoura/react-conditional@0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@glhrmoura/react-conditional/-/react-conditional-0.4.0.tgz#36310cf3035250be566eb9bad70457f4d417d266"
-  integrity sha512-JWRGvGkVjOL8V7X5H2ZJbySkKvB3bY/Aop4EXrFrMqQ9yzdcNjKJ2txyTPzNAjPpVKQfyWvleE5872pD60k68A==
+"@glhrmoura/react-conditional@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@glhrmoura/react-conditional/-/react-conditional-0.6.0.tgz#e1599173bc6ee592e117f51d17a008e1b4a5c277"
+  integrity sha512-oHPmTcgr1SH+X5gvcYZXL6eo3s/1YHpNtn4xQJMyErqhS64l/XRxJqc6Wyv908vNaH1oJlaBPh7mxTtkSRZkLg==
 
 "@jridgewell/gen-mapping@^0.3.12", "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.12"

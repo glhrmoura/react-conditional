@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, type ComponentType } from 'react';
 import ReactDOM from 'react-dom/client';
-import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
+import { Condition, If, ElseIf, Else, Switch, Match, Default } from '@glhrmoura/react-conditional';
 import { User, Star, Shield, LogOut, Copy, Check, ExternalLink, Mail } from 'lucide-react';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-okaidia.css';
@@ -128,40 +128,81 @@ function ResultPanel({ userType }: { userType: UserType }) {
   const Icon = active.icon;
 
   return (
-    <div className={`relative overflow-hidden rounded-2xl border ${active.border} ${active.soft} px-6 py-8 text-center`}>
-      <div className="pointer-events-none absolute inset-0 demo-grid opacity-30" />
-      <div className="relative mx-auto flex max-w-md flex-col items-center gap-4">
-        <div
-          className={`flex h-14 w-14 items-center justify-center rounded-2xl border ${active.border} bg-surface ${active.accent} animate-border-pulse`}
-        >
-          <Icon className="h-6 w-6" strokeWidth={1.75} />
+    <div className="grid gap-4">
+      <div className={`relative overflow-hidden rounded-2xl border ${active.border} ${active.soft} px-6 py-8 text-center`}>
+        <div className="pointer-events-none absolute inset-0 demo-grid opacity-30" />
+        <div className="relative mx-auto flex max-w-md flex-col items-center gap-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">Condition / If / ElseIf / Else</p>
+          <div
+            className={`flex h-14 w-14 items-center justify-center rounded-2xl border ${active.border} bg-surface ${active.accent} animate-border-pulse`}
+          >
+            <Icon className="h-6 w-6" strokeWidth={1.75} />
+          </div>
+          <Condition>
+            <If case={userType === 'basic'}>
+              <div>
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-accent">The user is basic</h2>
+              </div>
+            </If>
+            <ElseIf case={userType === 'vip'}>
+              <div>
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-gold">The user is VIP</h2>
+              </div>
+            </ElseIf>
+            <ElseIf case={userType === 'admin'}>
+              <div>
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-admin">The user is admin</h2>
+              </div>
+            </ElseIf>
+            <Else>
+              <div>
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-rose">There is no user</h2>
+              </div>
+            </Else>
+          </Condition>
         </div>
-        <Condition>
-          <If case={userType === 'basic'}>
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-              <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-accent">The user is basic</h2>
-            </div>
-          </If>
-          <ElseIf case={userType === 'vip'}>
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-              <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-gold">The user is VIP</h2>
-            </div>
-          </ElseIf>
-          <ElseIf case={userType === 'admin'}>
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-              <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-admin">The user is admin</h2>
-            </div>
-          </ElseIf>
-          <Else>
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-              <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-rose">There is no user</h2>
-            </div>
-          </Else>
-        </Condition>
+      </div>
+
+      <div className={`relative overflow-hidden rounded-2xl border ${active.border} ${active.soft} px-6 py-8 text-center`}>
+        <div className="pointer-events-none absolute inset-0 demo-grid opacity-30" />
+        <div className="relative mx-auto flex max-w-md flex-col items-center gap-4">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">Switch / Match / Default</p>
+          <div
+            className={`flex h-14 w-14 items-center justify-center rounded-2xl border ${active.border} bg-surface ${active.accent} animate-border-pulse`}
+          >
+            <Icon className="h-6 w-6" strokeWidth={1.75} />
+          </div>
+          <Switch value={userType}>
+            <Match when="basic">
+              <div>
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
+                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-accent">Matched basic</h2>
+              </div>
+            </Match>
+            <Match when="vip">
+              <div>
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
+                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-gold">Matched VIP</h2>
+              </div>
+            </Match>
+            <Match when={(value: unknown) => value === 'admin'}>
+              <div>
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
+                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-admin">Matched admin</h2>
+              </div>
+            </Match>
+            <Default>
+              <div>
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
+                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-rose">Default branch</h2>
+              </div>
+            </Default>
+          </Switch>
+        </div>
       </div>
     </div>
   );
