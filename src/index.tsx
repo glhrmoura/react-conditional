@@ -1,6 +1,22 @@
 import React, { useState, useEffect, useRef, type ComponentType, type ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { Condition, If, ElseIf, Else, Switch, Match, Default, Unless } from '@glhrmoura/react-conditional';
+import {
+  Condition,
+  If,
+  ElseIf,
+  Else,
+  Switch,
+  Match,
+  Default,
+  Unless,
+  Show,
+  Guard,
+  Exists,
+  Empty,
+  Every,
+  Some,
+  Fallback,
+} from '@glhrmoura/react-conditional';
 import { User, Star, Shield, LogOut, Copy, Check, ExternalLink, Mail, Menu, X } from 'lucide-react';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-okaidia.css';
@@ -11,7 +27,19 @@ import 'prismjs/components/prism-bash';
 import './styles.css';
 
 type UserType = 'basic' | 'vip' | 'admin' | '';
-type TopicId = 'overview' | 'install' | 'playground' | 'condition' | 'switch' | 'unless';
+type TopicId =
+  | 'overview'
+  | 'install'
+  | 'playground'
+  | 'condition'
+  | 'switch'
+  | 'unless'
+  | 'show'
+  | 'guard'
+  | 'exists'
+  | 'empty'
+  | 'compose'
+  | 'fallback';
 
 type NavItem = {
   id: TopicId;
@@ -44,6 +72,12 @@ const navGroups: NavGroup[] = [
       { id: 'condition', label: 'Condition', description: 'If, ElseIf, Else' },
       { id: 'switch', label: 'Switch', description: 'Match, Default' },
       { id: 'unless', label: 'Unless', description: 'Render when false' },
+      { id: 'show', label: 'Show', description: 'Standalone boolean' },
+      { id: 'guard', label: 'Guard', description: 'Truthy when / When' },
+      { id: 'exists', label: 'Exists', description: 'Not nullish' },
+      { id: 'empty', label: 'Empty', description: 'Empty values' },
+      { id: 'compose', label: 'Every / Some', description: 'Combine booleans' },
+      { id: 'fallback', label: 'Fallback', description: 'Required else branch' },
     ],
   },
 ];
@@ -277,9 +311,9 @@ function OverviewTopic() {
       <TopicHeader
         eyebrow="Start"
         title="Overview"
-        description="Declarative conditional rendering for React with a slots API. Use Condition for boolean branches, Switch to match values, or Unless for inverted guards."
+        description="Declarative conditional rendering for React with a slots API. Use Condition, Switch, Unless, Show, Guard, Exists, Empty, Every, Some, and Fallback."
       />
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <article className="rounded-2xl border border-line bg-surface p-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Condition</p>
           <h3 className="mt-3 font-display text-xl font-semibold text-text">Boolean branches</h3>
@@ -293,15 +327,19 @@ function OverviewTopic() {
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Switch</p>
           <h3 className="mt-3 font-display text-xl font-semibold text-text">Value matching</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            Match a value with <code className="font-mono text-accent">Match</code> and fall back to{' '}
+            Match a value, array of values, or predicate with{' '}
+            <code className="font-mono text-accent">Match</code> and{' '}
             <code className="font-mono text-accent">Default</code>.
           </p>
         </article>
         <article className="rounded-2xl border border-line bg-surface p-5">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Unless</p>
-          <h3 className="mt-3 font-display text-xl font-semibold text-text">Inverted guard</h3>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Helpers</p>
+          <h3 className="mt-3 font-display text-xl font-semibold text-text">Standalone checks</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            Render children only when <code className="font-mono text-accent">case</code> is false.
+            <code className="font-mono text-accent">Show</code>,{' '}
+            <code className="font-mono text-accent">Guard</code>,{' '}
+            <code className="font-mono text-accent">Exists</code>,{' '}
+            <code className="font-mono text-accent">Empty</code>, and more without wrappers.
           </p>
         </article>
       </div>
@@ -566,7 +604,7 @@ function SwitchTopic() {
       <TopicHeader
         eyebrow="API"
         title="Switch"
-        description="Value-based matching. The first matching Match wins; otherwise Default is rendered. when accepts an exact value or a predicate."
+        description="Value-based matching. The first matching Match wins; otherwise Default is rendered. when accepts an exact value, an array of values, or a predicate."
       />
       <div className="flex flex-col gap-5">
         <Snippet
@@ -577,7 +615,7 @@ function SwitchTopic() {
 const App = ({ status }) => (
   <Switch value={status}>
     <Match when='loading'>Loading...</Match>
-    <Match when='error'>Something went wrong</Match>
+    <Match when={['error', 'failed']}>Something went wrong</Match>
     <Match when={(value) => value === 'success'}>Done</Match>
     <Default>Unknown status</Default>
   </Switch>
@@ -660,6 +698,305 @@ const App = ({ error }) => (
 );`}
         />
       </div>
+    </div>
+  );
+}
+
+function ShowTopic() {
+  const [isLogged, setIsLogged] = useState(true);
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Show"
+        description="Standalone boolean render with an optional fallback. No Condition wrapper required."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setIsLogged((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            isLogged = {String(isLogged)}
+          </button>
+        </div>
+        <div className="p-5 sm:p-8">
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <Show case={isLogged} fallback={<p className="font-display text-xl font-semibold text-rose">Login prompt</p>}>
+              <p className="font-display text-xl font-semibold text-accent">Dashboard</p>
+            </Show>
+          </div>
+        </div>
+      </div>
+      <Snippet
+        title="Show with fallback"
+        description="Render children when case is true, otherwise fallback."
+        code={`import { Show } from '@glhrmoura/react-conditional';
+
+const App = ({ isLogged }) => (
+  <Show case={isLogged} fallback={<LoginPrompt />}>
+    <Dashboard />
+  </Show>
+);`}
+      />
+    </div>
+  );
+}
+
+function GuardTopic() {
+  const [user, setUser] = useState<{ name: string } | null>({ name: 'Ada' });
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Guard / When"
+        description="Render when when is truthy. When is an alias of Guard."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setUser((value) => (value ? null : { name: 'Ada' }))}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            user = {user ? user.name : 'null'}
+          </button>
+        </div>
+        <div className="p-5 sm:p-8">
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <Guard when={user} fallback={<p className="font-display text-xl font-semibold text-rose">Guest</p>}>
+              {() => <p className="font-display text-xl font-semibold text-accent">Hello, {user!.name}</p>}
+            </Guard>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-5">
+        <Snippet
+          title="Guard"
+          description="Truthy check with optional fallback."
+          code={`import { Guard } from '@glhrmoura/react-conditional';
+
+const App = ({ user }) => (
+  <Guard when={user} fallback={<Guest />}>
+    {() => <Profile name={user.name} />}
+  </Guard>
+);`}
+        />
+        <Snippet
+          title="When alias"
+          description="When is the same component as Guard."
+          code={`import { When } from '@glhrmoura/react-conditional';
+
+const App = ({ user }) => (
+  <When when={user?.isAdmin}>
+    <AdminPanel />
+  </When>
+);`}
+        />
+      </div>
+    </div>
+  );
+}
+
+function ExistsTopic() {
+  const [user, setUser] = useState<{ name: string } | null>({ name: 'Ada' });
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Exists"
+        description="Render when value is not null or undefined. Unlike Guard, 0 and empty string still count as existing."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setUser((value) => (value ? null : { name: 'Ada' }))}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            user = {user ? 'object' : 'null'}
+          </button>
+        </div>
+        <div className="p-5 sm:p-8">
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <Exists value={user} fallback={<p className="font-display text-xl font-semibold text-rose">Missing</p>}>
+              {() => <p className="font-display text-xl font-semibold text-accent">{user!.name}</p>}
+            </Exists>
+          </div>
+        </div>
+      </div>
+      <Snippet
+        title="Exists"
+        description="Nullish check with optional fallback."
+        code={`import { Exists } from '@glhrmoura/react-conditional';
+
+const App = ({ user }) => (
+  <Exists value={user} fallback={<Guest />}>
+    {() => <Profile name={user.name} />}
+  </Exists>
+);`}
+      />
+    </div>
+  );
+}
+
+function EmptyTopic() {
+  const [items, setItems] = useState<string[]>([]);
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Empty"
+        description="Render when value is empty: null, undefined, '', [], or {}."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setItems((value) => (value.length ? [] : ['one', 'two']))}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            items.length = {items.length}
+          </button>
+        </div>
+        <div className="p-5 sm:p-8">
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <Empty value={items} fallback={<p className="font-display text-xl font-semibold text-accent">{items.join(', ')}</p>}>
+              <p className="font-display text-xl font-semibold text-gold">Empty state</p>
+            </Empty>
+          </div>
+        </div>
+      </div>
+      <Snippet
+        title="Empty"
+        description="Show empty UI when the value has no content."
+        code={`import { Empty } from '@glhrmoura/react-conditional';
+
+const App = ({ items }) => (
+  <Empty value={items} fallback={<ItemList items={items} />}>
+    <EmptyState />
+  </Empty>
+);`}
+      />
+    </div>
+  );
+}
+
+function ComposeTopic() {
+  const [isLogged, setIsLogged] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Every / Some"
+        description="Combine multiple boolean cases with AND (Every) or OR (Some)."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="flex flex-wrap gap-3 border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setIsLogged((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            isLogged = {String(isLogged)}
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsAdmin((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            isAdmin = {String(isAdmin)}
+          </button>
+        </div>
+        <div className="grid gap-4 p-5 sm:grid-cols-2 sm:p-8">
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">Every</p>
+            <Every cases={[isLogged, isAdmin]} fallback={<p className="font-display text-lg font-semibold text-rose">Forbidden</p>}>
+              <p className="font-display text-lg font-semibold text-accent">Admin panel</p>
+            </Every>
+          </div>
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">Some</p>
+            <Some cases={[isLogged, isAdmin]} fallback={<p className="font-display text-lg font-semibold text-rose">No access</p>}>
+              <p className="font-display text-lg font-semibold text-accent">Feature banner</p>
+            </Some>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-5">
+        <Snippet
+          title="Every"
+          description="All cases must be true."
+          code={`import { Every } from '@glhrmoura/react-conditional';
+
+const App = ({ isLogged, isAdmin }) => (
+  <Every cases={[isLogged, isAdmin]} fallback={<Forbidden />}>
+    <AdminPanel />
+  </Every>
+);`}
+        />
+        <Snippet
+          title="Some"
+          description="At least one case must be true."
+          code={`import { Some } from '@glhrmoura/react-conditional';
+
+const App = ({ isLogged, hasFlag }) => (
+  <Some cases={[isLogged, hasFlag]}>
+    <FeatureBanner />
+  </Some>
+);`}
+        />
+      </div>
+    </div>
+  );
+}
+
+function FallbackTopic() {
+  const [ready, setReady] = useState(false);
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Fallback"
+        description="Always provide a fallback branch when case is false."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setReady((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            ready = {String(ready)}
+          </button>
+        </div>
+        <div className="p-5 sm:p-8">
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <Fallback case={ready} fallback={<p className="font-display text-xl font-semibold text-gold">Spinner</p>}>
+              <p className="font-display text-xl font-semibold text-accent">Ready view</p>
+            </Fallback>
+          </div>
+        </div>
+      </div>
+      <Snippet
+        title="Fallback"
+        description="Required fallback when case is false."
+        code={`import { Fallback } from '@glhrmoura/react-conditional';
+
+const App = ({ data }) => (
+  <Fallback case={Boolean(data)} fallback={<Spinner />}>
+    {() => <View data={data} />}
+  </Fallback>
+);`}
+      />
     </div>
   );
 }
@@ -772,8 +1109,26 @@ function App() {
               <ElseIf case={topic === 'switch'}>
                 <SwitchTopic />
               </ElseIf>
-              <Else>
+              <ElseIf case={topic === 'unless'}>
                 <UnlessTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'show'}>
+                <ShowTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'guard'}>
+                <GuardTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'exists'}>
+                <ExistsTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'empty'}>
+                <EmptyTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'compose'}>
+                <ComposeTopic />
+              </ElseIf>
+              <Else>
+                <FallbackTopic />
               </Else>
             </Condition>
           </main>
