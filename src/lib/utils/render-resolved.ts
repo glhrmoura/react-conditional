@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { resolveChildren } from './resolve-children';
+import { resolveChildren } from '@/lib/utils/resolve-children';
 
 export function renderResolved(
   children: ReactNode | (() => ReactNode),
