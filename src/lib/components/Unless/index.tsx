@@ -1,12 +1,9 @@
 import React, { ReactNode } from 'react';
+import { resolveChildren } from '../../utils/resolve-children';
 
 export interface UnlessProps {
   case: boolean;
   children: ReactNode | (() => ReactNode);
-}
-
-function resolveChildren(children: ReactNode | (() => ReactNode)): ReactNode {
-  return typeof children === 'function' ? children() : children;
 }
 
 const Unless: React.FC<UnlessProps> = ({ case: condition, children }) => {
