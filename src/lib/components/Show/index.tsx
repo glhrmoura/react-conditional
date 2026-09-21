@@ -1,18 +1,19 @@
 import React, { ReactNode } from 'react';
-import { resolveChildren } from '../../utils/resolve-children';
+import { renderResolved } from '../../utils/render-resolved';
 
 export interface ShowProps {
   case: boolean;
   children: ReactNode | (() => ReactNode);
   fallback?: ReactNode | (() => ReactNode);
+  asChild?: boolean;
 }
 
-const Show: React.FC<ShowProps> = ({ case: condition, children, fallback }) => {
+const Show: React.FC<ShowProps> = ({ case: condition, children, fallback, asChild }) => {
   if (condition) {
-    return <>{resolveChildren(children)}</>;
+    return <>{renderResolved(children, asChild)}</>;
   }
   if (fallback !== undefined) {
-    return <>{resolveChildren(fallback)}</>;
+    return <>{renderResolved(fallback, asChild)}</>;
   }
   return null;
 };
