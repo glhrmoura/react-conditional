@@ -16,6 +16,17 @@ import {
   Every,
   Some,
   Fallback,
+  Either,
+  Then,
+  Otherwise,
+  Toggle,
+  Compare,
+  Includes,
+  Once,
+  Lazy,
+  Portal,
+  useMatch,
+  useCompare,
 } from '@glhrmoura/react-conditional';
 import { User, Star, Shield, LogOut, Copy, Check, ExternalLink, Mail, Menu, X } from 'lucide-react';
 import Prism from 'prismjs';
@@ -39,7 +50,12 @@ type TopicId =
   | 'exists'
   | 'empty'
   | 'compose'
-  | 'fallback';
+  | 'fallback'
+  | 'either'
+  | 'compare'
+  | 'once'
+  | 'portal'
+  | 'hooks';
 
 type NavItem = {
   id: TopicId;
@@ -78,6 +94,11 @@ const navGroups: NavGroup[] = [
       { id: 'empty', label: 'Empty', description: 'Empty values' },
       { id: 'compose', label: 'Every / Some', description: 'Combine booleans' },
       { id: 'fallback', label: 'Fallback', description: 'Required else branch' },
+      { id: 'either', label: 'Either / Toggle', description: 'Binary branches' },
+      { id: 'compare', label: 'Compare / Includes', description: 'Relations & lists' },
+      { id: 'once', label: 'Once / Lazy', description: 'Sticky and cached' },
+      { id: 'portal', label: 'Portal', description: 'Conditional portal' },
+      { id: 'hooks', label: 'Hooks', description: 'Logic outside JSX' },
     ],
   },
 ];
@@ -139,7 +160,7 @@ const userTypes: UserOption[] = [
 type SnippetProps = {
   title: string;
   code: string;
-  description: string;
+  description?: string;
   language?: string;
 };
 
@@ -311,7 +332,7 @@ function OverviewTopic() {
       <TopicHeader
         eyebrow="Start"
         title="Overview"
-        description="Declarative conditional rendering for React with a slots API. Use Condition, Switch, Unless, Show, Guard, Exists, Empty, Every, Some, and Fallback."
+        description="Declarative conditional rendering for React with slots, helpers, portals, and hooks."
       />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <article className="rounded-2xl border border-line bg-surface p-5">
@@ -604,7 +625,7 @@ function SwitchTopic() {
       <TopicHeader
         eyebrow="API"
         title="Switch"
-        description="Value-based matching. The first matching Match wins; otherwise Default is rendered. when accepts an exact value, an array of values, or a predicate."
+        description="Value-based matching. Supports arrays, or, predicates, and empty Match fall-through."
       />
       <div className="flex flex-col gap-5">
         <Snippet
@@ -618,6 +639,21 @@ const App = ({ status }) => (
     <Match when={['error', 'failed']}>Something went wrong</Match>
     <Match when={(value) => value === 'success'}>Done</Match>
     <Default>Unknown status</Default>
+  </Switch>
+);`}
+        />
+        <Snippet
+          title="or and fall-through"
+          description="Use or for extra values, or leave Match children empty to fall through."
+          code={`import { Switch, Match, Default } from '@glhrmoura/react-conditional';
+
+const App = ({ code }) => (
+  <Switch value={code}>
+    <Match when={401} or={403} />
+    <Match when={404}>
+      Shared unauthorized / not found UI
+    </Match>
+    <Default>Other status</Default>
   </Switch>
 );`}
         />
@@ -1001,6 +1037,285 @@ const App = ({ data }) => (
   );
 }
 
+function EitherTopic() {
+  const [isOn, setIsOn] = useState(true);
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Either / Toggle"
+        description="Binary branches with slots (Either) or on/off props (Toggle)."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setIsOn((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            isOn = {String(isOn)}
+          </button>
+        </div>
+        <div className="grid gap-4 p-5 sm:grid-cols-2 sm:p-8">
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <Either case={isOn}>
+              <Then>
+                <p className="font-display text-xl font-semibold text-accent">On</p>
+              </Then>
+              <Otherwise>
+                <p className="font-display text-xl font-semibold text-rose">Off</p>
+              </Otherwise>
+            </Either>
+          </div>
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <Toggle
+              case={isOn}
+              on={<p className="font-display text-xl font-semibold text-accent">Enabled</p>}
+              off={<p className="font-display text-xl font-semibold text-rose">Disabled</p>}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-5">
+        <Snippet
+          title="Either"
+          code={`import { Either, Then, Otherwise } from '@glhrmoura/react-conditional';
+
+const App = ({ isOn }) => (
+  <Either case={isOn}>
+    <Then>On</Then>
+    <Otherwise>Off</Otherwise>
+  </Either>
+);`}
+        />
+        <Snippet
+          title="Toggle"
+          code={`import { Toggle } from '@glhrmoura/react-conditional';
+
+const App = ({ isOn }) => (
+  <Toggle case={isOn} on={<OnIcon />} off={<OffIcon />} />
+);`}
+        />
+      </div>
+    </div>
+  );
+}
+
+function CompareTopic() {
+  const [age, setAge] = useState(16);
+  const [role, setRole] = useState('viewer');
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Compare / Includes"
+        description="Relational checks and membership against a list."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="flex flex-wrap gap-3 border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setAge((value) => (value >= 18 ? 16 : 21))}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            age = {age}
+          </button>
+          <button
+            type="button"
+            onClick={() => setRole((value) => (value === 'admin' ? 'viewer' : 'admin'))}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            role = {role}
+          </button>
+        </div>
+        <div className="grid gap-4 p-5 sm:grid-cols-2 sm:p-8">
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <Compare value={age} gte={18} fallback={<p className="font-display text-lg font-semibold text-rose">Minor</p>}>
+              <p className="font-display text-lg font-semibold text-accent">Adult</p>
+            </Compare>
+          </div>
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <Includes
+              value={role}
+              list={['admin', 'editor']}
+              fallback={<p className="font-display text-lg font-semibold text-rose">Forbidden</p>}
+            >
+              <p className="font-display text-lg font-semibold text-accent">Editor panel</p>
+            </Includes>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-5">
+        <Snippet
+          title="Compare"
+          code={`import { Compare } from '@glhrmoura/react-conditional';
+
+const App = ({ age }) => (
+  <Compare value={age} gte={18} fallback={<MinorNotice />}>
+    <AdultContent />
+  </Compare>
+);`}
+        />
+        <Snippet
+          title="Includes"
+          code={`import { Includes } from '@glhrmoura/react-conditional';
+
+const App = ({ role }) => (
+  <Includes value={role} list={['admin', 'editor']} fallback={<Forbidden />}>
+    <EditorPanel />
+  </Includes>
+);`}
+        />
+      </div>
+    </div>
+  );
+}
+
+function OnceTopic() {
+  const [ready, setReady] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Once / Lazy"
+        description="Once stays mounted after the first true case. Lazy caches children and only shows them while case is true."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="flex flex-wrap gap-3 border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setReady((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            ready = {String(ready)}
+          </button>
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            open = {String(open)}
+          </button>
+        </div>
+        <div className="grid gap-4 p-5 sm:grid-cols-2 sm:p-8">
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">Once</p>
+            <Once case={ready} fallback={<p className="text-muted">Waiting…</p>}>
+              <p className="font-display text-lg font-semibold text-accent">Mounted and sticky</p>
+            </Once>
+          </div>
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">Lazy</p>
+            <Lazy case={open} fallback={<p className="text-muted">Closed</p>}>
+              {() => <p className="font-display text-lg font-semibold text-accent">Cached panel</p>}
+            </Lazy>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-5">
+        <Snippet
+          title="Once"
+          code={`import { Once } from '@glhrmoura/react-conditional';
+
+const App = ({ ready }) => (
+  <Once case={ready}>
+    {() => <ExpensiveWidget />}
+  </Once>
+);`}
+        />
+        <Snippet
+          title="Lazy"
+          code={`import { Lazy } from '@glhrmoura/react-conditional';
+
+const App = ({ open }) => (
+  <Lazy case={open} fallback={null}>
+    {() => <HeavyPanel />}
+  </Lazy>
+);`}
+        />
+      </div>
+    </div>
+  );
+}
+
+function PortalTopic() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Portal"
+        description="Render children into a DOM container only when case is true."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            open = {String(open)}
+          </button>
+        </div>
+        <div className="p-5 sm:p-8">
+          <p className="mb-4 text-sm text-muted">Portal content mounts on document.body when open.</p>
+          <Portal case={open}>
+            <div className="fixed bottom-6 right-6 z-50 rounded-2xl border border-line bg-surface-raised px-5 py-4 shadow-lg">
+              <p className="font-display text-lg font-semibold text-accent">Portal active</p>
+            </div>
+          </Portal>
+        </div>
+      </div>
+      <Snippet
+        title="Portal"
+        code={`import { Portal } from '@glhrmoura/react-conditional';
+
+const App = ({ open }) => (
+  <Portal case={open} container={document.body}>
+    <Modal />
+  </Portal>
+);`}
+      />
+    </div>
+  );
+}
+
+function HooksTopic() {
+  const role = 'admin';
+  const age = 21;
+  const matched = useMatch(role, 'admin', ['owner']);
+  const adult = useCompare(age, { gte: 18 });
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Hooks"
+        description="Mirror helpers for logic outside JSX."
+      />
+      <div className="mb-8 rounded-2xl border border-line bg-canvas px-5 py-6">
+        <p className="font-mono text-sm text-muted">useMatch(role, 'admin', ['owner']) → {String(matched)}</p>
+        <p className="mt-2 font-mono text-sm text-muted">useCompare(age, {'{ gte: 18 }'}) → {String(adult)}</p>
+      </div>
+      <Snippet
+        title="Hooks"
+        code={`import { useMatch, useCompare } from '@glhrmoura/react-conditional';
+
+function useFlags(role, age) {
+  const isAdmin = useMatch(role, 'admin', ['owner']);
+  const adult = useCompare(age, { gte: 18 });
+  return { isAdmin, adult };
+}`}
+      />
+    </div>
+  );
+}
+
 function SidebarNav({
   topic,
   onSelect,
@@ -1127,8 +1442,23 @@ function App() {
               <ElseIf case={topic === 'compose'}>
                 <ComposeTopic />
               </ElseIf>
-              <Else>
+              <ElseIf case={topic === 'fallback'}>
                 <FallbackTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'either'}>
+                <EitherTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'compare'}>
+                <CompareTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'once'}>
+                <OnceTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'portal'}>
+                <PortalTopic />
+              </ElseIf>
+              <Else>
+                <HooksTopic />
               </Else>
             </Condition>
           </main>
