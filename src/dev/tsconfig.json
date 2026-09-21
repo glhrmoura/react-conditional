@@ -4,6 +4,11 @@
   "exclude": ["../../dist", "../../node_modules"],
   "compilerOptions": {
     "noEmit": true,
-    "rootDir": "../"
+    "rootDir": "..",
+    "baseUrl": "../..",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/lib/*": ["src/lib/*"]
+    }
   }
 }
