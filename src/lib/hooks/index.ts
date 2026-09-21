@@ -1,7 +1,7 @@
-import { MatchWhen } from '../components/Switch';
-import { isEmpty } from '../utils/is-empty';
-import { includesValue } from '../utils/includes-value';
-import { Comparable, compareValues } from '../utils/compare-values';
+import { MatchWhen } from '@/lib/components/Switch';
+import { isEmpty } from '@/lib/utils/is-empty';
+import { includesValue } from '@/lib/utils/includes-value';
+import { Comparable, compareValues } from '@/lib/utils/compare-values';
 
 export function useShow(condition: boolean): boolean {
   return Boolean(condition);
