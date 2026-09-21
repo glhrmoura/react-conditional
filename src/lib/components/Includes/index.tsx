@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
-import { includesValue } from '../../utils/includes-value';
-import { renderResolved } from '../../utils/render-resolved';
+import { includesValue } from '@/lib/utils/includes-value';
+import { renderResolved } from '@/lib/utils/render-resolved';
 
 export interface IncludesProps<T = unknown> {
   value: T;
