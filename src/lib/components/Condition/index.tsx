@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect } from 'react';
-import { resolveChildren } from '../../utils/resolve-children';
-import { warnDev } from '../../utils/warn-dev';
+import { resolveChildren } from '@/lib/utils/resolve-children';
+import { warnDev } from '@/lib/utils/warn-dev';
 
 export interface ConditionProps {
   children: ReactNode;
