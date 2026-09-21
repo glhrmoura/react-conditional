@@ -1,7 +1,7 @@
 {
   "name": "@glhrmoura/react-conditional",
   "version": "0.7.0",
-  "description": "Declarative conditional rendering for React with Condition, Switch, and Unless",
+  "description": "Declarative conditional rendering for React with Condition, Switch, Unless, Show, Guard, and more",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -63,7 +63,11 @@
     "conditional-rendering",
     "switch",
     "match",
-    "slots"
+    "slots",
+    "show",
+    "guard",
+    "unless",
+    "fallback"
   ],
   "files": [
     "dist",
