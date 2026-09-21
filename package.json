@@ -1,7 +1,7 @@
 {
   "name": "@glhrmoura/react-conditional",
   "version": "0.8.0",
-  "description": "Declarative conditional rendering for React with Condition, Switch, Unless, Show, Guard, and more",
+  "description": "Declarative conditional rendering for React with slots, helpers, and hooks",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -36,7 +36,13 @@
     "mcp:build": "npm run build --prefix mcp/release"
   },
   "peerDependencies": {
-    "react": ">=16"
+    "react": ">=16",
+    "react-dom": ">=16"
+  },
+  "peerDependenciesMeta": {
+    "react-dom": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/node": "^24.2.1",
@@ -67,7 +73,9 @@
     "show",
     "guard",
     "unless",
-    "fallback"
+    "fallback",
+    "portal",
+    "hooks"
   ],
   "files": [
     "dist",
