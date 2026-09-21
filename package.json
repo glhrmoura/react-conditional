@@ -2,7 +2,7 @@
   "name": "glhrmoura-react-conditional-demo",
   "description": "Demo page of @glhrmoura/react-conditional",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "dev": "vite",
