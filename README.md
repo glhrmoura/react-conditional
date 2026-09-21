@@ -141,6 +141,23 @@ const App = ({ isLogged }) => (
 );
 ```
 
+#### Switch Matching
+
+Use `Switch`, `Match`, and `Default` to render based on a value. `when` accepts an exact value or a predicate function:
+
+```jsx
+import { Switch, Match, Default } from "@glhrmoura/react-conditional";
+
+const App = ({ status }) => (
+  <Switch value={status}>
+    <Match when="loading">Loading...</Match>
+    <Match when="error">Something went wrong</Match>
+    <Match when={(value) => value === "success"}>Done</Match>
+    <Default>Unknown status</Default>
+  </Switch>
+);
+```
+
 ### API Reference
 
 #### `Condition`
@@ -168,6 +185,32 @@ Renders children when the case is true and no previous `If` or `ElseIf` has been
 #### `Else`
 
 Renders children when no `If` or `ElseIf` conditions have been met.
+
+**Props:**
+
+- `children: ReactNode | (() => ReactNode)` - The fallback content to render
+
+#### `Switch`
+
+Renders the first matching `Match` for a given value, or `Default` when nothing matches.
+
+**Props:**
+
+- `value: unknown` - The value to match against
+- `children: ReactNode` - `Match` and `Default` slots
+
+#### `Match`
+
+Renders children when `when` matches the parent `Switch` value.
+
+**Props:**
+
+- `when: unknown | ((value: unknown) => boolean)` - Exact value match or predicate
+- `children: ReactNode | (() => ReactNode)` - The content to render when matched
+
+#### `Default`
+
+Renders children when no `Match` has matched inside `Switch`.
 
 **Props:**
 
