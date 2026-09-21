@@ -672,13 +672,13 @@ function SidebarNav({
   onSelect: (id: TopicId) => void;
 }) {
   return (
-    <nav className="flex flex-col gap-6" aria-label="Topics">
+    <nav className="flex flex-col gap-7" aria-label="Topics">
       {navGroups.map((group) => (
         <div key={group.title}>
-          <p className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">
+          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-muted/55">
             {group.title}
           </p>
-          <ul className="flex flex-col gap-1">
+          <ul className="flex flex-col">
             {group.items.map((item) => {
               const active = topic === item.id;
               return (
@@ -686,14 +686,14 @@ function SidebarNav({
                   <button
                     type="button"
                     onClick={() => onSelect(item.id)}
-                    className={`w-full cursor-pointer rounded-xl px-3 py-2.5 text-left transition ${
+                    className={`w-full cursor-pointer border-l-2 py-2.5 pl-3 text-left transition ${
                       active
-                        ? 'bg-accent-soft text-accent'
-                        : 'text-muted hover:bg-surface-raised hover:text-text'
+                        ? 'border-accent bg-accent-soft/60 text-accent'
+                        : 'border-transparent text-text hover:border-line-strong hover:bg-surface-raised'
                     }`}
                   >
-                    <span className="block text-sm font-semibold">{item.label}</span>
-                    <span className={`mt-0.5 block text-xs ${active ? 'text-accent/80' : 'text-muted/80'}`}>
+                    <span className="block text-sm font-semibold tracking-tight">{item.label}</span>
+                    <span className={`mt-0.5 block text-xs leading-snug ${active ? 'text-accent/75' : 'text-muted'}`}>
                       {item.description}
                     </span>
                   </button>
