@@ -12,7 +12,7 @@
 
 Declarative conditional rendering for React with a slots API.
 
-Use `Condition`, `If`, `ElseIf`, and `Else` for boolean branches, `Switch`, `Match`, and `Default` to match against a value, or `Unless` to render when a case is false.
+Use `Condition`, `If`, `ElseIf`, and `Else` for boolean branches, `Switch`, `Match`, and `Default` to match against a value, `Unless` / `Show` / `Guard` for standalone checks, or helpers like `Exists`, `Empty`, `Every`, `Some`, and `Fallback`.
 
 ### Documentation
 
@@ -115,7 +115,7 @@ const App = ({ userType }) => (
 
 #### Switch Matching
 
-Use `Switch`, `Match`, and `Default` to render based on a value. `when` accepts an exact value or a predicate. The first matching `Match` wins; otherwise `Default` is rendered.
+Use `Switch`, `Match`, and `Default` to render based on a value. `when` accepts an exact value, an array of values, or a predicate. The first matching `Match` wins; otherwise `Default` is rendered. `Switch` and `Match` are generic for typed values.
 
 ```jsx
 import { Switch, Match, Default } from '@glhrmoura/react-conditional';
@@ -123,7 +123,7 @@ import { Switch, Match, Default } from '@glhrmoura/react-conditional';
 const App = ({ status }) => (
   <Switch value={status}>
     <Match when='loading'>Loading...</Match>
-    <Match when='error'>Something went wrong</Match>
+    <Match when={['error', 'failed']}>Something went wrong</Match>
     <Match when={(value) => value === 'success'}>Done</Match>
     <Default>Unknown status</Default>
   </Switch>
@@ -146,7 +146,7 @@ const App = ({ role }) => (
 
 #### Unless
 
-Use `Unless` to render children only when `case` is false. Useful for guard clauses without wrapping in `Condition`.
+Use `Unless` to render children only when `case` is false.
 
 ```jsx
 import { Unless } from '@glhrmoura/react-conditional';
@@ -160,6 +160,100 @@ const App = ({ isLoading, error }) => (
       {() => <ErrorBanner message={error.message} />}
     </Unless>
   </>
+);
+```
+
+#### Show
+
+Standalone boolean render with optional `fallback`.
+
+```jsx
+import { Show } from '@glhrmoura/react-conditional';
+
+const App = ({ isLogged }) => (
+  <Show case={isLogged} fallback={<LoginPrompt />}>
+    <Dashboard />
+  </Show>
+);
+```
+
+#### Guard / When
+
+Render when `when` is truthy. `When` is an alias of `Guard`.
+
+```jsx
+import { Guard, When } from '@glhrmoura/react-conditional';
+
+const App = ({ user }) => (
+  <>
+    <Guard when={user} fallback={<Guest />}>
+      {() => <Profile name={user.name} />}
+    </Guard>
+    <When when={user?.isAdmin}>
+      <AdminPanel />
+    </When>
+  </>
+);
+```
+
+#### Exists
+
+Render when `value` is not `null` or `undefined`.
+
+```jsx
+import { Exists } from '@glhrmoura/react-conditional';
+
+const App = ({ user }) => (
+  <Exists value={user} fallback={<Guest />}>
+    {() => <Profile name={user.name} />}
+  </Exists>
+);
+```
+
+#### Empty
+
+Render when `value` is empty (`null`, `undefined`, `''`, `[]`, or `{}`).
+
+```jsx
+import { Empty } from '@glhrmoura/react-conditional';
+
+const App = ({ items }) => (
+  <Empty value={items} fallback={<ItemList items={items} />}>
+    <EmptyState />
+  </Empty>
+);
+```
+
+#### Every / Some
+
+Combine multiple boolean cases with AND (`Every`) or OR (`Some`).
+
+```jsx
+import { Every, Some } from '@glhrmoura/react-conditional';
+
+const App = ({ isLogged, isAdmin, hasFlag }) => (
+  <>
+    <Every cases={[isLogged, isAdmin]} fallback={<Forbidden />}>
+      <AdminPanel />
+    </Every>
+    <Some cases={[isLogged, hasFlag]}>
+      <FeatureBanner />
+    </Some>
+  </>
+);
+```
+
+#### Fallback
+
+Require a fallback branch when `case` is false.
+
+```jsx
+import { Fallback } from '@glhrmoura/react-conditional';
+
+const App = ({ data }) => (
+  <Fallback case={Boolean(data)} fallback={<Spinner />}>
+    {() => <View data={data} />}
+  </Fallback>
 );
 ```
 
@@ -201,11 +295,11 @@ Fallback when no `If` or `ElseIf` matched.
 
 #### `Switch`
 
-Value-based conditional wrapper that renders the first matching `Match`, or `Default`.
+Value-based conditional wrapper that renders the first matching `Match`, or `Default`. Generic over the value type.
 
 **Props:**
 
-- `value: unknown`
+- `value: T`
 - `children: ReactNode` - `Match` and `Default` slots
 
 #### `Match`
@@ -214,7 +308,7 @@ Renders children when `when` matches the parent `Switch` value.
 
 **Props:**
 
-- `when: unknown | ((value: unknown) => boolean)` - exact match via `Object.is`, or predicate
+- `when: T | readonly T[] | ((value: T) => boolean)` - exact match via `Object.is`, any item in an array, or predicate
 - `children: ReactNode | (() => ReactNode)`
 
 #### `Default`
@@ -233,6 +327,76 @@ Renders children when `case` is false.
 
 - `case: boolean`
 - `children: ReactNode | (() => ReactNode)`
+
+#### `Show`
+
+Standalone boolean render.
+
+**Props:**
+
+- `case: boolean`
+- `children: ReactNode | (() => ReactNode)`
+- `fallback?: ReactNode | (() => ReactNode)`
+
+#### `Guard` / `When`
+
+Renders children when `when` is truthy. `When` is an alias of `Guard`.
+
+**Props:**
+
+- `when: unknown`
+- `children: ReactNode | (() => ReactNode)`
+- `fallback?: ReactNode | (() => ReactNode)`
+
+#### `Exists`
+
+Renders children when `value` is not `null` or `undefined`.
+
+**Props:**
+
+- `value: unknown`
+- `children: ReactNode | (() => ReactNode)`
+- `fallback?: ReactNode | (() => ReactNode)`
+
+#### `Empty`
+
+Renders children when `value` is empty.
+
+**Props:**
+
+- `value: unknown`
+- `children: ReactNode | (() => ReactNode)`
+- `fallback?: ReactNode | (() => ReactNode)`
+
+#### `Every`
+
+Renders children when every item in `cases` is true.
+
+**Props:**
+
+- `cases: boolean[]`
+- `children: ReactNode | (() => ReactNode)`
+- `fallback?: ReactNode | (() => ReactNode)`
+
+#### `Some`
+
+Renders children when at least one item in `cases` is true.
+
+**Props:**
+
+- `cases: boolean[]`
+- `children: ReactNode | (() => ReactNode)`
+- `fallback?: ReactNode | (() => ReactNode)`
+
+#### `Fallback`
+
+Renders children when `case` is true, otherwise always renders `fallback`.
+
+**Props:**
+
+- `case: boolean`
+- `children: ReactNode | (() => ReactNode)`
+- `fallback: ReactNode | (() => ReactNode)`
 
 ### License
 
