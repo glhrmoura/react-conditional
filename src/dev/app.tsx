@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent } from 'react';
 
-import { Condition, If, ElseIf, Else } from '@/lib';
+import { Condition, If, ElseIf, Else, Switch, Match, Default } from '@/lib';
 
 const App = () => {
   const [userType, setUserType] = useState('basic');
@@ -15,9 +15,9 @@ const App = () => {
       <div>
         <label>
           <input
-            type="radio"
-            name="user-type"
-            value="basic"
+            type='radio'
+            name='user-type'
+            value='basic'
             onChange={onSelectUserType}
             checked={userType === 'basic'}
           />
@@ -25,9 +25,9 @@ const App = () => {
         </label>
         <label>
           <input
-            type="radio"
-            name="user-type"
-            value="vip"
+            type='radio'
+            name='user-type'
+            value='vip'
             onChange={onSelectUserType}
             checked={userType === 'vip'}
           />
@@ -35,9 +35,9 @@ const App = () => {
         </label>
         <label>
           <input
-            type="radio"
-            name="user-type"
-            value="admin"
+            type='radio'
+            name='user-type'
+            value='admin'
             onChange={onSelectUserType}
             checked={userType === 'admin'}
           />
@@ -45,9 +45,9 @@ const App = () => {
         </label>
         <label>
           <input
-            type="radio"
-            name="user-type"
-            value=""
+            type='radio'
+            name='user-type'
+            value=''
             onChange={onSelectUserType}
             checked={userType === ''}
           />
@@ -72,6 +72,25 @@ const App = () => {
             {() => <div style={{ color: 'gray' }}>❌ The user is not logged in</div>}
           </Else>
         </Condition>
+      </div>
+
+      <hr />
+
+      <div>
+        <Switch value={userType}>
+          <Match when='basic'>
+            <div style={{ color: 'green' }}>Switch: basic user</div>
+          </Match>
+          <Match when='vip'>
+            <div style={{ color: 'blue' }}>Switch: vip user</div>
+          </Match>
+          <Match when={(value) => value === 'admin'}>
+            <div style={{ color: 'red' }}>Switch: admin user</div>
+          </Match>
+          <Default>
+            {() => <div style={{ color: 'gray' }}>Switch: logged out</div>}
+          </Default>
+        </Switch>
       </div>
     </React.StrictMode>
   );
