@@ -1,5 +1,5 @@
-import { spawn } from "node:child_process";
-import type { ExecResult } from "../types/index.js";
+import { spawn } from 'node:child_process';
+import type { ExecResult } from '../types/index.js';
 
 export async function runCommand(
   command: string,
@@ -14,18 +14,18 @@ export async function runCommand(
       shell: false,
     });
 
-    let stdout = "";
-    let stderr = "";
+    let stdout = '';
+    let stderr = '';
 
-    child.stdout.on("data", (chunk: Buffer) => {
+    child.stdout.on('data', (chunk: Buffer) => {
       stdout += chunk.toString();
     });
 
-    child.stderr.on("data", (chunk: Buffer) => {
+    child.stderr.on('data', (chunk: Buffer) => {
       stderr += chunk.toString();
     });
 
-    child.on("error", (error) => {
+    child.on('error', (error) => {
       resolve({
         ok: false,
         code: null,
@@ -34,7 +34,7 @@ export async function runCommand(
       });
     });
 
-    child.on("close", (code) => {
+    child.on('close', (code) => {
       resolve({
         ok: code === 0,
         code,
