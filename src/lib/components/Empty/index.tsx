@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
-import { resolveChildren } from '../../utils/resolve-children';
-import { isEmpty } from '../../utils/is-empty';
+import { resolveChildren } from '@/lib/utils/resolve-children';
+import { isEmpty } from '@/lib/utils/is-empty';
 
 export interface EmptyProps {
   value: unknown;
