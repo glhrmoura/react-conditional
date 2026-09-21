@@ -1,5 +1,5 @@
 import React, { ReactNode, useRef } from 'react';
-import { renderResolved } from '../../utils/render-resolved';
+import { renderResolved } from '@/lib/utils/render-resolved';
 
 export interface OnceProps {
   case: boolean;
