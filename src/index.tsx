@@ -123,87 +123,109 @@ function Snippet({ title, code, description, language = 'jsx' }: SnippetProps) {
   );
 }
 
-function ResultPanel({ userType }: { userType: UserType }) {
+function ApiResultCard({
+  apiLabel,
+  apiHint,
+  userType,
+  children,
+}: {
+  apiLabel: string;
+  apiHint: string;
+  userType: UserType;
+  children: React.ReactNode;
+}) {
   const active = userTypes.find((type) => type.value === userType) ?? userTypes[3];
   const Icon = active.icon;
 
   return (
-    <div className="grid gap-4">
-      <div className={`relative overflow-hidden rounded-2xl border ${active.border} ${active.soft} px-6 py-8 text-center`}>
+    <article className="overflow-hidden rounded-2xl border border-line bg-canvas">
+      <header className="border-b border-line px-5 py-4">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">{apiLabel}</p>
+        <p className="mt-1 font-mono text-xs text-muted">{apiHint}</p>
+      </header>
+      <div className={`relative px-5 py-7 text-center ${active.soft}`}>
         <div className="pointer-events-none absolute inset-0 demo-grid opacity-30" />
-        <div className="relative mx-auto flex max-w-md flex-col items-center gap-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">Condition / If / ElseIf / Else</p>
+        <div className="relative mx-auto flex max-w-sm flex-col items-center gap-4">
           <div
-            className={`flex h-14 w-14 items-center justify-center rounded-2xl border ${active.border} bg-surface ${active.accent} animate-border-pulse`}
+            className={`flex h-12 w-12 items-center justify-center rounded-2xl border ${active.border} bg-surface ${active.accent} animate-border-pulse`}
           >
-            <Icon className="h-6 w-6" strokeWidth={1.75} />
+            <Icon className="h-5 w-5" strokeWidth={1.75} />
           </div>
-          <Condition>
-            <If case={userType === 'basic'}>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-accent">The user is basic</h2>
-              </div>
-            </If>
-            <ElseIf case={userType === 'vip'}>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-gold">The user is VIP</h2>
-              </div>
-            </ElseIf>
-            <ElseIf case={userType === 'admin'}>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-admin">The user is admin</h2>
-              </div>
-            </ElseIf>
-            <Else>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-rose">There is no user</h2>
-              </div>
-            </Else>
-          </Condition>
+          {children}
         </div>
       </div>
+    </article>
+  );
+}
 
-      <div className={`relative overflow-hidden rounded-2xl border ${active.border} ${active.soft} px-6 py-8 text-center`}>
-        <div className="pointer-events-none absolute inset-0 demo-grid opacity-30" />
-        <div className="relative mx-auto flex max-w-md flex-col items-center gap-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted">Switch / Match / Default</p>
-          <div
-            className={`flex h-14 w-14 items-center justify-center rounded-2xl border ${active.border} bg-surface ${active.accent} animate-border-pulse`}
-          >
-            <Icon className="h-6 w-6" strokeWidth={1.75} />
-          </div>
-          <Switch value={userType}>
-            <Match when="basic">
-              <div>
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
-                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-accent">Matched basic</h2>
-              </div>
-            </Match>
-            <Match when="vip">
-              <div>
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
-                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-gold">Matched VIP</h2>
-              </div>
-            </Match>
-            <Match when={(value: unknown) => value === 'admin'}>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
-                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-admin">Matched admin</h2>
-              </div>
-            </Match>
-            <Default>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
-                <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-rose">Default branch</h2>
-              </div>
-            </Default>
-          </Switch>
-        </div>
-      </div>
+function ResultPanel({ userType }: { userType: UserType }) {
+  return (
+    <div className="grid gap-4 lg:grid-cols-2">
+      <ApiResultCard
+        apiLabel="Condition"
+        apiHint="If → ElseIf → Else"
+        userType={userType}
+      >
+        <Condition>
+          <If case={userType === 'basic'}>
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-accent">The user is basic</h3>
+            </div>
+          </If>
+          <ElseIf case={userType === 'vip'}>
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-gold">The user is VIP</h3>
+            </div>
+          </ElseIf>
+          <ElseIf case={userType === 'admin'}>
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-admin">The user is admin</h3>
+            </div>
+          </ElseIf>
+          <Else>
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
+              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-rose">There is no user</h3>
+            </div>
+          </Else>
+        </Condition>
+      </ApiResultCard>
+
+      <ApiResultCard
+        apiLabel="Switch"
+        apiHint="Match → Default"
+        userType={userType}
+      >
+        <Switch value={userType}>
+          <Match when="basic">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
+              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-accent">Matched basic</h3>
+            </div>
+          </Match>
+          <Match when="vip">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
+              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-gold">Matched VIP</h3>
+            </div>
+          </Match>
+          <Match when={(value: unknown) => value === 'admin'}>
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
+              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-admin">Matched admin</h3>
+            </div>
+          </Match>
+          <Default>
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
+              <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-rose">Default branch</h3>
+            </div>
+          </Default>
+        </Switch>
+      </ApiResultCard>
     </div>
   );
 }
@@ -268,69 +290,73 @@ function App() {
         </div>
       </section>
 
-      <section className="mb-12 overflow-hidden rounded-[1.75rem] border border-line bg-surface p-5 sm:p-8">
-        <div className="mb-6 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Live playground</p>
-            <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-text">Interactive Demo</h2>
-          </div>
+      <section className="mb-12">
+        <div className="mb-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Live playground</p>
+          <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-text">Interactive Demo</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
+            One input drives both APIs side by side — boolean branches with Condition, value matching with Switch.
+          </p>
         </div>
 
-        <div className="mb-3">
-          <p className="mb-3 text-sm font-medium text-muted">Select a user type</p>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {userTypes.map((type) => {
-              const Icon = type.icon;
-              const selected = type.value === userType;
+        <div className="overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+          <div className="border-b border-line p-5 sm:p-8">
+            <p className="mb-3 text-sm font-medium text-muted">Shared input</p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {userTypes.map((type) => {
+                const Icon = type.icon;
+                const selected = type.value === userType;
 
-              return (
-                <label
-                  key={type.label}
-                  className={`group relative flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3.5 transition duration-200 ${
-                    selected
-                      ? `${type.border} ${type.soft}`
-                      : 'border-line bg-surface-raised hover:border-line-strong'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="user-type"
-                    value={type.value}
-                    checked={selected}
-                    onChange={() => setUserType(type.value)}
-                    className="sr-only"
-                  />
-                  <span
-                    className={`flex h-10 w-10 items-center justify-center rounded-xl border transition ${
+                return (
+                  <label
+                    key={type.label}
+                    className={`group relative flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3.5 transition duration-200 ${
                       selected
-                        ? `${type.border} bg-surface ${type.accent}`
-                        : 'border-line bg-canvas text-muted group-hover:text-text'
+                        ? `${type.border} ${type.soft}`
+                        : 'border-line bg-surface-raised hover:border-line-strong'
                     }`}
                   >
-                    <Icon className="h-5 w-5" strokeWidth={1.75} />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className={`block text-sm font-semibold ${selected ? type.accent : 'text-text'}`}>
-                      {type.label}
+                    <input
+                      type="radio"
+                      name="user-type"
+                      value={type.value}
+                      checked={selected}
+                      onChange={() => setUserType(type.value)}
+                      className="sr-only"
+                    />
+                    <span
+                      className={`flex h-10 w-10 items-center justify-center rounded-xl border transition ${
+                        selected
+                          ? `${type.border} bg-surface ${type.accent}`
+                          : 'border-line bg-canvas text-muted group-hover:text-text'
+                      }`}
+                    >
+                      <Icon className="h-5 w-5" strokeWidth={1.75} />
                     </span>
-                    <span className="block text-xs text-muted">{type.description}</span>
-                  </span>
-                  <span
-                    className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition ${
-                      selected ? `${type.border} bg-surface` : 'border-line-strong bg-canvas'
-                    }`}
-                  >
-                    {selected ? <span className={`h-2 w-2 rounded-full ${type.dot}`} /> : null}
-                  </span>
-                </label>
-              );
-            })}
+                    <span className="min-w-0 flex-1">
+                      <span className={`block text-sm font-semibold ${selected ? type.accent : 'text-text'}`}>
+                        {type.label}
+                      </span>
+                      <span className="block text-xs text-muted">{type.description}</span>
+                    </span>
+                    <span
+                      className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition ${
+                        selected ? `${type.border} bg-surface` : 'border-line-strong bg-canvas'
+                      }`}
+                    >
+                      {selected ? <span className={`h-2 w-2 rounded-full ${type.dot}`} /> : null}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="p-5 sm:p-8">
+            <p className="mb-4 text-sm font-medium text-muted">API output</p>
+            <ResultPanel userType={userType} />
           </div>
         </div>
-
-        <div className="my-6 h-px bg-line" />
-
-        <ResultPanel userType={userType} />
       </section>
 
       <section>
