@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { renderResolved } from '../../utils/render-resolved';
+import { renderResolved } from '@/lib/utils/render-resolved';
 
 export interface ShowProps {
   case: boolean;
