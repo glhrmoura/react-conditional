@@ -84,7 +84,7 @@ const App = () => {
           <Match when='vip'>
             <div style={{ color: 'blue' }}>Switch: vip user</div>
           </Match>
-          <Match when={(value) => value === 'admin'}>
+          <Match when={(value: unknown) => value === 'admin'}>
             <div style={{ color: 'red' }}>Switch: admin user</div>
           </Match>
           <Default>
