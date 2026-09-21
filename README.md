@@ -12,7 +12,7 @@
 
 Declarative conditional rendering for React with a slots API.
 
-Use `Condition`, `If`, `ElseIf`, and `Else` for boolean branches, or `Switch`, `Match`, and `Default` to match against a value.
+Use `Condition`, `If`, `ElseIf`, and `Else` for boolean branches, `Switch`, `Match`, and `Default` to match against a value, or `Unless` to render when a case is false.
 
 ### Documentation
 
@@ -144,6 +144,25 @@ const App = ({ role }) => (
 );
 ```
 
+#### Unless
+
+Use `Unless` to render children only when `case` is false. Useful for guard clauses without wrapping in `Condition`.
+
+```jsx
+import { Unless } from '@glhrmoura/react-conditional';
+
+const App = ({ isLoading, error }) => (
+  <>
+    <Unless case={isLoading}>
+      <Content />
+    </Unless>
+    <Unless case={!error}>
+      {() => <ErrorBanner message={error.message} />}
+    </Unless>
+  </>
+);
+```
+
 ### API Reference
 
 #### `Condition`
@@ -204,6 +223,15 @@ Fallback when no `Match` matched inside `Switch`.
 
 **Props:**
 
+- `children: ReactNode | (() => ReactNode)`
+
+#### `Unless`
+
+Renders children when `case` is false.
+
+**Props:**
+
+- `case: boolean`
 - `children: ReactNode | (() => ReactNode)`
 
 ### License
