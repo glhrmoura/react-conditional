@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, type ComponentType, type ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { Condition, If, ElseIf, Else, Switch, Match, Default } from '@glhrmoura/react-conditional';
+import { Condition, If, ElseIf, Else, Switch, Match, Default, Unless } from '@glhrmoura/react-conditional';
 import { User, Star, Shield, LogOut, Copy, Check, ExternalLink, Mail, Menu, X } from 'lucide-react';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-okaidia.css';
@@ -11,7 +11,7 @@ import 'prismjs/components/prism-bash';
 import './styles.css';
 
 type UserType = 'basic' | 'vip' | 'admin' | '';
-type TopicId = 'overview' | 'install' | 'playground' | 'condition' | 'switch';
+type TopicId = 'overview' | 'install' | 'playground' | 'condition' | 'switch' | 'unless';
 
 type NavItem = {
   id: TopicId;
@@ -43,6 +43,7 @@ const navGroups: NavGroup[] = [
     items: [
       { id: 'condition', label: 'Condition', description: 'If, ElseIf, Else' },
       { id: 'switch', label: 'Switch', description: 'Match, Default' },
+      { id: 'unless', label: 'Unless', description: 'Render when false' },
     ],
   },
 ];
@@ -276,9 +277,9 @@ function OverviewTopic() {
       <TopicHeader
         eyebrow="Start"
         title="Overview"
-        description="Declarative conditional rendering for React with a slots API. Use Condition for boolean branches, or Switch to match against a value."
+        description="Declarative conditional rendering for React with a slots API. Use Condition for boolean branches, Switch to match values, or Unless for inverted guards."
       />
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-3">
         <article className="rounded-2xl border border-line bg-surface p-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Condition</p>
           <h3 className="mt-3 font-display text-xl font-semibold text-text">Boolean branches</h3>
@@ -294,6 +295,13 @@ function OverviewTopic() {
           <p className="mt-2 text-sm leading-relaxed text-muted">
             Match a value with <code className="font-mono text-accent">Match</code> and fall back to{' '}
             <code className="font-mono text-accent">Default</code>.
+          </p>
+        </article>
+        <article className="rounded-2xl border border-line bg-surface p-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Unless</p>
+          <h3 className="mt-3 font-display text-xl font-semibold text-text">Inverted guard</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            Render children only when <code className="font-mono text-accent">case</code> is false.
           </p>
         </article>
       </div>
@@ -593,6 +601,69 @@ const App = ({ role }) => (
   );
 }
 
+function UnlessTopic() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Unless"
+        description="Render children only when case is false. Useful for guard clauses without wrapping in Condition."
+      />
+
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="border-b border-line p-5 sm:p-8">
+          <p className="mb-3 text-sm font-medium text-muted">Toggle loading</p>
+          <button
+            type="button"
+            onClick={() => setIsLoading((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            isLoading = {String(isLoading)}
+          </button>
+        </div>
+        <div className="p-5 sm:p-8">
+          <p className="mb-4 text-sm font-medium text-muted">Output</p>
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <Unless case={isLoading}>
+              <p className="font-display text-xl font-semibold text-accent">Content is visible</p>
+            </Unless>
+            <Unless case={!isLoading}>
+              <p className="font-display text-xl font-semibold text-gold">Hidden while loading is false</p>
+            </Unless>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-5">
+        <Snippet
+          title="Basic Unless"
+          description="Render content only when the case is false."
+          code={`import { Unless } from '@glhrmoura/react-conditional';
+
+const App = ({ isLoading }) => (
+  <Unless case={isLoading}>
+    <Content />
+  </Unless>
+);`}
+        />
+        <Snippet
+          title="With Function Children"
+          description="Lazy-evaluate children when the inverted case matches."
+          code={`import { Unless } from '@glhrmoura/react-conditional';
+
+const App = ({ error }) => (
+  <Unless case={!error}>
+    {() => <ErrorBanner message={error.message} />}
+  </Unless>
+);`}
+        />
+      </div>
+    </div>
+  );
+}
+
 function SidebarNav({
   topic,
   onSelect,
@@ -698,8 +769,11 @@ function App() {
               <ElseIf case={topic === 'condition'}>
                 <ConditionTopic />
               </ElseIf>
-              <Else>
+              <ElseIf case={topic === 'switch'}>
                 <SwitchTopic />
+              </ElseIf>
+              <Else>
+                <UnlessTopic />
               </Else>
             </Condition>
           </main>
