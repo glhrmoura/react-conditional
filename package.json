@@ -1,6 +1,6 @@
 {
   "name": "@glhrmoura/react-conditional",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Declarative conditional rendering for React with Condition, Switch, Unless, Show, Guard, and more",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
