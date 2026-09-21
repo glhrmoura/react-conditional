@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
-import { Comparable, compareValues } from '../../utils/compare-values';
-import { renderResolved } from '../../utils/render-resolved';
+import { Comparable, compareValues } from '@/lib/utils/compare-values';
+import { renderResolved } from '@/lib/utils/render-resolved';
 
 export interface CompareProps {
   value: Comparable;
