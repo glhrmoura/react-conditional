@@ -2,6 +2,11 @@ import { MatchWhen } from '@/lib/components/Switch';
 import { isEmpty } from '@/lib/utils/is-empty';
 import { includesValue } from '@/lib/utils/includes-value';
 import { Comparable, compareValues } from '@/lib/utils/compare-values';
+import { AccessMode, hasAccess, toAccessList } from '@/lib/utils/has-access';
+import { MediaBound, buildMediaQuery, matchMediaQuery } from '@/lib/utils/media-query';
+import { useMediaMatch } from '@/lib/components/Media';
+import { usePermissionContext } from '@/lib/components/Permission';
+import { useFeatureFlags } from '@/lib/components/Feature';
 
 export function useShow(condition: boolean): boolean {
   return Boolean(condition);
@@ -56,3 +61,32 @@ export function useCompare(
   if (gte !== undefined && compareValues(value, gte) < 0) return false;
   return eq !== undefined || ne !== undefined || lt !== undefined || lte !== undefined || gt !== undefined || gte !== undefined;
 }
+
+export function useMedia(min?: MediaBound, max?: MediaBound): boolean {
+  return useMediaMatch(min, max);
+}
+
+export function usePermission(options: {
+  can?: string | readonly string[];
+  role?: string | readonly string[];
+  permissions?: readonly string[];
+  roles?: readonly string[];
+  mode?: AccessMode;
+}): boolean {
+  const ctx = usePermissionContext();
+  const neededCan = toAccessList(options.can);
+  const neededRoles = toAccessList(options.role);
+  if (neededCan.length === 0 && neededRoles.length === 0) return false;
+  const availablePerms = options.permissions ?? ctx.permissions;
+  const availableRoles = options.roles ?? ctx.roles;
+  const mode = options.mode ?? 'every';
+  return hasAccess(neededCan, availablePerms, mode) && hasAccess(neededRoles, availableRoles, mode);
+}
+
+export function useFeature(nameOrWhen: string | boolean): boolean {
+  const flags = useFeatureFlags();
+  if (typeof nameOrWhen === 'boolean') return nameOrWhen;
+  return Boolean(flags[nameOrWhen]);
+}
+
+export { useMediaMatch, matchMediaQuery, buildMediaQuery };
