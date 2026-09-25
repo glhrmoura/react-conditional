@@ -1376,8 +1376,13 @@ function App() {
         <aside className="hidden w-60 shrink-0 lg:block">
           <div className="sticky top-8">
             <div className="mb-8">
-              <p className="font-display text-lg font-bold tracking-tight text-text">React Conditional</p>
-              <p className="mt-1 text-xs text-muted">Docs & playground</p>
+              <div className="flex items-center gap-3">
+                <img src="/logo.png" alt="React Conditional" className="h-10 w-10 rounded-full" />
+                <div>
+                  <p className="font-display text-lg font-bold tracking-tight text-text">React Conditional</p>
+                  <p className="mt-1 text-xs text-muted">Docs & playground</p>
+                </div>
+              </div>
             </div>
             <SidebarNav topic={topic} onSelect={onSelectTopic} />
           </div>
@@ -1385,9 +1390,12 @@ function App() {
 
         <div className="min-w-0 flex-1">
           <div className="mb-6 flex items-center justify-between gap-3 lg:hidden">
-            <div>
-              <p className="font-display text-lg font-bold tracking-tight text-text">React Conditional</p>
-              <p className="text-xs text-muted">Docs & playground</p>
+            <div className="flex items-center gap-3">
+              <img src="/logo.png" alt="React Conditional" className="h-9 w-9 rounded-full" />
+              <div>
+                <p className="font-display text-lg font-bold tracking-tight text-text">React Conditional</p>
+                <p className="text-xs text-muted">Docs & playground</p>
+              </div>
             </div>
             <button
               type="button"
