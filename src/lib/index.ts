@@ -32,6 +32,28 @@ import { Lazy } from '@/lib/components/Lazy';
 import type { LazyProps } from '@/lib/components/Lazy';
 import { Portal } from '@/lib/components/Portal';
 import type { PortalProps } from '@/lib/components/Portal';
+import { ErrorBoundary } from '@/lib/components/ErrorBoundary';
+import type { ErrorBoundaryProps, ErrorFallback } from '@/lib/components/ErrorBoundary';
+import { Async, Await, Pending, Resolved, Rejected } from '@/lib/components/Async';
+import type {
+  AsyncProps,
+  AsyncSource,
+  PendingProps,
+  ResolvedProps,
+  RejectedProps,
+} from '@/lib/components/Async';
+import { Permission, PermissionProvider } from '@/lib/components/Permission';
+import type {
+  PermissionProps,
+  PermissionProviderProps,
+  PermissionContextValue,
+} from '@/lib/components/Permission';
+import { Media } from '@/lib/components/Media';
+import type { MediaProps } from '@/lib/components/Media';
+import { Feature, FeatureProvider } from '@/lib/components/Feature';
+import type { FeatureProps, FeatureProviderProps, FeatureFlags } from '@/lib/components/Feature';
+import type { AccessMode } from '@/lib/utils/has-access';
+import type { MediaBound } from '@/lib/utils/media-query';
 import {
   useShow,
   useMatch,
@@ -39,6 +61,9 @@ import {
   useEmpty,
   useIncludes,
   useCompare,
+  useMedia,
+  usePermission,
+  useFeature,
 } from '@/lib/hooks';
 
 export {
@@ -67,12 +92,26 @@ export {
   Once,
   Lazy,
   Portal,
+  ErrorBoundary,
+  Async,
+  Await,
+  Pending,
+  Resolved,
+  Rejected,
+  Permission,
+  PermissionProvider,
+  Media,
+  Feature,
+  FeatureProvider,
   useShow,
   useMatch,
   useExists,
   useEmpty,
   useIncludes,
   useCompare,
+  useMedia,
+  usePermission,
+  useFeature,
 };
 
 export type {
@@ -102,4 +141,20 @@ export type {
   OnceProps,
   LazyProps,
   PortalProps,
+  ErrorBoundaryProps,
+  ErrorFallback,
+  AsyncProps,
+  AsyncSource,
+  PendingProps,
+  ResolvedProps,
+  RejectedProps,
+  PermissionProps,
+  PermissionProviderProps,
+  PermissionContextValue,
+  AccessMode,
+  MediaProps,
+  MediaBound,
+  FeatureProps,
+  FeatureProviderProps,
+  FeatureFlags,
 };
