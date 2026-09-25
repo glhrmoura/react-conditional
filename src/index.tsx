@@ -101,27 +101,41 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    title: 'API',
+    title: 'Condition',
+    items: [{ id: 'condition', label: 'Condition', description: 'If, ElseIf, Else' }],
+  },
+  {
+    title: 'Switch',
+    items: [{ id: 'switch', label: 'Switch', description: 'Match, Default' }],
+  },
+  {
+    title: 'Helpers',
     items: [
-      { id: 'async', label: 'Async / Await', description: 'Promise slots' },
       { id: 'compare', label: 'Compare / Includes', description: 'Relations & lists' },
-      { id: 'condition', label: 'Condition', description: 'If, ElseIf, Else' },
       { id: 'either', label: 'Either / Toggle', description: 'Binary branches' },
       { id: 'empty', label: 'Empty', description: 'Empty values' },
       { id: 'error-boundary', label: 'ErrorBoundary', description: 'Catch child errors' },
       { id: 'compose', label: 'Every / Some', description: 'Combine booleans' },
       { id: 'exists', label: 'Exists', description: 'Not nullish' },
       { id: 'fallback', label: 'Fallback', description: 'Required else branch' },
-      { id: 'feature', label: 'Feature', description: 'Feature flags' },
       { id: 'guard', label: 'Guard', description: 'Truthy when / When' },
       { id: 'hooks', label: 'Hooks', description: 'Logic outside JSX' },
-      { id: 'media', label: 'Media', description: 'Viewport min / max' },
       { id: 'once', label: 'Once / Lazy', description: 'Sticky and cached' },
-      { id: 'permission', label: 'Permission', description: 'Roles and can' },
       { id: 'portal', label: 'Portal', description: 'Conditional portal' },
       { id: 'show', label: 'Show', description: 'Standalone boolean' },
-      { id: 'switch', label: 'Switch', description: 'Match, Default' },
       { id: 'unless', label: 'Unless', description: 'Render when false' },
+    ],
+  },
+  {
+    title: 'Async',
+    items: [{ id: 'async', label: 'Async / Await', description: 'Promise slots' }],
+  },
+  {
+    title: 'Access',
+    items: [
+      { id: 'feature', label: 'Feature', description: 'Feature flags' },
+      { id: 'media', label: 'Media', description: 'Viewport min / max' },
+      { id: 'permission', label: 'Permission', description: 'can, role, and mode' },
     ],
   },
 ];
@@ -255,6 +269,22 @@ function TopicHeader({
   );
 }
 
+function Purpose({ items }: { items: { name: string; text: string }[] }) {
+  return (
+    <section className="mb-8" aria-label="What it is for">
+      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">What it is for</p>
+      <div className="grid gap-3">
+        {items.map((item) => (
+          <div key={item.name} className="rounded-2xl border border-line bg-surface px-5 py-4">
+            <p className="font-mono text-sm font-semibold text-accent">{item.name}</p>
+            <p className="mt-1.5 text-sm leading-relaxed text-muted">{item.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function ApiResultCard({
   apiLabel,
   apiHint,
@@ -355,53 +385,42 @@ function OverviewTopic() {
       <TopicHeader
         eyebrow="Start"
         title="Overview"
-        description="Declarative conditional rendering for React with slots, helpers, portals, async states, permissions, media queries, feature flags, and hooks."
+        description="Pick a component by the question you already have: a boolean, a value, a promise, or who is allowed to see the UI."
       />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <article className="rounded-2xl border border-line bg-surface p-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Condition</p>
           <h3 className="mt-3 font-display text-xl font-semibold text-text">Boolean branches</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            Compose <code className="font-mono text-accent">If</code>,{' '}
-            <code className="font-mono text-accent">ElseIf</code>, and{' '}
-            <code className="font-mono text-accent">Else</code> with clear precedence.
+            Use it when the question is yes or no and only one branch should render, such as loading, an error, or the page.
           </p>
         </article>
         <article className="rounded-2xl border border-line bg-surface p-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Switch</p>
           <h3 className="mt-3 font-display text-xl font-semibold text-text">Value matching</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            Match a value, array of values, or predicate with{' '}
-            <code className="font-mono text-accent">Match</code> and{' '}
-            <code className="font-mono text-accent">Default</code>.
+            Use it when you already have a status, role, or code and each value should render its own UI.
           </p>
         </article>
         <article className="rounded-2xl border border-line bg-surface p-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Helpers</p>
           <h3 className="mt-3 font-display text-xl font-semibold text-text">Standalone checks</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            <code className="font-mono text-accent">Show</code>,{' '}
-            <code className="font-mono text-accent">Guard</code>,{' '}
-            <code className="font-mono text-accent">Exists</code>,{' '}
-            <code className="font-mono text-accent">Empty</code>, and more without wrappers.
+            Use Show, Guard, Exists, and Empty for one check that stands on its own.
           </p>
         </article>
         <article className="rounded-2xl border border-line bg-surface p-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Async</p>
           <h3 className="mt-3 font-display text-xl font-semibold text-text">Promise slots</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            <code className="font-mono text-accent">Pending</code>,{' '}
-            <code className="font-mono text-accent">Resolved</code>, and{' '}
-            <code className="font-mono text-accent">Rejected</code> for async UI.
+            Use it to show a spinner, the data, or the error from one promise.
           </p>
         </article>
         <article className="rounded-2xl border border-line bg-surface p-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Access</p>
           <h3 className="mt-3 font-display text-xl font-semibold text-text">Flags and roles</h3>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            Gate with <code className="font-mono text-accent">Permission</code>,{' '}
-            <code className="font-mono text-accent">Feature</code>, and{' '}
-            <code className="font-mono text-accent">Media</code>.
+            Use Permission, Feature, and Media to show UI for a role, a flag, or a viewport.
           </p>
         </article>
       </div>
@@ -430,6 +449,18 @@ function InstallTopic() {
         eyebrow="Start"
         title="Install"
         description="Add React Conditional to your project with yarn or npm."
+      />
+      <Purpose
+        items={[
+          {
+            name: 'Package',
+            text: 'This installs the components and hooks. React stays a peer dependency you already have in the app.',
+          },
+          {
+            name: 'react-dom',
+            text: 'Portal renders into another DOM node, so that component needs react-dom as well.',
+          },
+        ]}
       />
       <div className="flex flex-col gap-5">
         <Snippet
@@ -462,6 +493,18 @@ function PlaygroundTopic({
         eyebrow="Try it"
         title="Playground"
         description="One shared input drives Condition and Switch side by side so you can compare both APIs."
+      />
+      <Purpose
+        items={[
+          {
+            name: 'Condition',
+            text: 'Asks a boolean about the same user. The first true If or ElseIf renders, and Else covers the rest.',
+          },
+          {
+            name: 'Switch',
+            text: 'Matches that user as a value. Each Match is one case, and Default covers anything left over.',
+          },
+        ]}
       />
       <div className="overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="border-b border-line p-5 sm:p-8">
@@ -543,10 +586,30 @@ function ConditionTopic() {
         title="Condition"
         description="Boolean conditional rendering. Precedence is always If → ElseIf → Else, regardless of children order."
       />
+      <Purpose
+        items={[
+          {
+            name: 'Condition',
+            text: 'Groups the branches so only one of them renders. Use it for a flow with a few mutually exclusive screens.',
+          },
+          {
+            name: 'If',
+            text: 'The first true case. Later branches are skipped once this one matches.',
+          },
+          {
+            name: 'ElseIf',
+            text: 'The next boolean, checked only after every earlier If and ElseIf was false.',
+          },
+          {
+            name: 'Else',
+            text: 'The leftover UI when every case is false, such as a logged-out or empty screen.',
+          },
+        ]}
+      />
       <div className="flex flex-col gap-5">
         <Snippet
           title="Basic Usage"
-          description="Simple conditional rendering with If and Else components."
+          description="One boolean, two screens: the welcome when the user is logged in, and the login when they are not."
           code={`import { Condition, If, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged }) => (
@@ -562,7 +625,7 @@ const App = ({ isLogged }) => (
         />
         <Snippet
           title="Multiple Conditions"
-          description="Using ElseIf for additional conditional branches."
+          description="ElseIf adds the roles that sit between admin and the logged-out Else."
           code={`import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ userRole }) => (
@@ -584,7 +647,7 @@ const App = ({ userRole }) => (
         />
         <Snippet
           title="Loading States"
-          description="Common pattern for handling loading and error states."
+          description="Loading is checked first, then the error, and the data renders only when both are clear."
           code={`import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ data, isLoading, error }) => (
@@ -603,7 +666,7 @@ const App = ({ data, isLoading, error }) => (
         />
         <Snippet
           title="Order Independence"
-          description="Components work regardless of their order in JSX. Precedence is always maintained."
+          description="Else can be written first in the JSX. If still wins whenever its case is true."
           code={`import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged }) => (
@@ -620,7 +683,7 @@ const App = ({ isLogged }) => (
         />
         <Snippet
           title="Complex User Interface"
-          description="Real-world example with multiple conditions and complex UI."
+          description="One Condition walks through loading, a missing user, denied access, and the dashboard."
           code={`import { Condition, If, ElseIf, Else } from '@glhrmoura/react-conditional';
 
 const UserDashboard = ({ user, isLoading, hasPermission }) => (
@@ -667,6 +730,26 @@ function SwitchTopic() {
         eyebrow="API"
         title="Switch"
         description="Value-based matching. Supports arrays, or, predicates, and empty Match fall-through."
+      />
+      <Purpose
+        items={[
+          {
+            name: 'Switch',
+            text: 'Matches one value, such as a status, role, or HTTP code, instead of a chain of booleans.',
+          },
+          {
+            name: 'Match',
+            text: 'Renders when when hits. when can be an exact value, a list, or a function. or adds more values to the same branch.',
+          },
+          {
+            name: 'Empty Match',
+            text: 'A Match with no children falls through, so several values can share the next branch that has UI.',
+          },
+          {
+            name: 'Default',
+            text: 'Renders when no Match hits. It can sit anywhere among the branches.',
+          },
+        ]}
       />
       <div className="flex flex-col gap-5">
         <Snippet
@@ -726,6 +809,14 @@ function UnlessTopic() {
         title="Unless"
         description="Render children only when case is false. Useful for guard clauses without wrapping in Condition."
       />
+      <Purpose
+        items={[
+          {
+            name: 'Unless',
+            text: 'Keeps children off the screen while a flag is true. A loading flag uses it so the page appears only after loading finishes.',
+          },
+        ]}
+      />
 
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="border-b border-line p-5 sm:p-8">
@@ -754,7 +845,7 @@ function UnlessTopic() {
       <div className="flex flex-col gap-5">
         <Snippet
           title="Basic Unless"
-          description="Render content only when the case is false."
+          description="Content stays hidden while isLoading is true and appears when loading finishes."
           code={`import { Unless } from '@glhrmoura/react-conditional';
 
 const App = ({ isLoading }) => (
@@ -765,7 +856,7 @@ const App = ({ isLoading }) => (
         />
         <Snippet
           title="With Function Children"
-          description="Lazy-evaluate children when the inverted case matches."
+          description="A function child waits to run until Unless decides to render it."
           code={`import { Unless } from '@glhrmoura/react-conditional';
 
 const App = ({ error }) => (
@@ -789,6 +880,14 @@ function ShowTopic() {
         title="Show"
         description="Standalone boolean render with an optional fallback. No Condition wrapper required."
       />
+      <Purpose
+        items={[
+          {
+            name: 'Show',
+            text: 'Renders children when one boolean is true, and fallback when it is false. Use it for a single gate, such as a dashboard that becomes a login prompt.',
+          },
+        ]}
+      />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="border-b border-line p-5 sm:p-8">
           <button
@@ -809,7 +908,7 @@ function ShowTopic() {
       </div>
       <Snippet
         title="Show with fallback"
-        description="Render children when case is true, otherwise fallback."
+        description="The dashboard renders for a logged-in user. The login prompt is the fallback."
         code={`import { Show } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged }) => (
@@ -832,6 +931,18 @@ function GuardTopic() {
         title="Guard / When"
         description="Render when when is truthy. When is an alias of Guard."
       />
+      <Purpose
+        items={[
+          {
+            name: 'Guard',
+            text: 'Renders when a value is truthy. Use it before reading fields on an object. null, undefined, false, 0, and an empty string show the fallback.',
+          },
+          {
+            name: 'When',
+            text: 'The same component as Guard. The shorter name fits a boolean flag such as isAdmin.',
+          },
+        ]}
+      />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="border-b border-line p-5 sm:p-8">
           <button
@@ -853,7 +964,7 @@ function GuardTopic() {
       <div className="flex flex-col gap-5">
         <Snippet
           title="Guard"
-          description="Truthy check with optional fallback."
+          description="Profile renders only when user is an object. Guest covers null."
           code={`import { Guard } from '@glhrmoura/react-conditional';
 
 const App = ({ user }) => (
@@ -864,7 +975,7 @@ const App = ({ user }) => (
         />
         <Snippet
           title="When alias"
-          description="When is the same component as Guard."
+          description="When reads a boolean flag and renders the admin panel only while that flag is truthy."
           code={`import { When } from '@glhrmoura/react-conditional';
 
 const App = ({ user }) => (
@@ -886,7 +997,15 @@ function ExistsTopic() {
       <TopicHeader
         eyebrow="API"
         title="Exists"
-        description="Render when value is not null or undefined. Unlike Guard, 0 and empty string still count as existing."
+        description="Render when value is not null or undefined. 0, false, and an empty string still count as present."
+      />
+      <Purpose
+        items={[
+          {
+            name: 'Exists',
+            text: 'Renders when the value is present. 0, false, and an empty string still count. null and undefined show the fallback. Use it when those falsy values are real data.',
+          },
+        ]}
       />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="border-b border-line p-5 sm:p-8">
@@ -908,7 +1027,7 @@ function ExistsTopic() {
       </div>
       <Snippet
         title="Exists"
-        description="Nullish check with optional fallback."
+        description="The profile renders for a present user. A missing user renders Guest, while 0 and '' would still count as present."
         code={`import { Exists } from '@glhrmoura/react-conditional';
 
 const App = ({ user }) => (
@@ -931,6 +1050,14 @@ function EmptyTopic() {
         title="Empty"
         description="Render when value is empty: null, undefined, '', [], or {}."
       />
+      <Purpose
+        items={[
+          {
+            name: 'Empty',
+            text: 'Renders children for an empty value: null, undefined, an empty string, an empty array, or an empty object. Put the filled list in fallback. Use it for empty states.',
+          },
+        ]}
+      />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="border-b border-line p-5 sm:p-8">
           <button
@@ -951,7 +1078,7 @@ function EmptyTopic() {
       </div>
       <Snippet
         title="Empty"
-        description="Show empty UI when the value has no content."
+        description="EmptyState is the children, shown for an empty list. The filled list goes in fallback."
         code={`import { Empty } from '@glhrmoura/react-conditional';
 
 const App = ({ items }) => (
@@ -974,6 +1101,18 @@ function ComposeTopic() {
         eyebrow="API"
         title="Every / Some"
         description="Combine multiple boolean cases with AND (Every) or OR (Some)."
+      />
+      <Purpose
+        items={[
+          {
+            name: 'Every',
+            text: 'Renders when every boolean is true. Use it when several gates must pass together, such as logged in and admin.',
+          },
+          {
+            name: 'Some',
+            text: 'Renders when at least one boolean is true. Use it when any one reason is enough to show the UI.',
+          },
+        ]}
       />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="flex flex-wrap gap-3 border-b border-line p-5 sm:p-8">
@@ -1010,7 +1149,7 @@ function ComposeTopic() {
       <div className="flex flex-col gap-5">
         <Snippet
           title="Every"
-          description="All cases must be true."
+          description="The admin panel appears only when the user is logged in and is an admin."
           code={`import { Every } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged, isAdmin }) => (
@@ -1021,7 +1160,7 @@ const App = ({ isLogged, isAdmin }) => (
         />
         <Snippet
           title="Some"
-          description="At least one case must be true."
+          description="The banner appears when the user is logged in or the flag is on."
           code={`import { Some } from '@glhrmoura/react-conditional';
 
 const App = ({ isLogged, hasFlag }) => (
@@ -1045,6 +1184,14 @@ function FallbackTopic() {
         title="Fallback"
         description="Always provide a fallback branch when case is false."
       />
+      <Purpose
+        items={[
+          {
+            name: 'Fallback',
+            text: 'Renders children when case is true and the fallback prop when it is false. The else branch is required, so a loading placeholder cannot be forgotten.',
+          },
+        ]}
+      />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="border-b border-line p-5 sm:p-8">
           <button
@@ -1065,7 +1212,7 @@ function FallbackTopic() {
       </div>
       <Snippet
         title="Fallback"
-        description="Required fallback when case is false."
+        description="The view renders when data exists. The spinner is required for the moment before that."
         code={`import { Fallback } from '@glhrmoura/react-conditional';
 
 const App = ({ data }) => (
@@ -1087,6 +1234,18 @@ function EitherTopic() {
         eyebrow="API"
         title="Either / Toggle"
         description="Binary branches with slots (Either) or on/off props (Toggle)."
+      />
+      <Purpose
+        items={[
+          {
+            name: 'Either',
+            text: 'Picks Then or Otherwise from a boolean. Use the slots when each side is a block of UI.',
+          },
+          {
+            name: 'Toggle',
+            text: 'The same choice as on and off props. Use it when the two sides are small nodes, such as icons.',
+          },
+        ]}
       />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="border-b border-line p-5 sm:p-8">
@@ -1121,6 +1280,7 @@ function EitherTopic() {
       <div className="flex flex-col gap-5">
         <Snippet
           title="Either"
+          description="Then renders when case is true. Otherwise renders when it is false."
           code={`import { Either, Then, Otherwise } from '@glhrmoura/react-conditional';
 
 const App = ({ isOn }) => (
@@ -1132,6 +1292,7 @@ const App = ({ isOn }) => (
         />
         <Snippet
           title="Toggle"
+          description="on and off are the two sides when the branches are small elements."
           code={`import { Toggle } from '@glhrmoura/react-conditional';
 
 const App = ({ isOn }) => (
@@ -1153,6 +1314,18 @@ function CompareTopic() {
         eyebrow="API"
         title="Compare / Includes"
         description="Relational checks and membership against a list."
+      />
+      <Purpose
+        items={[
+          {
+            name: 'Compare',
+            text: 'Renders when a number or string passes eq, ne, lt, lte, gt, or gte. Use it for ranges such as age or price.',
+          },
+          {
+            name: 'Includes',
+            text: 'Renders when the value is inside a list. Use it for a role or status that belongs to a set.',
+          },
+        ]}
       />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="flex flex-wrap gap-3 border-b border-line p-5 sm:p-8">
@@ -1191,6 +1364,7 @@ function CompareTopic() {
       <div className="flex flex-col gap-5">
         <Snippet
           title="Compare"
+          description="gte={18} keeps adult content for ages of 18 and above. fallback covers everyone younger."
           code={`import { Compare } from '@glhrmoura/react-conditional';
 
 const App = ({ age }) => (
@@ -1201,6 +1375,7 @@ const App = ({ age }) => (
         />
         <Snippet
           title="Includes"
+          description="The panel renders when role is one of the listed values."
           code={`import { Includes } from '@glhrmoura/react-conditional';
 
 const App = ({ role }) => (
@@ -1224,6 +1399,18 @@ function OnceTopic() {
         eyebrow="API"
         title="Once / Lazy"
         description="Once stays mounted after the first true case. Lazy caches children and only shows them while case is true."
+      />
+      <Purpose
+        items={[
+          {
+            name: 'Once',
+            text: 'After case becomes true, children stay mounted even if case turns false again. Use it for a widget that should be created a single time.',
+          },
+          {
+            name: 'Lazy',
+            text: 'Builds children the first time case is true and reuses that result. It hides them again while case is false. Use it for a heavy panel that opens and closes.',
+          },
+        ]}
       />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="flex flex-wrap gap-3 border-b border-line p-5 sm:p-8">
@@ -1260,6 +1447,7 @@ function OnceTopic() {
       <div className="flex flex-col gap-5">
         <Snippet
           title="Once"
+          description="The widget mounts the first time ready is true and stays mounted after that."
           code={`import { Once } from '@glhrmoura/react-conditional';
 
 const App = ({ ready }) => (
@@ -1270,6 +1458,7 @@ const App = ({ ready }) => (
         />
         <Snippet
           title="Lazy"
+          description="The panel is built once, shown while open is true, and hidden again when open is false."
           code={`import { Lazy } from '@glhrmoura/react-conditional';
 
 const App = ({ open }) => (
@@ -1293,6 +1482,14 @@ function PortalTopic() {
         title="Portal"
         description="Render children into a DOM container only when case is true."
       />
+      <Purpose
+        items={[
+          {
+            name: 'Portal',
+            text: 'Moves children into another DOM node, usually document.body, only while case is true. Use it for a modal or toast that must sit above the page.',
+          },
+        ]}
+      />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="border-b border-line p-5 sm:p-8">
           <button
@@ -1314,6 +1511,7 @@ function PortalTopic() {
       </div>
       <Snippet
         title="Portal"
+        description="The modal is attached to document.body only while open is true."
         code={`import { Portal } from '@glhrmoura/react-conditional';
 
 const App = ({ open }) => (
@@ -1354,11 +1552,24 @@ function HooksTopic() {
         title="Hooks"
         description="Mirror helpers for logic outside JSX."
       />
+      <Purpose
+        items={[
+          {
+            name: 'Hooks',
+            text: 'Return the same answers as the components, as booleans. Use them for className, disabled, or a request that should not live inside JSX.',
+          },
+          {
+            name: 'Names',
+            text: 'useShow, useMatch, useExists, useEmpty, useIncludes, useCompare, useMedia, usePermission, and useFeature follow the component with the same idea.',
+          },
+        ]}
+      />
       <FeatureProvider flags={{ beta: true }}>
         <HooksReadout />
       </FeatureProvider>
       <Snippet
         title="Hooks"
+        description="Each hook returns a boolean you can use outside JSX, for a class, a disabled button, or another condition."
         code={`import { useMatch, useCompare, useMedia, usePermission, useFeature } from '@glhrmoura/react-conditional';
 
 function useFlags(role, age) {
@@ -1388,6 +1599,14 @@ function ErrorBoundaryTopic() {
         eyebrow="API"
         title="ErrorBoundary"
         description="Catch render errors only when case is true. Use resetKey to recover after a retry."
+      />
+      <Purpose
+        items={[
+          {
+            name: 'ErrorBoundary',
+            text: 'Catches a render error from children while case is true and shows fallback. Change resetKey to mount a fresh boundary after a retry.',
+          },
+        ]}
       />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="flex flex-wrap gap-3 border-b border-line p-5 sm:p-8">
@@ -1422,6 +1641,7 @@ function ErrorBoundaryTopic() {
       </div>
       <Snippet
         title="ErrorBoundary"
+        description="While case is true, a crash in RiskyWidget renders the fallback instead of breaking the page."
         code={`import { ErrorBoundary } from '@glhrmoura/react-conditional';
 
 const App = ({ enabled }) => (
@@ -1457,6 +1677,26 @@ function AsyncTopic() {
         title="Async / Await"
         description="source accepts a Promise or a loader. Slots are Pending, Resolved, and Rejected."
       />
+      <Purpose
+        items={[
+          {
+            name: 'Async',
+            text: 'Runs a promise or a function that returns one, then renders a single slot. Await is the same component.',
+          },
+          {
+            name: 'Pending',
+            text: 'Shown while the promise is still running. Use it for a spinner.',
+          },
+          {
+            name: 'Resolved',
+            text: 'Receives the value when the promise succeeds. Use the function child to render that data.',
+          },
+          {
+            name: 'Rejected',
+            text: 'Receives the error when the promise fails. Use it for the error message.',
+          },
+        ]}
+      />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="border-b border-line p-5 sm:p-8">
           <button
@@ -1489,6 +1729,7 @@ function AsyncTopic() {
       </div>
       <Snippet
         title="Async"
+        description="Pending, Resolved, and Rejected are the three screens of one request."
         code={`import { Async, Pending, Resolved, Rejected } from '@glhrmoura/react-conditional';
 
 const App = ({ loadUser }) => (
@@ -1504,39 +1745,172 @@ const App = ({ loadUser }) => (
 }
 
 function PermissionTopic() {
-  const [canEdit, setCanEdit] = useState(true);
-  const permissions = canEdit ? ['edit', 'view'] : ['view'];
+  const [permissions, setPermissions] = useState(['view', 'edit']);
+  const [roles, setRoles] = useState(['editor']);
+
+  const toggle = (current: string[], item: string) =>
+    current.includes(item) ? current.filter((value) => value !== item) : [...current, item];
+
+  const formatList = (items: string[]) => `[${items.map((item) => JSON.stringify(item)).join(', ')}]`;
+
+  const checks: {
+    label: string;
+    hint: string;
+    can?: string | string[];
+    role?: string;
+    mode?: 'every' | 'some';
+    allowed: string;
+    denied: string;
+  }[] = [
+    {
+      label: 'can="edit"',
+      hint: 'Shown when permissions includes edit.',
+      can: 'edit',
+      allowed: 'Editor',
+      denied: 'Read only',
+    },
+    {
+      label: 'role="admin"',
+      hint: 'Shown when roles includes admin.',
+      role: 'admin',
+      allowed: 'Admin tools',
+      denied: 'Not an admin',
+    },
+    {
+      label: 'can={["publish", "delete"]} mode="some"',
+      hint: 'Shown when permissions includes publish or delete.',
+      can: ['publish', 'delete'],
+      mode: 'some',
+      allowed: 'Moderation',
+      denied: 'No moderation access',
+    },
+    {
+      label: 'can="edit" role="admin"',
+      hint: 'Shown when permissions includes edit and roles includes admin.',
+      can: 'edit',
+      role: 'admin',
+      allowed: 'Admin editor',
+      denied: 'Needs edit and admin',
+    },
+  ];
 
   return (
     <div>
       <TopicHeader
         eyebrow="API"
         title="Permission"
-        description="Render by capability (can) and/or role. Share lists with PermissionProvider."
+        description="PermissionProvider stores the user's permissions and roles. can checks permissions and role checks roles."
+      />
+      <Purpose
+        items={[
+          {
+            name: 'PermissionProvider',
+            text: 'Holds permissions and roles once, so every Permission inside can read them.',
+          },
+          {
+            name: 'can',
+            text: 'Checks the permissions list. A string needs that capability. A list uses mode.',
+          },
+          {
+            name: 'role',
+            text: 'Checks the roles list the same way. Set can and role together when both must pass.',
+          },
+          {
+            name: 'mode',
+            text: 'every, the default, needs every listed value. some needs any one of them.',
+          },
+        ]}
       />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="border-b border-line p-5 sm:p-8">
-          <button
-            type="button"
-            onClick={() => setCanEdit((value) => !value)}
-            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
-          >
-            can edit = {String(canEdit)}
-          </button>
+          <p className="text-sm font-medium text-text">What this user has</p>
+          <p className="mt-1 text-sm text-muted">These arrays are the props of PermissionProvider.</p>
+          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-muted">permissions</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {['view', 'edit', 'publish', 'delete'].map((item) => {
+              const on = permissions.includes(item);
+              return (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setPermissions((current) => toggle(current, item))}
+                  className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm font-medium transition ${
+                    on
+                      ? 'border-accent/50 bg-accent-soft text-accent'
+                      : 'border-line bg-surface-raised text-muted hover:border-line-strong hover:text-text'
+                  }`}
+                >
+                  {item}
+                </button>
+              );
+            })}
+          </div>
+          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-muted">roles</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {['viewer', 'editor', 'admin'].map((item) => {
+              const on = roles.includes(item);
+              return (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setRoles((current) => toggle(current, item))}
+                  className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm font-medium transition ${
+                    on
+                      ? 'border-accent/50 bg-accent-soft text-accent'
+                      : 'border-line bg-surface-raised text-muted hover:border-line-strong hover:text-text'
+                  }`}
+                >
+                  {item}
+                </button>
+              );
+            })}
+          </div>
+          <pre className="mt-5 overflow-x-auto rounded-xl border border-line bg-canvas px-4 py-3 font-mono text-[13px] leading-7">
+            <code>
+              <span className="block whitespace-nowrap">
+                <span className="text-accent">permissions</span>
+                <span className="text-muted">=</span>
+                <span className="text-text">{`{${formatList(permissions)}}`}</span>
+              </span>
+              <span className="block whitespace-nowrap">
+                <span className="text-accent">roles</span>
+                <span className="text-muted">=</span>
+                <span className="text-text">{`{${formatList(roles)}}`}</span>
+              </span>
+            </code>
+          </pre>
         </div>
         <div className="p-5 sm:p-8">
-          <PermissionProvider permissions={permissions} roles={['editor']}>
-            <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
-              <Permission can="edit" fallback={<p className="font-display text-xl font-semibold text-rose">Read only</p>}>
-                <p className="font-display text-xl font-semibold text-accent">Editor</p>
-              </Permission>
+          <PermissionProvider permissions={permissions} roles={roles}>
+            <div className="flex flex-col gap-3">
+              {checks.map((check) => (
+                <div
+                  key={check.label}
+                  className="flex flex-col gap-3 rounded-2xl border border-line bg-canvas px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div>
+                    <p className="font-mono text-sm text-text">{check.label}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-muted">{check.hint}</p>
+                  </div>
+                  <Permission
+                    can={check.can}
+                    role={check.role}
+                    mode={check.mode}
+                    fallback={<p className="font-display text-lg font-semibold text-rose">{check.denied}</p>}
+                  >
+                    <p className="font-display text-lg font-semibold text-accent">{check.allowed}</p>
+                  </Permission>
+                </div>
+              ))}
             </div>
           </PermissionProvider>
         </div>
       </div>
-      <Snippet
-        title="Permission"
-        code={`import { Permission, PermissionProvider } from '@glhrmoura/react-conditional';
+      <div className="flex flex-col gap-5">
+        <Snippet
+          title="Share the user once"
+          description="PermissionProvider passes permissions and roles to every Permission inside it."
+          code={`import { Permission, PermissionProvider } from '@glhrmoura/react-conditional';
 
 const App = ({ user }) => (
   <PermissionProvider permissions={user.permissions} roles={user.roles}>
@@ -1545,7 +1919,38 @@ const App = ({ user }) => (
     </Permission>
   </PermissionProvider>
 );`}
-      />
+        />
+        <Snippet
+          title="can, role, and mode"
+          description="can checks permissions. role checks roles. When both are set, both must pass. mode some matches any value in that list. The default mode is every."
+          code={`<PermissionProvider permissions={['view', 'edit']} roles={['editor']}>
+  <Permission can="edit" fallback={<ReadOnly />}>
+    <Editor />
+  </Permission>
+  <Permission role="admin" fallback={<NotAdmin />}>
+    <AdminTools />
+  </Permission>
+  <Permission can={['publish', 'delete']} mode="some" fallback={<Locked />}>
+    <Moderation />
+  </Permission>
+  <Permission can="edit" role="admin" fallback={<Denied />}>
+    <AdminEditor />
+  </Permission>
+</PermissionProvider>`}
+        />
+        <Snippet
+          title="Without a provider"
+          description="Pass permissions and roles on Permission when the lists are local to that gate."
+          code={`<Permission
+  can="edit"
+  permissions={user.permissions}
+  roles={user.roles}
+  fallback={<ReadOnly />}
+>
+  <Editor />
+</Permission>`}
+        />
+      </div>
     </div>
   );
 }
@@ -1560,6 +1965,14 @@ function MediaTopic() {
         title="Media"
         description="Match a viewport with min and/or max. Numbers are pixels. Unmatched during SSR."
       />
+      <Purpose
+        items={[
+          {
+            name: 'Media',
+            text: 'Renders children when the viewport matches min, max, or both. A number is pixels. On the server the query does not match, so fallback is what SSR sends.',
+          },
+        ]}
+      />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="p-5 sm:p-8">
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
@@ -1572,6 +1985,7 @@ function MediaTopic() {
       </div>
       <Snippet
         title="Media"
+        description="Desktop nav renders from 768px up. Narrower viewports get the fallback."
         code={`import { Media } from '@glhrmoura/react-conditional';
 
 const App = () => (
@@ -1593,6 +2007,18 @@ function FeatureTopic() {
         eyebrow="API"
         title="Feature"
         description="Gate UI with when, or with a flag name from FeatureProvider."
+      />
+      <Purpose
+        items={[
+          {
+            name: 'FeatureProvider',
+            text: 'Stores named flags for the tree, such as beta or checkout-v2.',
+          },
+          {
+            name: 'Feature',
+            text: 'Renders children when name is on in the provider, or when the when prop is truthy. Use fallback for the stable UI.',
+          },
+        ]}
       />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="border-b border-line p-5 sm:p-8">
@@ -1616,12 +2042,16 @@ function FeatureTopic() {
       </div>
       <Snippet
         title="Feature"
+        description="when uses a boolean you already have. name reads a flag stored on FeatureProvider."
         code={`import { Feature, FeatureProvider } from '@glhrmoura/react-conditional';
 
 const App = ({ flags }) => (
   <FeatureProvider flags={flags}>
     <Feature when={flags.beta} fallback={<StablePanel />}>
       <BetaPanel />
+    </Feature>
+    <Feature name="checkout-v2">
+      <CheckoutV2 />
     </Feature>
   </FeatureProvider>
 );`}
