@@ -25,8 +25,21 @@ import {
   Once,
   Lazy,
   Portal,
+  ErrorBoundary,
+  Async,
+  Pending,
+  Resolved,
+  Rejected,
+  Permission,
+  PermissionProvider,
+  Media,
+  Feature,
+  FeatureProvider,
   useMatch,
   useCompare,
+  useMedia,
+  usePermission,
+  useFeature,
 } from '@glhrmoura/react-conditional';
 import { User, Star, Shield, LogOut, Copy, Check, ExternalLink, Mail, Menu, X } from 'lucide-react';
 import Prism from 'prismjs';
@@ -55,6 +68,11 @@ type TopicId =
   | 'compare'
   | 'once'
   | 'portal'
+  | 'error-boundary'
+  | 'async'
+  | 'permission'
+  | 'media'
+  | 'feature'
   | 'hooks';
 
 type NavItem = {
@@ -98,6 +116,11 @@ const navGroups: NavGroup[] = [
       { id: 'compare', label: 'Compare / Includes', description: 'Relations & lists' },
       { id: 'once', label: 'Once / Lazy', description: 'Sticky and cached' },
       { id: 'portal', label: 'Portal', description: 'Conditional portal' },
+      { id: 'error-boundary', label: 'ErrorBoundary', description: 'Catch child errors' },
+      { id: 'async', label: 'Async / Await', description: 'Promise slots' },
+      { id: 'permission', label: 'Permission', description: 'Roles and can' },
+      { id: 'media', label: 'Media', description: 'Viewport min / max' },
+      { id: 'feature', label: 'Feature', description: 'Feature flags' },
       { id: 'hooks', label: 'Hooks', description: 'Logic outside JSX' },
     ],
   },
@@ -332,7 +355,7 @@ function OverviewTopic() {
       <TopicHeader
         eyebrow="Start"
         title="Overview"
-        description="Declarative conditional rendering for React with slots, helpers, portals, and hooks."
+        description="Declarative conditional rendering for React with slots, helpers, portals, async states, permissions, media queries, feature flags, and hooks."
       />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <article className="rounded-2xl border border-line bg-surface p-5">
@@ -361,6 +384,24 @@ function OverviewTopic() {
             <code className="font-mono text-accent">Guard</code>,{' '}
             <code className="font-mono text-accent">Exists</code>,{' '}
             <code className="font-mono text-accent">Empty</code>, and more without wrappers.
+          </p>
+        </article>
+        <article className="rounded-2xl border border-line bg-surface p-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Async</p>
+          <h3 className="mt-3 font-display text-xl font-semibold text-text">Promise slots</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            <code className="font-mono text-accent">Pending</code>,{' '}
+            <code className="font-mono text-accent">Resolved</code>, and{' '}
+            <code className="font-mono text-accent">Rejected</code> for async UI.
+          </p>
+        </article>
+        <article className="rounded-2xl border border-line bg-surface p-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Access</p>
+          <h3 className="mt-3 font-display text-xl font-semibold text-text">Flags and roles</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted">
+            Gate with <code className="font-mono text-accent">Permission</code>,{' '}
+            <code className="font-mono text-accent">Feature</code>, and{' '}
+            <code className="font-mono text-accent">Media</code>.
           </p>
         </article>
       </div>
@@ -1285,12 +1326,27 @@ const App = ({ open }) => (
   );
 }
 
-function HooksTopic() {
+function HooksReadout() {
   const role = 'admin';
   const age = 21;
   const matched = useMatch(role, 'admin', ['owner']);
   const adult = useCompare(age, { gte: 18 });
+  const desktop = useMedia(768);
+  const canEdit = usePermission({ can: 'edit', permissions: ['edit'] });
+  const beta = useFeature('beta');
 
+  return (
+    <div className="mb-8 rounded-2xl border border-line bg-canvas px-5 py-6">
+      <p className="font-mono text-sm text-muted">useMatch(role, 'admin', ['owner']) → {String(matched)}</p>
+      <p className="mt-2 font-mono text-sm text-muted">useCompare(age, {'{ gte: 18 }'}) → {String(adult)}</p>
+      <p className="mt-2 font-mono text-sm text-muted">useMedia(768) → {String(desktop)}</p>
+      <p className="mt-2 font-mono text-sm text-muted">usePermission({'{ can: \'edit\' }'}) → {String(canEdit)}</p>
+      <p className="mt-2 font-mono text-sm text-muted">useFeature('beta') → {String(beta)}</p>
+    </div>
+  );
+}
+
+function HooksTopic() {
   return (
     <div>
       <TopicHeader
@@ -1298,19 +1354,277 @@ function HooksTopic() {
         title="Hooks"
         description="Mirror helpers for logic outside JSX."
       />
-      <div className="mb-8 rounded-2xl border border-line bg-canvas px-5 py-6">
-        <p className="font-mono text-sm text-muted">useMatch(role, 'admin', ['owner']) → {String(matched)}</p>
-        <p className="mt-2 font-mono text-sm text-muted">useCompare(age, {'{ gte: 18 }'}) → {String(adult)}</p>
-      </div>
+      <FeatureProvider flags={{ beta: true }}>
+        <HooksReadout />
+      </FeatureProvider>
       <Snippet
         title="Hooks"
-        code={`import { useMatch, useCompare } from '@glhrmoura/react-conditional';
+        code={`import { useMatch, useCompare, useMedia, usePermission, useFeature } from '@glhrmoura/react-conditional';
 
 function useFlags(role, age) {
   const isAdmin = useMatch(role, 'admin', ['owner']);
   const adult = useCompare(age, { gte: 18 });
-  return { isAdmin, adult };
+  const desktop = useMedia(768);
+  const canEdit = usePermission({ can: 'edit' });
+  const beta = useFeature('beta');
+  return { isAdmin, adult, desktop, canEdit, beta };
 }`}
+      />
+    </div>
+  );
+}
+
+function Boom(): React.ReactElement {
+  throw new Error('Widget crashed');
+}
+
+function ErrorBoundaryTopic() {
+  const [enabled, setEnabled] = useState(true);
+  const [boom, setBoom] = useState(false);
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="ErrorBoundary"
+        description="Catch render errors only when case is true. Use resetKey to recover after a retry."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="flex flex-wrap gap-3 border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setEnabled((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            case = {String(enabled)}
+          </button>
+          <button
+            type="button"
+            onClick={() => setBoom((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            throw = {String(boom)}
+          </button>
+        </div>
+        <div className="p-5 sm:p-8">
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <ErrorBoundary
+              case={enabled}
+              resetKey={`${enabled}-${boom}`}
+              fallback={(error) => (
+                <p className="font-display text-xl font-semibold text-rose">{error.message}</p>
+              )}
+            >
+              {boom && enabled ? <Boom /> : <p className="font-display text-xl font-semibold text-accent">Stable widget</p>}
+            </ErrorBoundary>
+          </div>
+        </div>
+      </div>
+      <Snippet
+        title="ErrorBoundary"
+        code={`import { ErrorBoundary } from '@glhrmoura/react-conditional';
+
+const App = ({ enabled }) => (
+  <ErrorBoundary
+    case={enabled}
+    fallback={(error) => <ErrorView message={error.message} />}
+  >
+    <RiskyWidget />
+  </ErrorBoundary>
+);`}
+      />
+    </div>
+  );
+}
+
+function AsyncTopic() {
+  const [ok, setOk] = useState(true);
+  const source = React.useCallback(
+    () =>
+      new Promise<{ name: string }>((resolve, reject) => {
+        window.setTimeout(() => {
+          if (ok) resolve({ name: 'Ada' });
+          else reject(new Error('Failed to load'));
+        }, 600);
+      }),
+    [ok]
+  );
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Async / Await"
+        description="source accepts a Promise or a loader. Slots are Pending, Resolved, and Rejected."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setOk((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            succeed = {String(ok)}
+          </button>
+        </div>
+        <div className="p-5 sm:p-8">
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <Async source={source}>
+              <Pending>
+                <p className="font-display text-xl font-semibold text-gold">Loading...</p>
+              </Pending>
+              <Resolved>
+                {(user) => <p className="font-display text-xl font-semibold text-accent">Hello, {user.name}</p>}
+              </Resolved>
+              <Rejected>
+                {(error) => (
+                  <p className="font-display text-xl font-semibold text-rose">
+                    {error instanceof Error ? error.message : 'Error'}
+                  </p>
+                )}
+              </Rejected>
+            </Async>
+          </div>
+        </div>
+      </div>
+      <Snippet
+        title="Async"
+        code={`import { Async, Pending, Resolved, Rejected } from '@glhrmoura/react-conditional';
+
+const App = ({ loadUser }) => (
+  <Async source={loadUser}>
+    <Pending>Loading...</Pending>
+    <Resolved>{(user) => <Profile name={user.name} />}</Resolved>
+    <Rejected>{(error) => <ErrorView message={error.message} />}</Rejected>
+  </Async>
+);`}
+      />
+    </div>
+  );
+}
+
+function PermissionTopic() {
+  const [canEdit, setCanEdit] = useState(true);
+  const permissions = canEdit ? ['edit', 'view'] : ['view'];
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Permission"
+        description="Render by capability (can) and/or role. Share lists with PermissionProvider."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setCanEdit((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            can edit = {String(canEdit)}
+          </button>
+        </div>
+        <div className="p-5 sm:p-8">
+          <PermissionProvider permissions={permissions} roles={['editor']}>
+            <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+              <Permission can="edit" fallback={<p className="font-display text-xl font-semibold text-rose">Read only</p>}>
+                <p className="font-display text-xl font-semibold text-accent">Editor</p>
+              </Permission>
+            </div>
+          </PermissionProvider>
+        </div>
+      </div>
+      <Snippet
+        title="Permission"
+        code={`import { Permission, PermissionProvider } from '@glhrmoura/react-conditional';
+
+const App = ({ user }) => (
+  <PermissionProvider permissions={user.permissions} roles={user.roles}>
+    <Permission can="edit" fallback={<ReadOnly />}>
+      <Editor />
+    </Permission>
+  </PermissionProvider>
+);`}
+      />
+    </div>
+  );
+}
+
+function MediaTopic() {
+  const desktop = useMedia(768);
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Media"
+        description="Match a viewport with min and/or max. Numbers are pixels. Unmatched during SSR."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="p-5 sm:p-8">
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <Media min={768} fallback={<p className="font-display text-xl font-semibold text-gold">Mobile nav</p>}>
+              <p className="font-display text-xl font-semibold text-accent">Desktop nav</p>
+            </Media>
+            <p className="mt-3 font-mono text-xs text-muted">useMedia(768) → {String(desktop)}</p>
+          </div>
+        </div>
+      </div>
+      <Snippet
+        title="Media"
+        code={`import { Media } from '@glhrmoura/react-conditional';
+
+const App = () => (
+  <Media min={768} fallback={<MobileNav />}>
+    <DesktopNav />
+  </Media>
+);`}
+      />
+    </div>
+  );
+}
+
+function FeatureTopic() {
+  const [beta, setBeta] = useState(true);
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Feature"
+        description="Gate UI with when, or with a flag name from FeatureProvider."
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setBeta((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            beta = {String(beta)}
+          </button>
+        </div>
+        <div className="p-5 sm:p-8">
+          <FeatureProvider flags={{ beta }}>
+            <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+              <Feature name="beta" fallback={<p className="font-display text-xl font-semibold text-gold">Stable panel</p>}>
+                <p className="font-display text-xl font-semibold text-accent">Beta panel</p>
+              </Feature>
+            </div>
+          </FeatureProvider>
+        </div>
+      </div>
+      <Snippet
+        title="Feature"
+        code={`import { Feature, FeatureProvider } from '@glhrmoura/react-conditional';
+
+const App = ({ flags }) => (
+  <FeatureProvider flags={flags}>
+    <Feature when={flags.beta} fallback={<StablePanel />}>
+      <BetaPanel />
+    </Feature>
+  </FeatureProvider>
+);`}
       />
     </div>
   );
@@ -1464,6 +1778,21 @@ function App() {
               </ElseIf>
               <ElseIf case={topic === 'portal'}>
                 <PortalTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'error-boundary'}>
+                <ErrorBoundaryTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'async'}>
+                <AsyncTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'permission'}>
+                <PermissionTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'media'}>
+                <MediaTopic />
+              </ElseIf>
+              <ElseIf case={topic === 'feature'}>
+                <FeatureTopic />
               </ElseIf>
               <Else>
                 <HooksTopic />
