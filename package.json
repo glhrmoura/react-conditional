@@ -1,7 +1,7 @@
 {
   "name": "@glhrmoura/react-conditional",
   "version": "0.9.0",
-  "description": "Declarative conditional rendering for React with slots, helpers, and hooks",
+  "description": "Declarative conditional rendering for React with slots, async, permissions, media, and hooks",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -75,7 +75,12 @@
     "unless",
     "fallback",
     "portal",
-    "hooks"
+    "hooks",
+    "error-boundary",
+    "async",
+    "permission",
+    "media",
+    "feature-flag"
   ],
   "files": [
     "dist",
