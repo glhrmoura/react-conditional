@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  type ComponentType,
-  type ReactNode,
-} from "react";
+import React, { useState, useEffect, useRef, type ReactNode } from "react";
 import ReactDOM from "react-dom/client";
 import {
   Condition,
@@ -59,6 +53,7 @@ import {
   Menu,
   X,
   ArrowRight,
+  type LucideIcon,
 } from "lucide-react";
 import Prism from "prismjs";
 import "prismjs/themes/prism-okaidia.css";
@@ -198,7 +193,7 @@ type UserOption = {
   label: string;
   value: UserType;
   description: string;
-  icon: ComponentType<{ className?: string; strokeWidth?: number }>;
+  icon: LucideIcon;
   accent: string;
   soft: string;
   border: string;
@@ -2043,7 +2038,7 @@ function AsyncTopic() {
                   Loading...
                 </p>
               </Pending>
-              <Resolved>
+              <Resolved<{ name: string }>>
                 {(user) => (
                   <p className="font-display text-xl font-semibold text-accent">
                     Hello, {user.name}
@@ -2574,9 +2569,18 @@ function MobileDrawer({
   onClose: () => void;
   onSelect: (id: TopicId) => void;
 }) {
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const node = rootRef.current;
+    if (!node) return;
+    if (open) node.removeAttribute("inert");
+    else node.setAttribute("inert", "");
+  }, [open]);
+
   return (
     <div
-      inert={open ? undefined : true}
+      ref={rootRef}
       className={`fixed inset-0 z-50 lg:hidden ${open ? "" : "pointer-events-none"}`}
     >
       <button
