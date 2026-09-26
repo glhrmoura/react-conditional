@@ -1,5 +1,11 @@
-import React, { useState, useEffect, useRef, type ComponentType, type ReactNode } from 'react';
-import ReactDOM from 'react-dom/client';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  type ComponentType,
+  type ReactNode,
+} from "react";
+import ReactDOM from "react-dom/client";
 import {
   Condition,
   If,
@@ -40,40 +46,52 @@ import {
   useMedia,
   usePermission,
   useFeature,
-} from '@glhrmoura/react-conditional';
-import { User, Star, Shield, LogOut, Copy, Check, ExternalLink, Mail, Menu, X, ArrowRight } from 'lucide-react';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism-okaidia.css';
-import 'prismjs/components/prism-jsx';
-import 'prismjs/components/prism-typescript';
-import 'prismjs/components/prism-bash';
+} from "@glhrmoura/react-conditional";
+import {
+  User,
+  Star,
+  Shield,
+  LogOut,
+  Copy,
+  Check,
+  ExternalLink,
+  Mail,
+  Menu,
+  X,
+  ArrowRight,
+} from "lucide-react";
+import Prism from "prismjs";
+import "prismjs/themes/prism-okaidia.css";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-bash";
 
-import './styles.css';
+import "./styles.css";
 
-type UserType = 'basic' | 'vip' | 'admin' | '';
+type UserType = "basic" | "vip" | "admin" | "";
 type TopicId =
-  | 'overview'
-  | 'install'
-  | 'playground'
-  | 'condition'
-  | 'switch'
-  | 'unless'
-  | 'show'
-  | 'guard'
-  | 'exists'
-  | 'empty'
-  | 'compose'
-  | 'fallback'
-  | 'either'
-  | 'compare'
-  | 'once'
-  | 'portal'
-  | 'error-boundary'
-  | 'async'
-  | 'permission'
-  | 'media'
-  | 'feature'
-  | 'hooks';
+  | "overview"
+  | "install"
+  | "playground"
+  | "condition"
+  | "switch"
+  | "unless"
+  | "show"
+  | "guard"
+  | "exists"
+  | "empty"
+  | "compose"
+  | "fallback"
+  | "either"
+  | "compare"
+  | "once"
+  | "portal"
+  | "error-boundary"
+  | "async"
+  | "permission"
+  | "media"
+  | "feature"
+  | "hooks";
 
 type NavItem = {
   id: TopicId;
@@ -88,54 +106,90 @@ type NavGroup = {
 
 const navGroups: NavGroup[] = [
   {
-    title: 'Start',
+    title: "Start",
     items: [
-      { id: 'overview', label: 'Overview', description: 'What this library does' },
-      { id: 'install', label: 'Install', description: 'Add it to your project' },
+      {
+        id: "overview",
+        label: "Overview",
+        description: "What this library does",
+      },
+      {
+        id: "install",
+        label: "Install",
+        description: "Add it to your project",
+      },
     ],
   },
   {
-    title: 'Try it',
+    title: "Try it",
     items: [
-      { id: 'playground', label: 'Playground', description: 'Compare both APIs live' },
+      {
+        id: "playground",
+        label: "Playground",
+        description: "Compare both APIs live",
+      },
     ],
   },
   {
-    title: 'Condition',
-    items: [{ id: 'condition', label: 'Condition', description: 'If, ElseIf, Else' }],
-  },
-  {
-    title: 'Switch',
-    items: [{ id: 'switch', label: 'Switch', description: 'Match, Default' }],
-  },
-  {
-    title: 'Helpers',
+    title: "Condition",
     items: [
-      { id: 'compare', label: 'Compare / Includes', description: 'Relations & lists' },
-      { id: 'either', label: 'Either / Toggle', description: 'Binary branches' },
-      { id: 'empty', label: 'Empty', description: 'Empty values' },
-      { id: 'error-boundary', label: 'ErrorBoundary', description: 'Catch child errors' },
-      { id: 'compose', label: 'Every / Some', description: 'Combine booleans' },
-      { id: 'exists', label: 'Exists', description: 'Not nullish' },
-      { id: 'fallback', label: 'Fallback', description: 'Required else branch' },
-      { id: 'guard', label: 'Guard', description: 'Truthy when / When' },
-      { id: 'hooks', label: 'Hooks', description: 'Logic outside JSX' },
-      { id: 'once', label: 'Once / Lazy', description: 'Sticky and cached' },
-      { id: 'portal', label: 'Portal', description: 'Conditional portal' },
-      { id: 'show', label: 'Show', description: 'Standalone boolean' },
-      { id: 'unless', label: 'Unless', description: 'Render when false' },
+      { id: "condition", label: "Condition", description: "If, ElseIf, Else" },
     ],
   },
   {
-    title: 'Async',
-    items: [{ id: 'async', label: 'Async / Await', description: 'Promise slots' }],
+    title: "Switch",
+    items: [{ id: "switch", label: "Switch", description: "Match, Default" }],
   },
   {
-    title: 'Access',
+    title: "Helpers",
     items: [
-      { id: 'feature', label: 'Feature', description: 'Feature flags' },
-      { id: 'media', label: 'Media', description: 'Viewport min / max' },
-      { id: 'permission', label: 'Permission', description: 'can, role, and mode' },
+      {
+        id: "compare",
+        label: "Compare / Includes",
+        description: "Relations & lists",
+      },
+      {
+        id: "either",
+        label: "Either / Toggle",
+        description: "Binary branches",
+      },
+      { id: "empty", label: "Empty", description: "Empty values" },
+      {
+        id: "error-boundary",
+        label: "ErrorBoundary",
+        description: "Catch child errors",
+      },
+      { id: "compose", label: "Every / Some", description: "Combine booleans" },
+      { id: "exists", label: "Exists", description: "Not nullish" },
+      {
+        id: "fallback",
+        label: "Fallback",
+        description: "Required else branch",
+      },
+      { id: "guard", label: "Guard", description: "Truthy when / When" },
+      { id: "hooks", label: "Hooks", description: "Logic outside JSX" },
+      { id: "once", label: "Once / Lazy", description: "Sticky and cached" },
+      { id: "portal", label: "Portal", description: "Conditional portal" },
+      { id: "show", label: "Show", description: "Standalone boolean" },
+      { id: "unless", label: "Unless", description: "Render when false" },
+    ],
+  },
+  {
+    title: "Async",
+    items: [
+      { id: "async", label: "Async / Await", description: "Promise slots" },
+    ],
+  },
+  {
+    title: "Access",
+    items: [
+      { id: "feature", label: "Feature", description: "Feature flags" },
+      { id: "media", label: "Media", description: "Viewport min / max" },
+      {
+        id: "permission",
+        label: "Permission",
+        description: "can, role, and mode",
+      },
     ],
   },
 ];
@@ -153,44 +207,44 @@ type UserOption = {
 
 const userTypes: UserOption[] = [
   {
-    label: 'Basic',
-    value: 'basic',
-    description: 'Standard access',
+    label: "Basic",
+    value: "basic",
+    description: "Standard access",
     icon: User,
-    accent: 'text-accent',
-    soft: 'bg-accent-soft',
-    border: 'border-accent/50',
-    dot: 'bg-accent',
+    accent: "text-accent",
+    soft: "bg-accent-soft",
+    border: "border-accent/50",
+    dot: "bg-accent",
   },
   {
-    label: 'VIP',
-    value: 'vip',
-    description: 'Priority privileges',
+    label: "VIP",
+    value: "vip",
+    description: "Priority privileges",
     icon: Star,
-    accent: 'text-gold',
-    soft: 'bg-gold-soft',
-    border: 'border-gold/50',
-    dot: 'bg-gold',
+    accent: "text-gold",
+    soft: "bg-gold-soft",
+    border: "border-gold/50",
+    dot: "bg-gold",
   },
   {
-    label: 'Admin',
-    value: 'admin',
-    description: 'Full control',
+    label: "Admin",
+    value: "admin",
+    description: "Full control",
     icon: Shield,
-    accent: 'text-admin',
-    soft: 'bg-admin-soft',
-    border: 'border-admin/50',
-    dot: 'bg-admin',
+    accent: "text-admin",
+    soft: "bg-admin-soft",
+    border: "border-admin/50",
+    dot: "bg-admin",
   },
   {
-    label: 'Logout',
-    value: '',
-    description: 'No active session',
+    label: "Logout",
+    value: "",
+    description: "No active session",
     icon: LogOut,
-    accent: 'text-rose',
-    soft: 'bg-rose-soft',
-    border: 'border-rose/50',
-    dot: 'bg-rose',
+    accent: "text-rose",
+    soft: "bg-rose-soft",
+    border: "border-rose/50",
+    dot: "bg-rose",
   },
 ];
 
@@ -201,7 +255,7 @@ type SnippetProps = {
   language?: string;
 };
 
-function Snippet({ title, code, description, language = 'jsx' }: SnippetProps) {
+function Snippet({ title, code, description, language = "jsx" }: SnippetProps) {
   const codeRef = useRef<HTMLElement>(null);
   const [copied, setCopied] = useState(false);
 
@@ -221,8 +275,12 @@ function Snippet({ title, code, description, language = 'jsx' }: SnippetProps) {
     <article className="overflow-hidden rounded-2xl border border-line bg-surface transition duration-300 hover:border-line-strong">
       <div className="flex items-start justify-between gap-4 border-b border-line px-5 py-4 sm:px-6">
         <div>
-          <h3 className="font-display text-lg font-semibold tracking-tight text-text">{title}</h3>
-          <p className="mt-1 text-sm leading-relaxed text-muted">{description}</p>
+          <h3 className="font-display text-lg font-semibold tracking-tight text-text">
+            {title}
+          </h3>
+          <p className="mt-1 text-sm leading-relaxed text-muted">
+            {description}
+          </p>
         </div>
         <button
           type="button"
@@ -230,8 +288,12 @@ function Snippet({ title, code, description, language = 'jsx' }: SnippetProps) {
           className="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-line bg-surface-raised px-2.5 py-1.5 text-xs font-medium text-muted transition hover:border-accent/40 hover:text-accent"
           aria-label="Copy code"
         >
-          {copied ? <Check className="h-3.5 w-3.5" strokeWidth={2.25} /> : <Copy className="h-3.5 w-3.5" strokeWidth={2.25} />}
-          {copied ? 'Copied' : 'Copy'}
+          {copied ? (
+            <Check className="h-3.5 w-3.5" strokeWidth={2.25} />
+          ) : (
+            <Copy className="h-3.5 w-3.5" strokeWidth={2.25} />
+          )}
+          {copied ? "Copied" : "Copy"}
         </button>
       </div>
       <div className="bg-canvas">
@@ -239,7 +301,9 @@ function Snippet({ title, code, description, language = 'jsx' }: SnippetProps) {
           <span className="h-2.5 w-2.5 rounded-full border border-rose/60 bg-rose/30" />
           <span className="h-2.5 w-2.5 rounded-full border border-gold/60 bg-gold/30" />
           <span className="h-2.5 w-2.5 rounded-full border border-accent/60 bg-accent/30" />
-          <span className="ml-3 font-mono text-[11px] tracking-wide text-muted/70">{language}</span>
+          <span className="ml-3 font-mono text-[11px] tracking-wide text-muted/70">
+            {language}
+          </span>
         </div>
         <pre>
           <code ref={codeRef} className={`language-${language}`}>
@@ -262,9 +326,15 @@ function TopicHeader({
 }) {
   return (
     <div className="mb-8">
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">{eyebrow}</p>
-      <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-text">{title}</h2>
-      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">{description}</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+        {eyebrow}
+      </p>
+      <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-text">
+        {title}
+      </h2>
+      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
+        {description}
+      </p>
     </div>
   );
 }
@@ -272,12 +342,21 @@ function TopicHeader({
 function Purpose({ items }: { items: { name: string; text: string }[] }) {
   return (
     <section className="mb-8" aria-label="What it is for">
-      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">What it is for</p>
+      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+        What it is for
+      </p>
       <div className="grid gap-3">
         {items.map((item) => (
-          <div key={item.name} className="rounded-2xl border border-line bg-surface px-5 py-4">
-            <p className="font-mono text-sm font-semibold text-accent">{item.name}</p>
-            <p className="mt-1.5 text-sm leading-relaxed text-muted">{item.text}</p>
+          <div
+            key={item.name}
+            className="rounded-2xl border border-line bg-surface px-5 py-4"
+          >
+            <p className="font-mono text-sm font-semibold text-accent">
+              {item.name}
+            </p>
+            <p className="mt-1.5 text-sm leading-relaxed text-muted">
+              {item.text}
+            </p>
           </div>
         ))}
       </div>
@@ -296,13 +375,16 @@ function ApiResultCard({
   userType: UserType;
   children: ReactNode;
 }) {
-  const active = userTypes.find((type) => type.value === userType) ?? userTypes[3];
+  const active =
+    userTypes.find((type) => type.value === userType) ?? userTypes[3];
   const Icon = active.icon;
 
   return (
     <article className="overflow-hidden rounded-2xl border border-line bg-canvas">
       <header className="border-b border-line px-5 py-4">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">{apiLabel}</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
+          {apiLabel}
+        </p>
         <p className="mt-1 font-mono text-xs text-muted">{apiHint}</p>
       </header>
       <div className={`relative px-5 py-7 text-center ${active.soft}`}>
@@ -339,7 +421,7 @@ function UserTypePicker({
             className={`group relative flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3.5 transition duration-200 ${
               selected
                 ? `${type.border} ${type.soft}`
-                : 'border-line bg-surface-raised hover:border-line-strong'
+                : "border-line bg-surface-raised hover:border-line-strong"
             }`}
           >
             <input
@@ -354,23 +436,31 @@ function UserTypePicker({
               className={`flex h-10 w-10 items-center justify-center rounded-xl border transition ${
                 selected
                   ? `${type.border} bg-surface ${type.accent}`
-                  : 'border-line bg-canvas text-muted group-hover:text-text'
+                  : "border-line bg-canvas text-muted group-hover:text-text"
               }`}
             >
               <Icon className="h-5 w-5" strokeWidth={1.75} />
             </span>
             <span className="min-w-0 flex-1">
-              <span className={`block text-sm font-semibold ${selected ? type.accent : 'text-text'}`}>
+              <span
+                className={`block text-sm font-semibold ${selected ? type.accent : "text-text"}`}
+              >
                 {type.label}
               </span>
-              <span className="block text-xs text-muted">{type.description}</span>
+              <span className="block text-xs text-muted">
+                {type.description}
+              </span>
             </span>
             <span
               className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition ${
-                selected ? `${type.border} bg-surface` : 'border-line-strong bg-canvas'
+                selected
+                  ? `${type.border} bg-surface`
+                  : "border-line-strong bg-canvas"
               }`}
             >
-              {selected ? <span className={`h-2 w-2 rounded-full ${type.dot}`} /> : null}
+              {selected ? (
+                <span className={`h-2 w-2 rounded-full ${type.dot}`} />
+              ) : null}
             </span>
           </label>
         );
@@ -381,29 +471,29 @@ function UserTypePicker({
 
 const overviewCards: { group: string; headline: string; text: string }[] = [
   {
-    group: 'Condition',
-    headline: 'Boolean branches',
-    text: 'Use it when the question is yes or no and only one branch should render, such as loading, an error, or the page.',
+    group: "Condition",
+    headline: "Boolean branches",
+    text: "Use it when the question is yes or no and only one branch should render, such as loading, an error, or the page.",
   },
   {
-    group: 'Switch',
-    headline: 'Value matching',
-    text: 'Use it when you already have a status, role, or code and each value should render its own UI.',
+    group: "Switch",
+    headline: "Value matching",
+    text: "Use it when you already have a status, role, or code and each value should render its own UI.",
   },
   {
-    group: 'Async',
-    headline: 'Promise slots',
-    text: 'Use it to show a spinner, the data, or the error from one promise.',
+    group: "Async",
+    headline: "Promise slots",
+    text: "Use it to show a spinner, the data, or the error from one promise.",
   },
   {
-    group: 'Helpers',
-    headline: 'Standalone checks',
-    text: 'Use Show, Guard, Exists, and Empty for one check that stands on its own.',
+    group: "Helpers",
+    headline: "Standalone checks",
+    text: "Use Show, Guard, Exists, and Empty for one check that stands on its own.",
   },
   {
-    group: 'Access',
-    headline: 'Flags and roles',
-    text: 'Use Permission, Feature, and Media to show UI for a role, a flag, or a viewport.',
+    group: "Access",
+    headline: "Flags and roles",
+    text: "Use Permission, Feature, and Media to show UI for a role, a flag, or a viewport.",
   },
 ];
 
@@ -417,19 +507,26 @@ function OverviewTopic({ onSelect }: { onSelect: (id: TopicId) => void }) {
       />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {overviewCards.map((card) => {
-          const topics = navGroups.find((group) => group.title === card.group)?.items ?? [];
+          const topics =
+            navGroups.find((group) => group.title === card.group)?.items ?? [];
           const single = topics.length === 1;
 
           return (
             <article
               key={card.group}
               className={`flex flex-col rounded-2xl border border-line bg-surface p-5 ${
-                topics.length > 1 ? 'sm:col-span-2 lg:col-span-3' : ''
+                topics.length > 1 ? "sm:col-span-2 lg:col-span-3" : ""
               }`}
             >
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">{card.group}</p>
-              <h3 className="mt-3 font-display text-xl font-semibold text-text">{card.headline}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{card.text}</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
+                {card.group}
+              </p>
+              <h3 className="mt-3 font-display text-xl font-semibold text-text">
+                {card.headline}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">
+                {card.text}
+              </p>
               <div className="mt-auto flex flex-wrap gap-2 pt-4">
                 {topics.map((topic) => (
                   <button
@@ -438,8 +535,8 @@ function OverviewTopic({ onSelect }: { onSelect: (id: TopicId) => void }) {
                     onClick={() => onSelect(topic.id)}
                     className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition hover:border-accent/40 hover:text-accent ${
                       single
-                        ? 'border-accent/40 bg-accent-soft text-accent'
-                        : 'border-line bg-surface-raised text-text'
+                        ? "border-accent/40 bg-accent-soft text-accent"
+                        : "border-line bg-surface-raised text-text"
                     }`}
                   >
                     {topic.label}
@@ -466,12 +563,12 @@ function InstallTopic() {
       <Purpose
         items={[
           {
-            name: 'Package',
-            text: 'This installs the components and hooks. React stays a peer dependency you already have in the app.',
+            name: "Package",
+            text: "This installs the components and hooks. React stays a peer dependency you already have in the app.",
           },
           {
-            name: 'react-dom',
-            text: 'Portal renders into another DOM node, so that component needs react-dom as well.',
+            name: "react-dom",
+            text: "Portal renders into another DOM node, so that component needs react-dom as well.",
           },
         ]}
       />
@@ -510,12 +607,12 @@ function PlaygroundTopic({
       <Purpose
         items={[
           {
-            name: 'Condition',
-            text: 'Asks a boolean about the same user. The first true If or ElseIf renders, and Else covers the rest.',
+            name: "Condition",
+            text: "Asks a boolean about the same user. The first true If or ElseIf renders, and Else covers the rest.",
           },
           {
-            name: 'Switch',
-            text: 'Matches that user as a value. Each Match is one case, and Default covers anything left over.',
+            name: "Switch",
+            text: "Matches that user as a value. Each Match is one case, and Default covers anything left over.",
           },
         ]}
       />
@@ -527,59 +624,99 @@ function PlaygroundTopic({
         <div className="p-5 sm:p-8">
           <p className="mb-4 text-sm font-medium text-muted">API output</p>
           <div className="grid gap-4 lg:grid-cols-2">
-            <ApiResultCard apiLabel="Condition" apiHint="If → ElseIf → Else" userType={userType}>
+            <ApiResultCard
+              apiLabel="Condition"
+              apiHint="If → ElseIf → Else"
+              userType={userType}
+            >
               <Condition>
-                <If case={userType === 'basic'}>
+                <If case={userType === "basic"}>
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-accent">The user is basic</h3>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+                      Rendered branch
+                    </p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-accent">
+                      The user is basic
+                    </h3>
                   </div>
                 </If>
-                <ElseIf case={userType === 'vip'}>
+                <ElseIf case={userType === "vip"}>
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-gold">The user is VIP</h3>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+                      Rendered branch
+                    </p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-gold">
+                      The user is VIP
+                    </h3>
                   </div>
                 </ElseIf>
-                <ElseIf case={userType === 'admin'}>
+                <ElseIf case={userType === "admin"}>
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-admin">The user is admin</h3>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+                      Rendered branch
+                    </p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-admin">
+                      The user is admin
+                    </h3>
                   </div>
                 </ElseIf>
                 <Else>
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Rendered branch</p>
-                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-rose">There is no user</h3>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+                      Rendered branch
+                    </p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-rose">
+                      There is no user
+                    </h3>
                   </div>
                 </Else>
               </Condition>
             </ApiResultCard>
 
-            <ApiResultCard apiLabel="Switch" apiHint="Match → Default" userType={userType}>
+            <ApiResultCard
+              apiLabel="Switch"
+              apiHint="Match → Default"
+              userType={userType}
+            >
               <Switch value={userType}>
                 <Match when="basic">
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
-                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-accent">Matched basic</h3>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+                      Matched value
+                    </p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-accent">
+                      Matched basic
+                    </h3>
                   </div>
                 </Match>
                 <Match when="vip">
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
-                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-gold">Matched VIP</h3>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+                      Matched value
+                    </p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-gold">
+                      Matched VIP
+                    </h3>
                   </div>
                 </Match>
-                <Match when={(value: unknown) => value === 'admin'}>
+                <Match when={(value: unknown) => value === "admin"}>
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
-                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-admin">Matched admin</h3>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+                      Matched value
+                    </p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-admin">
+                      Matched admin
+                    </h3>
                   </div>
                 </Match>
                 <Default>
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">Matched value</p>
-                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-rose">Default branch</h3>
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+                      Matched value
+                    </p>
+                    <h3 className="mt-2 font-display text-xl font-semibold tracking-tight text-rose">
+                      Default branch
+                    </h3>
                   </div>
                 </Default>
               </Switch>
@@ -602,20 +739,20 @@ function ConditionTopic() {
       <Purpose
         items={[
           {
-            name: 'Condition',
-            text: 'Groups the branches so only one of them renders. Use it for a flow with a few mutually exclusive screens.',
+            name: "Condition",
+            text: "Groups the branches so only one of them renders. Use it for a flow with a few mutually exclusive screens.",
           },
           {
-            name: 'If',
-            text: 'The first true case. Later branches are skipped once this one matches.',
+            name: "If",
+            text: "The first true case. Later branches are skipped once this one matches.",
           },
           {
-            name: 'ElseIf',
-            text: 'The next boolean, checked only after every earlier If and ElseIf was false.',
+            name: "ElseIf",
+            text: "The next boolean, checked only after every earlier If and ElseIf was false.",
           },
           {
-            name: 'Else',
-            text: 'The leftover UI when every case is false, such as a logged-out or empty screen.',
+            name: "Else",
+            text: "The leftover UI when every case is false, such as a logged-out or empty screen.",
           },
         ]}
       />
@@ -747,20 +884,32 @@ function SwitchTopic() {
       <Purpose
         items={[
           {
-            name: 'Switch',
-            text: 'Matches one value, such as a status, role, or HTTP code, instead of a chain of booleans.',
+            name: "Switch",
+            text: "Matches one value, such as a status, role, or HTTP code, instead of a chain of booleans.",
           },
           {
-            name: 'Match',
-            text: 'Renders when when hits. when can be an exact value, a list, or a function. or adds more values to the same branch.',
+            name: "when",
+            text: 'An exact value. Match when="loading" renders only while the switch value is that status.',
           },
           {
-            name: 'Empty Match',
-            text: 'A Match with no children falls through, so several values can share the next branch that has UI.',
+            name: "when list",
+            text: 'Any item in the array. Match when={["error", "failed"]} renders when the value is one of those statuses.',
           },
           {
-            name: 'Default',
-            text: 'Renders when no Match hits. It can sit anywhere among the branches.',
+            name: "when function",
+            text: 'A check you write. Match when={(value) => value === "success"} renders when the function returns true.',
+          },
+          {
+            name: "or",
+            text: "More values for the same branch. Match when={401} or={403} treats both codes as this Match.",
+          },
+          {
+            name: "Empty Match",
+            text: "A Match with no children falls through, so several values can share the next branch that has UI.",
+          },
+          {
+            name: "Default",
+            text: "Renders when no Match hits. It can sit anywhere among the branches.",
           },
         ]}
       />
@@ -825,8 +974,8 @@ function UnlessTopic() {
       <Purpose
         items={[
           {
-            name: 'Unless',
-            text: 'Keeps children off the screen while a flag is true. A loading flag uses it so the page appears only after loading finishes.',
+            name: "Unless",
+            text: "Keeps children off the screen while a flag is true. A loading flag uses it so the page appears only after loading finishes.",
           },
         ]}
       />
@@ -846,10 +995,14 @@ function UnlessTopic() {
           <p className="mb-4 text-sm font-medium text-muted">Output</p>
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
             <Unless case={isLoading}>
-              <p className="font-display text-xl font-semibold text-accent">Content is visible</p>
+              <p className="font-display text-xl font-semibold text-accent">
+                Content is visible
+              </p>
             </Unless>
             <Unless case={!isLoading}>
-              <p className="font-display text-xl font-semibold text-gold">Hidden while loading is false</p>
+              <p className="font-display text-xl font-semibold text-gold">
+                Hidden while loading is false
+              </p>
             </Unless>
           </div>
         </div>
@@ -896,8 +1049,8 @@ function ShowTopic() {
       <Purpose
         items={[
           {
-            name: 'Show',
-            text: 'Renders children when one boolean is true, and fallback when it is false. Use it for a single gate, such as a dashboard that becomes a login prompt.',
+            name: "Show",
+            text: "Renders children when one boolean is true, and fallback when it is false. Use it for a single gate, such as a dashboard that becomes a login prompt.",
           },
         ]}
       />
@@ -913,8 +1066,17 @@ function ShowTopic() {
         </div>
         <div className="p-5 sm:p-8">
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
-            <Show case={isLogged} fallback={<p className="font-display text-xl font-semibold text-rose">Login prompt</p>}>
-              <p className="font-display text-xl font-semibold text-accent">Dashboard</p>
+            <Show
+              case={isLogged}
+              fallback={
+                <p className="font-display text-xl font-semibold text-rose">
+                  Login prompt
+                </p>
+              }
+            >
+              <p className="font-display text-xl font-semibold text-accent">
+                Dashboard
+              </p>
             </Show>
           </div>
         </div>
@@ -935,7 +1097,7 @@ const App = ({ isLogged }) => (
 }
 
 function GuardTopic() {
-  const [user, setUser] = useState<{ name: string } | null>({ name: 'Ada' });
+  const [user, setUser] = useState<{ name: string } | null>({ name: "Ada" });
 
   return (
     <div>
@@ -947,12 +1109,12 @@ function GuardTopic() {
       <Purpose
         items={[
           {
-            name: 'Guard',
-            text: 'Renders when a value is truthy. Use it before reading fields on an object. null, undefined, false, 0, and an empty string show the fallback.',
+            name: "Guard",
+            text: "Renders when a value is truthy. Use it before reading fields on an object. null, undefined, false, 0, and an empty string show the fallback.",
           },
           {
-            name: 'When',
-            text: 'The same component as Guard. The shorter name fits a boolean flag such as isAdmin.',
+            name: "When",
+            text: "The same component as Guard. The shorter name fits a boolean flag such as isAdmin.",
           },
         ]}
       />
@@ -960,16 +1122,27 @@ function GuardTopic() {
         <div className="border-b border-line p-5 sm:p-8">
           <button
             type="button"
-            onClick={() => setUser((value) => (value ? null : { name: 'Ada' }))}
+            onClick={() => setUser((value) => (value ? null : { name: "Ada" }))}
             className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
           >
-            user = {user ? user.name : 'null'}
+            user = {user ? user.name : "null"}
           </button>
         </div>
         <div className="p-5 sm:p-8">
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
-            <Guard when={user} fallback={<p className="font-display text-xl font-semibold text-rose">Guest</p>}>
-              {() => <p className="font-display text-xl font-semibold text-accent">Hello, {user!.name}</p>}
+            <Guard
+              when={user}
+              fallback={
+                <p className="font-display text-xl font-semibold text-rose">
+                  Guest
+                </p>
+              }
+            >
+              {() => (
+                <p className="font-display text-xl font-semibold text-accent">
+                  Hello, {user!.name}
+                </p>
+              )}
             </Guard>
           </div>
         </div>
@@ -1003,7 +1176,7 @@ const App = ({ user }) => (
 }
 
 function ExistsTopic() {
-  const [user, setUser] = useState<{ name: string } | null>({ name: 'Ada' });
+  const [user, setUser] = useState<{ name: string } | null>({ name: "Ada" });
 
   return (
     <div>
@@ -1015,8 +1188,8 @@ function ExistsTopic() {
       <Purpose
         items={[
           {
-            name: 'Exists',
-            text: 'Renders when the value is present. 0, false, and an empty string still count. null and undefined show the fallback. Use it when those falsy values are real data.',
+            name: "Exists",
+            text: "Renders when the value is present. 0, false, and an empty string still count. null and undefined show the fallback. Use it when those falsy values are real data.",
           },
         ]}
       />
@@ -1024,16 +1197,27 @@ function ExistsTopic() {
         <div className="border-b border-line p-5 sm:p-8">
           <button
             type="button"
-            onClick={() => setUser((value) => (value ? null : { name: 'Ada' }))}
+            onClick={() => setUser((value) => (value ? null : { name: "Ada" }))}
             className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
           >
-            user = {user ? 'object' : 'null'}
+            user = {user ? "object" : "null"}
           </button>
         </div>
         <div className="p-5 sm:p-8">
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
-            <Exists value={user} fallback={<p className="font-display text-xl font-semibold text-rose">Missing</p>}>
-              {() => <p className="font-display text-xl font-semibold text-accent">{user!.name}</p>}
+            <Exists
+              value={user}
+              fallback={
+                <p className="font-display text-xl font-semibold text-rose">
+                  Missing
+                </p>
+              }
+            >
+              {() => (
+                <p className="font-display text-xl font-semibold text-accent">
+                  {user!.name}
+                </p>
+              )}
             </Exists>
           </div>
         </div>
@@ -1066,8 +1250,8 @@ function EmptyTopic() {
       <Purpose
         items={[
           {
-            name: 'Empty',
-            text: 'Renders children for an empty value: null, undefined, an empty string, an empty array, or an empty object. Put the filled list in fallback. Use it for empty states.',
+            name: "Empty",
+            text: "Renders children for an empty value: null, undefined, an empty string, an empty array, or an empty object. Put the filled list in fallback. Use it for empty states.",
           },
         ]}
       />
@@ -1075,7 +1259,9 @@ function EmptyTopic() {
         <div className="border-b border-line p-5 sm:p-8">
           <button
             type="button"
-            onClick={() => setItems((value) => (value.length ? [] : ['one', 'two']))}
+            onClick={() =>
+              setItems((value) => (value.length ? [] : ["one", "two"]))
+            }
             className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
           >
             items.length = {items.length}
@@ -1083,8 +1269,17 @@ function EmptyTopic() {
         </div>
         <div className="p-5 sm:p-8">
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
-            <Empty value={items} fallback={<p className="font-display text-xl font-semibold text-accent">{items.join(', ')}</p>}>
-              <p className="font-display text-xl font-semibold text-gold">Empty state</p>
+            <Empty
+              value={items}
+              fallback={
+                <p className="font-display text-xl font-semibold text-accent">
+                  {items.join(", ")}
+                </p>
+              }
+            >
+              <p className="font-display text-xl font-semibold text-gold">
+                Empty state
+              </p>
             </Empty>
           </div>
         </div>
@@ -1118,12 +1313,12 @@ function ComposeTopic() {
       <Purpose
         items={[
           {
-            name: 'Every',
-            text: 'Renders when every boolean is true. Use it when several gates must pass together, such as logged in and admin.',
+            name: "Every",
+            text: "Renders when every boolean is true. Use it when several gates must pass together, such as logged in and admin.",
           },
           {
-            name: 'Some',
-            text: 'Renders when at least one boolean is true. Use it when any one reason is enough to show the UI.',
+            name: "Some",
+            text: "Renders when at least one boolean is true. Use it when any one reason is enough to show the UI.",
           },
         ]}
       />
@@ -1146,15 +1341,37 @@ function ComposeTopic() {
         </div>
         <div className="grid gap-4 p-5 sm:grid-cols-2 sm:p-8">
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">Every</p>
-            <Every cases={[isLogged, isAdmin]} fallback={<p className="font-display text-lg font-semibold text-rose">Forbidden</p>}>
-              <p className="font-display text-lg font-semibold text-accent">Admin panel</p>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+              Every
+            </p>
+            <Every
+              cases={[isLogged, isAdmin]}
+              fallback={
+                <p className="font-display text-lg font-semibold text-rose">
+                  Forbidden
+                </p>
+              }
+            >
+              <p className="font-display text-lg font-semibold text-accent">
+                Admin panel
+              </p>
             </Every>
           </div>
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">Some</p>
-            <Some cases={[isLogged, isAdmin]} fallback={<p className="font-display text-lg font-semibold text-rose">No access</p>}>
-              <p className="font-display text-lg font-semibold text-accent">Feature banner</p>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+              Some
+            </p>
+            <Some
+              cases={[isLogged, isAdmin]}
+              fallback={
+                <p className="font-display text-lg font-semibold text-rose">
+                  No access
+                </p>
+              }
+            >
+              <p className="font-display text-lg font-semibold text-accent">
+                Feature banner
+              </p>
             </Some>
           </div>
         </div>
@@ -1200,8 +1417,8 @@ function FallbackTopic() {
       <Purpose
         items={[
           {
-            name: 'Fallback',
-            text: 'Renders children when case is true and the fallback prop when it is false. The else branch is required, so a loading placeholder cannot be forgotten.',
+            name: "Fallback",
+            text: "Renders children when case is true and the fallback prop when it is false. The else branch is required, so a loading placeholder cannot be forgotten.",
           },
         ]}
       />
@@ -1217,8 +1434,17 @@ function FallbackTopic() {
         </div>
         <div className="p-5 sm:p-8">
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
-            <Fallback case={ready} fallback={<p className="font-display text-xl font-semibold text-gold">Spinner</p>}>
-              <p className="font-display text-xl font-semibold text-accent">Ready view</p>
+            <Fallback
+              case={ready}
+              fallback={
+                <p className="font-display text-xl font-semibold text-gold">
+                  Spinner
+                </p>
+              }
+            >
+              <p className="font-display text-xl font-semibold text-accent">
+                Ready view
+              </p>
             </Fallback>
           </div>
         </div>
@@ -1251,12 +1477,12 @@ function EitherTopic() {
       <Purpose
         items={[
           {
-            name: 'Either',
-            text: 'Picks Then or Otherwise from a boolean. Use the slots when each side is a block of UI.',
+            name: "Either",
+            text: "Picks Then or Otherwise from a boolean. Use the slots when each side is a block of UI.",
           },
           {
-            name: 'Toggle',
-            text: 'The same choice as on and off props. Use it when the two sides are small nodes, such as icons.',
+            name: "Toggle",
+            text: "The same choice as on and off props. Use it when the two sides are small nodes, such as icons.",
           },
         ]}
       />
@@ -1274,18 +1500,30 @@ function EitherTopic() {
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
             <Either case={isOn}>
               <Then>
-                <p className="font-display text-xl font-semibold text-accent">On</p>
+                <p className="font-display text-xl font-semibold text-accent">
+                  On
+                </p>
               </Then>
               <Otherwise>
-                <p className="font-display text-xl font-semibold text-rose">Off</p>
+                <p className="font-display text-xl font-semibold text-rose">
+                  Off
+                </p>
               </Otherwise>
             </Either>
           </div>
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
             <Toggle
               case={isOn}
-              on={<p className="font-display text-xl font-semibold text-accent">Enabled</p>}
-              off={<p className="font-display text-xl font-semibold text-rose">Disabled</p>}
+              on={
+                <p className="font-display text-xl font-semibold text-accent">
+                  Enabled
+                </p>
+              }
+              off={
+                <p className="font-display text-xl font-semibold text-rose">
+                  Disabled
+                </p>
+              }
             />
           </div>
         </div>
@@ -1319,7 +1557,7 @@ const App = ({ isOn }) => (
 
 function CompareTopic() {
   const [age, setAge] = useState(16);
-  const [role, setRole] = useState('viewer');
+  const [role, setRole] = useState("viewer");
 
   return (
     <div>
@@ -1331,12 +1569,36 @@ function CompareTopic() {
       <Purpose
         items={[
           {
-            name: 'Compare',
-            text: 'Renders when a number or string passes eq, ne, lt, lte, gt, or gte. Use it for ranges such as age or price.',
+            name: "Compare",
+            text: "Checks a number, string, or date. Every operator you set on the same Compare has to pass, so gte and lt together describe a range such as an age or a price. Strings compare in character order, and dates compare by time. With no operator set, children do not render.",
           },
           {
-            name: 'Includes',
-            text: 'Renders when the value is inside a list. Use it for a role or status that belongs to a set.',
+            name: "eq",
+            text: "Equal. age with eq={18} renders only when the age is exactly 18.",
+          },
+          {
+            name: "ne",
+            text: 'Not equal. status with ne="draft" renders for every status except draft.',
+          },
+          {
+            name: "lt",
+            text: "Less than. price with lt={100} renders when the price is under 100.",
+          },
+          {
+            name: "lte",
+            text: "Less than or equal. score with lte={10} renders when the score is 10 or lower.",
+          },
+          {
+            name: "gt",
+            text: "Greater than. stock with gt={0} renders when there is at least one item left.",
+          },
+          {
+            name: "gte",
+            text: "Greater than or equal. age with gte={18} renders when the age is 18 or older.",
+          },
+          {
+            name: "Includes",
+            text: "Renders when value is one of the items in list. Use it for a role or status that belongs to a set, such as admin or editor.",
           },
         ]}
       />
@@ -1351,7 +1613,9 @@ function CompareTopic() {
           </button>
           <button
             type="button"
-            onClick={() => setRole((value) => (value === 'admin' ? 'viewer' : 'admin'))}
+            onClick={() =>
+              setRole((value) => (value === "admin" ? "viewer" : "admin"))
+            }
             className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
           >
             role = {role}
@@ -1359,17 +1623,33 @@ function CompareTopic() {
         </div>
         <div className="grid gap-4 p-5 sm:grid-cols-2 sm:p-8">
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
-            <Compare value={age} gte={18} fallback={<p className="font-display text-lg font-semibold text-rose">Minor</p>}>
-              <p className="font-display text-lg font-semibold text-accent">Adult</p>
+            <Compare
+              value={age}
+              gte={18}
+              fallback={
+                <p className="font-display text-lg font-semibold text-rose">
+                  Minor
+                </p>
+              }
+            >
+              <p className="font-display text-lg font-semibold text-accent">
+                Adult
+              </p>
             </Compare>
           </div>
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
             <Includes
               value={role}
-              list={['admin', 'editor']}
-              fallback={<p className="font-display text-lg font-semibold text-rose">Forbidden</p>}
+              list={["admin", "editor"]}
+              fallback={
+                <p className="font-display text-lg font-semibold text-rose">
+                  Forbidden
+                </p>
+              }
             >
-              <p className="font-display text-lg font-semibold text-accent">Editor panel</p>
+              <p className="font-display text-lg font-semibold text-accent">
+                Editor panel
+              </p>
             </Includes>
           </div>
         </div>
@@ -1416,12 +1696,12 @@ function OnceTopic() {
       <Purpose
         items={[
           {
-            name: 'Once',
-            text: 'After case becomes true, children stay mounted even if case turns false again. Use it for a widget that should be created a single time.',
+            name: "Once",
+            text: "After case becomes true, children stay mounted even if case turns false again. Use it for a widget that should be created a single time.",
           },
           {
-            name: 'Lazy',
-            text: 'Builds children the first time case is true and reuses that result. It hides them again while case is false. Use it for a heavy panel that opens and closes.',
+            name: "Lazy",
+            text: "Builds children the first time case is true and reuses that result. It hides them again while case is false. Use it for a heavy panel that opens and closes.",
           },
         ]}
       />
@@ -1444,15 +1724,28 @@ function OnceTopic() {
         </div>
         <div className="grid gap-4 p-5 sm:grid-cols-2 sm:p-8">
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">Once</p>
-            <Once case={ready} fallback={<p className="text-muted">Waiting…</p>}>
-              <p className="font-display text-lg font-semibold text-accent">Mounted and sticky</p>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+              Once
+            </p>
+            <Once
+              case={ready}
+              fallback={<p className="text-muted">Waiting…</p>}
+            >
+              <p className="font-display text-lg font-semibold text-accent">
+                Mounted and sticky
+              </p>
             </Once>
           </div>
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">Lazy</p>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+              Lazy
+            </p>
             <Lazy case={open} fallback={<p className="text-muted">Closed</p>}>
-              {() => <p className="font-display text-lg font-semibold text-accent">Cached panel</p>}
+              {() => (
+                <p className="font-display text-lg font-semibold text-accent">
+                  Cached panel
+                </p>
+              )}
             </Lazy>
           </div>
         </div>
@@ -1498,8 +1791,8 @@ function PortalTopic() {
       <Purpose
         items={[
           {
-            name: 'Portal',
-            text: 'Moves children into another DOM node, usually document.body, only while case is true. Use it for a modal or toast that must sit above the page.',
+            name: "Portal",
+            text: "Moves children into another DOM node, usually document.body, only while case is true. Use it for a modal or toast that must sit above the page.",
           },
         ]}
       />
@@ -1514,10 +1807,14 @@ function PortalTopic() {
           </button>
         </div>
         <div className="p-5 sm:p-8">
-          <p className="mb-4 text-sm text-muted">Portal content mounts on document.body when open.</p>
+          <p className="mb-4 text-sm text-muted">
+            Portal content mounts on document.body when open.
+          </p>
           <Portal case={open}>
             <div className="fixed bottom-6 right-6 z-50 rounded-2xl border border-line bg-surface-raised px-5 py-4 shadow-lg">
-              <p className="font-display text-lg font-semibold text-accent">Portal active</p>
+              <p className="font-display text-lg font-semibold text-accent">
+                Portal active
+              </p>
             </div>
           </Portal>
         </div>
@@ -1538,21 +1835,31 @@ const App = ({ open }) => (
 }
 
 function HooksReadout() {
-  const role = 'admin';
+  const role = "admin";
   const age = 21;
-  const matched = useMatch(role, 'admin', ['owner']);
+  const matched = useMatch(role, "admin", ["owner"]);
   const adult = useCompare(age, { gte: 18 });
   const desktop = useMedia(768);
-  const canEdit = usePermission({ can: 'edit', permissions: ['edit'] });
-  const beta = useFeature('beta');
+  const canEdit = usePermission({ can: "edit", permissions: ["edit"] });
+  const beta = useFeature("beta");
 
   return (
     <div className="mb-8 rounded-2xl border border-line bg-canvas px-5 py-6">
-      <p className="font-mono text-sm text-muted">useMatch(role, 'admin', ['owner']) → {String(matched)}</p>
-      <p className="mt-2 font-mono text-sm text-muted">useCompare(age, {'{ gte: 18 }'}) → {String(adult)}</p>
-      <p className="mt-2 font-mono text-sm text-muted">useMedia(768) → {String(desktop)}</p>
-      <p className="mt-2 font-mono text-sm text-muted">usePermission({'{ can: \'edit\' }'}) → {String(canEdit)}</p>
-      <p className="mt-2 font-mono text-sm text-muted">useFeature('beta') → {String(beta)}</p>
+      <p className="font-mono text-sm text-muted">
+        useMatch(role, 'admin', ['owner']) → {String(matched)}
+      </p>
+      <p className="mt-2 font-mono text-sm text-muted">
+        useCompare(age, {"{ gte: 18 }"}) → {String(adult)}
+      </p>
+      <p className="mt-2 font-mono text-sm text-muted">
+        useMedia(768) → {String(desktop)}
+      </p>
+      <p className="mt-2 font-mono text-sm text-muted">
+        usePermission({"{ can: 'edit' }"}) → {String(canEdit)}
+      </p>
+      <p className="mt-2 font-mono text-sm text-muted">
+        useFeature('beta') → {String(beta)}
+      </p>
     </div>
   );
 }
@@ -1568,12 +1875,12 @@ function HooksTopic() {
       <Purpose
         items={[
           {
-            name: 'Hooks',
-            text: 'Return the same answers as the components, as booleans. Use them for className, disabled, or a request that should not live inside JSX.',
+            name: "Hooks",
+            text: "Return the same answers as the components, as booleans. Use them for className, disabled, or a request that should not live inside JSX.",
           },
           {
-            name: 'Names',
-            text: 'useShow, useMatch, useExists, useEmpty, useIncludes, useCompare, useMedia, usePermission, and useFeature follow the component with the same idea.',
+            name: "Names",
+            text: "Each hook follows the component with the same idea: useShow, useMatch, useExists, useEmpty, useIncludes, useCompare, useMedia, usePermission, and useFeature. useCompare takes the operators as an object, such as { gte: 18 }.",
           },
         ]}
       />
@@ -1599,7 +1906,7 @@ function useFlags(role, age) {
 }
 
 function Boom(): React.ReactElement {
-  throw new Error('Widget crashed');
+  throw new Error("Widget crashed");
 }
 
 function ErrorBoundaryTopic() {
@@ -1616,8 +1923,8 @@ function ErrorBoundaryTopic() {
       <Purpose
         items={[
           {
-            name: 'ErrorBoundary',
-            text: 'Catches a render error from children while case is true and shows fallback. Change resetKey to mount a fresh boundary after a retry.',
+            name: "ErrorBoundary",
+            text: "Catches a render error from children while case is true and shows fallback. Change resetKey to mount a fresh boundary after a retry.",
           },
         ]}
       />
@@ -1644,10 +1951,18 @@ function ErrorBoundaryTopic() {
               case={enabled}
               resetKey={`${enabled}-${boom}`}
               fallback={(error) => (
-                <p className="font-display text-xl font-semibold text-rose">{error.message}</p>
+                <p className="font-display text-xl font-semibold text-rose">
+                  {error.message}
+                </p>
               )}
             >
-              {boom && enabled ? <Boom /> : <p className="font-display text-xl font-semibold text-accent">Stable widget</p>}
+              {boom && enabled ? (
+                <Boom />
+              ) : (
+                <p className="font-display text-xl font-semibold text-accent">
+                  Stable widget
+                </p>
+              )}
             </ErrorBoundary>
           </div>
         </div>
@@ -1676,11 +1991,11 @@ function AsyncTopic() {
     () =>
       new Promise<{ name: string }>((resolve, reject) => {
         window.setTimeout(() => {
-          if (ok) resolve({ name: 'Ada' });
-          else reject(new Error('Failed to load'));
+          if (ok) resolve({ name: "Ada" });
+          else reject(new Error("Failed to load"));
         }, 600);
       }),
-    [ok]
+    [ok],
   );
 
   return (
@@ -1693,20 +2008,20 @@ function AsyncTopic() {
       <Purpose
         items={[
           {
-            name: 'Async',
-            text: 'Runs a promise or a function that returns one, then renders a single slot. Await is the same component.',
+            name: "Async",
+            text: "Runs a promise or a function that returns one, then renders a single slot. Await is the same component.",
           },
           {
-            name: 'Pending',
-            text: 'Shown while the promise is still running. Use it for a spinner.',
+            name: "Pending",
+            text: "Shown while the promise is still running. Use it for a spinner.",
           },
           {
-            name: 'Resolved',
-            text: 'Receives the value when the promise succeeds. Use the function child to render that data.',
+            name: "Resolved",
+            text: "Receives the value when the promise succeeds. Use the function child to render that data.",
           },
           {
-            name: 'Rejected',
-            text: 'Receives the error when the promise fails. Use it for the error message.',
+            name: "Rejected",
+            text: "Receives the error when the promise fails. Use it for the error message.",
           },
         ]}
       />
@@ -1724,15 +2039,21 @@ function AsyncTopic() {
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
             <Async source={source}>
               <Pending>
-                <p className="font-display text-xl font-semibold text-gold">Loading...</p>
+                <p className="font-display text-xl font-semibold text-gold">
+                  Loading...
+                </p>
               </Pending>
               <Resolved>
-                {(user) => <p className="font-display text-xl font-semibold text-accent">Hello, {user.name}</p>}
+                {(user) => (
+                  <p className="font-display text-xl font-semibold text-accent">
+                    Hello, {user.name}
+                  </p>
+                )}
               </Resolved>
               <Rejected>
                 {(error) => (
                   <p className="font-display text-xl font-semibold text-rose">
-                    {error instanceof Error ? error.message : 'Error'}
+                    {error instanceof Error ? error.message : "Error"}
                   </p>
                 )}
               </Rejected>
@@ -1758,52 +2079,55 @@ const App = ({ loadUser }) => (
 }
 
 function PermissionTopic() {
-  const [permissions, setPermissions] = useState(['view', 'edit']);
-  const [roles, setRoles] = useState(['editor']);
+  const [permissions, setPermissions] = useState(["view", "edit"]);
+  const [roles, setRoles] = useState(["editor"]);
 
   const toggle = (current: string[], item: string) =>
-    current.includes(item) ? current.filter((value) => value !== item) : [...current, item];
+    current.includes(item)
+      ? current.filter((value) => value !== item)
+      : [...current, item];
 
-  const formatList = (items: string[]) => `[${items.map((item) => JSON.stringify(item)).join(', ')}]`;
+  const formatList = (items: string[]) =>
+    `[${items.map((item) => JSON.stringify(item)).join(", ")}]`;
 
   const checks: {
     label: string;
     hint: string;
     can?: string | string[];
     role?: string;
-    mode?: 'every' | 'some';
+    mode?: "every" | "some";
     allowed: string;
     denied: string;
   }[] = [
     {
       label: 'can="edit"',
-      hint: 'Shown when permissions includes edit.',
-      can: 'edit',
-      allowed: 'Editor',
-      denied: 'Read only',
+      hint: "Shown when permissions includes edit.",
+      can: "edit",
+      allowed: "Editor",
+      denied: "Read only",
     },
     {
       label: 'role="admin"',
-      hint: 'Shown when roles includes admin.',
-      role: 'admin',
-      allowed: 'Admin tools',
-      denied: 'Not an admin',
+      hint: "Shown when roles includes admin.",
+      role: "admin",
+      allowed: "Admin tools",
+      denied: "Not an admin",
     },
     {
       label: 'can={["publish", "delete"]} mode="some"',
-      hint: 'Shown when permissions includes publish or delete.',
-      can: ['publish', 'delete'],
-      mode: 'some',
-      allowed: 'Moderation',
-      denied: 'No moderation access',
+      hint: "Shown when permissions includes publish or delete.",
+      can: ["publish", "delete"],
+      mode: "some",
+      allowed: "Moderation",
+      denied: "No moderation access",
     },
     {
       label: 'can="edit" role="admin"',
-      hint: 'Shown when permissions includes edit and roles includes admin.',
-      can: 'edit',
-      role: 'admin',
-      allowed: 'Admin editor',
-      denied: 'Needs edit and admin',
+      hint: "Shown when permissions includes edit and roles includes admin.",
+      can: "edit",
+      role: "admin",
+      allowed: "Admin editor",
+      denied: "Needs edit and admin",
     },
   ];
 
@@ -1817,40 +2141,46 @@ function PermissionTopic() {
       <Purpose
         items={[
           {
-            name: 'PermissionProvider',
-            text: 'Holds permissions and roles once, so every Permission inside can read them.',
+            name: "PermissionProvider",
+            text: "Holds permissions and roles once, so every Permission inside can read them.",
           },
           {
-            name: 'can',
-            text: 'Checks the permissions list. A string needs that capability. A list uses mode.',
+            name: "can",
+            text: "Checks the permissions list. A string needs that capability. A list uses mode.",
           },
           {
-            name: 'role',
-            text: 'Checks the roles list the same way. Set can and role together when both must pass.',
+            name: "role",
+            text: "Checks the roles list the same way. Set can and role together when both must pass.",
           },
           {
-            name: 'mode',
-            text: 'every, the default, needs every listed value. some needs any one of them.',
+            name: "mode",
+            text: "every, the default, needs every listed value. some needs any one of them.",
           },
         ]}
       />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="border-b border-line p-5 sm:p-8">
           <p className="text-sm font-medium text-text">What this user has</p>
-          <p className="mt-1 text-sm text-muted">These arrays are the props of PermissionProvider.</p>
-          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-muted">permissions</p>
+          <p className="mt-1 text-sm text-muted">
+            These arrays are the props of PermissionProvider.
+          </p>
+          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-muted">
+            permissions
+          </p>
           <div className="mt-2 flex flex-wrap gap-2">
-            {['view', 'edit', 'publish', 'delete'].map((item) => {
+            {["view", "edit", "publish", "delete"].map((item) => {
               const on = permissions.includes(item);
               return (
                 <button
                   key={item}
                   type="button"
-                  onClick={() => setPermissions((current) => toggle(current, item))}
+                  onClick={() =>
+                    setPermissions((current) => toggle(current, item))
+                  }
                   className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm font-medium transition ${
                     on
-                      ? 'border-accent/50 bg-accent-soft text-accent'
-                      : 'border-line bg-surface-raised text-muted hover:border-line-strong hover:text-text'
+                      ? "border-accent/50 bg-accent-soft text-accent"
+                      : "border-line bg-surface-raised text-muted hover:border-line-strong hover:text-text"
                   }`}
                 >
                   {item}
@@ -1858,9 +2188,11 @@ function PermissionTopic() {
               );
             })}
           </div>
-          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-muted">roles</p>
+          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-muted">
+            roles
+          </p>
           <div className="mt-2 flex flex-wrap gap-2">
-            {['viewer', 'editor', 'admin'].map((item) => {
+            {["viewer", "editor", "admin"].map((item) => {
               const on = roles.includes(item);
               return (
                 <button
@@ -1869,8 +2201,8 @@ function PermissionTopic() {
                   onClick={() => setRoles((current) => toggle(current, item))}
                   className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm font-medium transition ${
                     on
-                      ? 'border-accent/50 bg-accent-soft text-accent'
-                      : 'border-line bg-surface-raised text-muted hover:border-line-strong hover:text-text'
+                      ? "border-accent/50 bg-accent-soft text-accent"
+                      : "border-line bg-surface-raised text-muted hover:border-line-strong hover:text-text"
                   }`}
                 >
                   {item}
@@ -1903,15 +2235,23 @@ function PermissionTopic() {
                 >
                   <div>
                     <p className="font-mono text-sm text-text">{check.label}</p>
-                    <p className="mt-1 text-xs leading-relaxed text-muted">{check.hint}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-muted">
+                      {check.hint}
+                    </p>
                   </div>
                   <Permission
                     can={check.can}
                     role={check.role}
                     mode={check.mode}
-                    fallback={<p className="font-display text-lg font-semibold text-rose">{check.denied}</p>}
+                    fallback={
+                      <p className="font-display text-lg font-semibold text-rose">
+                        {check.denied}
+                      </p>
+                    }
                   >
-                    <p className="font-display text-lg font-semibold text-accent">{check.allowed}</p>
+                    <p className="font-display text-lg font-semibold text-accent">
+                      {check.allowed}
+                    </p>
                   </Permission>
                 </div>
               ))}
@@ -1981,18 +2321,37 @@ function MediaTopic() {
       <Purpose
         items={[
           {
-            name: 'Media',
-            text: 'Renders children when the viewport matches min, max, or both. A number is pixels. On the server the query does not match, so fallback is what SSR sends.',
+            name: "Media",
+            text: "Renders children when the viewport width matches the bounds you set. On the server the query does not match, so fallback is what SSR sends.",
+          },
+          {
+            name: "min",
+            text: 'The narrowest width that still shows children. min={768} is 768px and wider. A string is used as written, such as min="48rem".',
+          },
+          {
+            name: "max",
+            text: "The widest width that still shows children. max={767} is 767px and narrower. Set min and max together when the width must sit between them.",
           },
         ]}
       />
       <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
         <div className="p-5 sm:p-8">
           <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
-            <Media min={768} fallback={<p className="font-display text-xl font-semibold text-gold">Mobile nav</p>}>
-              <p className="font-display text-xl font-semibold text-accent">Desktop nav</p>
+            <Media
+              min={768}
+              fallback={
+                <p className="font-display text-xl font-semibold text-gold">
+                  Mobile nav
+                </p>
+              }
+            >
+              <p className="font-display text-xl font-semibold text-accent">
+                Desktop nav
+              </p>
             </Media>
-            <p className="mt-3 font-mono text-xs text-muted">useMedia(768) → {String(desktop)}</p>
+            <p className="mt-3 font-mono text-xs text-muted">
+              useMedia(768) → {String(desktop)}
+            </p>
           </div>
         </div>
       </div>
@@ -2024,12 +2383,12 @@ function FeatureTopic() {
       <Purpose
         items={[
           {
-            name: 'FeatureProvider',
-            text: 'Stores named flags for the tree, such as beta or checkout-v2.',
+            name: "FeatureProvider",
+            text: "Stores named flags for the tree, such as beta or checkout-v2.",
           },
           {
-            name: 'Feature',
-            text: 'Renders children when name is on in the provider, or when the when prop is truthy. Use fallback for the stable UI.',
+            name: "Feature",
+            text: "Renders children when name is on in the provider, or when the when prop is truthy. Use fallback for the stable UI.",
           },
         ]}
       />
@@ -2046,8 +2405,17 @@ function FeatureTopic() {
         <div className="p-5 sm:p-8">
           <FeatureProvider flags={{ beta }}>
             <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
-              <Feature name="beta" fallback={<p className="font-display text-xl font-semibold text-gold">Stable panel</p>}>
-                <p className="font-display text-xl font-semibold text-accent">Beta panel</p>
+              <Feature
+                name="beta"
+                fallback={
+                  <p className="font-display text-xl font-semibold text-gold">
+                    Stable panel
+                  </p>
+                }
+              >
+                <p className="font-display text-xl font-semibold text-accent">
+                  Beta panel
+                </p>
               </Feature>
             </div>
           </FeatureProvider>
@@ -2097,12 +2465,16 @@ function SidebarNav({
                     onClick={() => onSelect(item.id)}
                     className={`w-full cursor-pointer border-l-2 py-2.5 pl-3 text-left transition ${
                       active
-                        ? 'border-accent bg-accent-soft/60 text-accent'
-                        : 'border-transparent text-text hover:border-line-strong hover:bg-surface-raised'
+                        ? "border-accent bg-accent-soft/60 text-accent"
+                        : "border-transparent text-text hover:border-line-strong hover:bg-surface-raised"
                     }`}
                   >
-                    <span className="block text-sm font-semibold tracking-tight">{item.label}</span>
-                    <span className={`mt-0.5 block text-xs leading-snug ${active ? 'text-accent/75' : 'text-muted'}`}>
+                    <span className="block text-sm font-semibold tracking-tight">
+                      {item.label}
+                    </span>
+                    <span
+                      className={`mt-0.5 block text-xs leading-snug ${active ? "text-accent/75" : "text-muted"}`}
+                    >
                       {item.description}
                     </span>
                   </button>
@@ -2130,7 +2502,10 @@ function NpmLink() {
       <span className="min-w-0 truncate font-mono text-sm text-text transition group-hover:text-accent">
         @glhrmoura/react-conditional
       </span>
-      <ExternalLink className="h-3.5 w-3.5 shrink-0 text-muted transition group-hover:text-accent" strokeWidth={2.25} />
+      <ExternalLink
+        className="h-3.5 w-3.5 shrink-0 text-muted transition group-hover:text-accent"
+        strokeWidth={2.25}
+      />
     </a>
   );
 }
@@ -2147,11 +2522,23 @@ function SiteHeader({
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-canvas/95 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-3 px-4 py-4 sm:px-6">
-        <button type="button" onClick={onHome} className="flex min-w-0 cursor-pointer items-center gap-3 text-left">
-          <img src="/logo.png" alt="" className="h-10 w-10 shrink-0 rounded-full" />
+        <button
+          type="button"
+          onClick={onHome}
+          className="flex min-w-0 cursor-pointer items-center gap-3 text-left"
+        >
+          <img
+            src="/logo.png"
+            alt=""
+            className="h-10 w-10 shrink-0 rounded-full"
+          />
           <span className="min-w-0">
-            <span className="block truncate font-display text-lg font-bold tracking-tight text-text">React Conditional</span>
-            <span className="mt-0.5 block text-xs text-muted">Declarative branches for React</span>
+            <span className="block truncate font-display text-lg font-bold tracking-tight text-text">
+              React Conditional
+            </span>
+            <span className="mt-0.5 block text-xs text-muted">
+              Declarative branches for React
+            </span>
           </span>
         </button>
         <button
@@ -2161,7 +2548,11 @@ function SiteHeader({
           aria-expanded={mobileNavOpen}
           aria-label="Toggle topics"
         >
-          {mobileNavOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          {mobileNavOpen ? (
+            <X className="h-4 w-4" />
+          ) : (
+            <Menu className="h-4 w-4" />
+          )}
           Topics
         </button>
         <div className="flex w-full min-w-0 justify-end sm:ml-auto sm:w-auto">
@@ -2186,23 +2577,25 @@ function MobileDrawer({
   return (
     <div
       inert={open ? undefined : true}
-      className={`fixed inset-0 z-50 lg:hidden ${open ? '' : 'pointer-events-none'}`}
+      className={`fixed inset-0 z-50 lg:hidden ${open ? "" : "pointer-events-none"}`}
     >
       <button
         type="button"
         aria-label="Close topics"
         onClick={onClose}
-        className={`absolute inset-0 bg-black/60 transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute inset-0 bg-black/60 transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`}
       />
       <aside
         className={`absolute inset-y-0 right-0 flex w-[min(20rem,88vw)] flex-col border-l border-line bg-canvas shadow-2xl transition-transform duration-300 ease-out ${
-          open ? 'translate-x-0' : 'translate-x-full'
+          open ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-4">
           <div className="flex items-center gap-3">
             <img src="/logo.png" alt="" className="h-9 w-9 rounded-full" />
-            <p className="font-display text-base font-bold tracking-tight text-text">Topics</p>
+            <p className="font-display text-base font-bold tracking-tight text-text">
+              Topics
+            </p>
           </div>
           <button
             type="button"
@@ -2222,34 +2615,34 @@ function MobileDrawer({
 }
 
 function App() {
-  const [topic, setTopic] = useState<TopicId>('overview');
-  const [userType, setUserType] = useState<UserType>('basic');
+  const [topic, setTopic] = useState<TopicId>("overview");
+  const [userType, setUserType] = useState<UserType>("basic");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
     if (!mobileNavOpen) return;
     const previous = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setMobileNavOpen(false);
+      if (event.key === "Escape") setMobileNavOpen(false);
     };
-    window.addEventListener('keydown', onKey);
+    window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = previous;
-      window.removeEventListener('keydown', onKey);
+      window.removeEventListener("keydown", onKey);
     };
   }, [mobileNavOpen]);
 
   const onSelectTopic = (id: TopicId) => {
     setTopic(id);
     setMobileNavOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <div className="flex min-h-screen w-full flex-col">
       <SiteHeader
-        onHome={() => onSelectTopic('overview')}
+        onHome={() => onSelectTopic("overview")}
         mobileNavOpen={mobileNavOpen}
         onToggleNav={() => setMobileNavOpen((open) => !open)}
       />
@@ -2269,67 +2662,67 @@ function App() {
         <div className="min-w-0 flex-1">
           <main>
             <Condition>
-              <If case={topic === 'overview'}>
+              <If case={topic === "overview"}>
                 <OverviewTopic onSelect={onSelectTopic} />
               </If>
-              <ElseIf case={topic === 'install'}>
+              <ElseIf case={topic === "install"}>
                 <InstallTopic />
               </ElseIf>
-              <ElseIf case={topic === 'playground'}>
+              <ElseIf case={topic === "playground"}>
                 <PlaygroundTopic userType={userType} onChange={setUserType} />
               </ElseIf>
-              <ElseIf case={topic === 'condition'}>
+              <ElseIf case={topic === "condition"}>
                 <ConditionTopic />
               </ElseIf>
-              <ElseIf case={topic === 'switch'}>
+              <ElseIf case={topic === "switch"}>
                 <SwitchTopic />
               </ElseIf>
-              <ElseIf case={topic === 'unless'}>
+              <ElseIf case={topic === "unless"}>
                 <UnlessTopic />
               </ElseIf>
-              <ElseIf case={topic === 'show'}>
+              <ElseIf case={topic === "show"}>
                 <ShowTopic />
               </ElseIf>
-              <ElseIf case={topic === 'guard'}>
+              <ElseIf case={topic === "guard"}>
                 <GuardTopic />
               </ElseIf>
-              <ElseIf case={topic === 'exists'}>
+              <ElseIf case={topic === "exists"}>
                 <ExistsTopic />
               </ElseIf>
-              <ElseIf case={topic === 'empty'}>
+              <ElseIf case={topic === "empty"}>
                 <EmptyTopic />
               </ElseIf>
-              <ElseIf case={topic === 'compose'}>
+              <ElseIf case={topic === "compose"}>
                 <ComposeTopic />
               </ElseIf>
-              <ElseIf case={topic === 'fallback'}>
+              <ElseIf case={topic === "fallback"}>
                 <FallbackTopic />
               </ElseIf>
-              <ElseIf case={topic === 'either'}>
+              <ElseIf case={topic === "either"}>
                 <EitherTopic />
               </ElseIf>
-              <ElseIf case={topic === 'compare'}>
+              <ElseIf case={topic === "compare"}>
                 <CompareTopic />
               </ElseIf>
-              <ElseIf case={topic === 'once'}>
+              <ElseIf case={topic === "once"}>
                 <OnceTopic />
               </ElseIf>
-              <ElseIf case={topic === 'portal'}>
+              <ElseIf case={topic === "portal"}>
                 <PortalTopic />
               </ElseIf>
-              <ElseIf case={topic === 'error-boundary'}>
+              <ElseIf case={topic === "error-boundary"}>
                 <ErrorBoundaryTopic />
               </ElseIf>
-              <ElseIf case={topic === 'async'}>
+              <ElseIf case={topic === "async"}>
                 <AsyncTopic />
               </ElseIf>
-              <ElseIf case={topic === 'permission'}>
+              <ElseIf case={topic === "permission"}>
                 <PermissionTopic />
               </ElseIf>
-              <ElseIf case={topic === 'media'}>
+              <ElseIf case={topic === "media"}>
                 <MediaTopic />
               </ElseIf>
-              <ElseIf case={topic === 'feature'}>
+              <ElseIf case={topic === "feature"}>
                 <FeatureTopic />
               </ElseIf>
               <Else>
@@ -2355,7 +2748,12 @@ function App() {
             rel="noopener noreferrer"
             className="inline-flex cursor-pointer items-center gap-1.5 transition hover:text-accent"
           >
-            <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <svg
+              className="h-3.5 w-3.5"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
               <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
             </svg>
             github.com/glhrmoura
@@ -2366,8 +2764,8 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );
