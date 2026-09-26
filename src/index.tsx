@@ -41,7 +41,7 @@ import {
   usePermission,
   useFeature,
 } from '@glhrmoura/react-conditional';
-import { User, Star, Shield, LogOut, Copy, Check, ExternalLink, Mail, Menu, X } from 'lucide-react';
+import { User, Star, Shield, LogOut, Copy, Check, ExternalLink, Mail, Menu, X, ArrowRight } from 'lucide-react';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-okaidia.css';
 import 'prismjs/components/prism-jsx';
@@ -379,7 +379,35 @@ function UserTypePicker({
   );
 }
 
-function OverviewTopic() {
+const overviewCards: { group: string; headline: string; text: string }[] = [
+  {
+    group: 'Condition',
+    headline: 'Boolean branches',
+    text: 'Use it when the question is yes or no and only one branch should render, such as loading, an error, or the page.',
+  },
+  {
+    group: 'Switch',
+    headline: 'Value matching',
+    text: 'Use it when you already have a status, role, or code and each value should render its own UI.',
+  },
+  {
+    group: 'Async',
+    headline: 'Promise slots',
+    text: 'Use it to show a spinner, the data, or the error from one promise.',
+  },
+  {
+    group: 'Helpers',
+    headline: 'Standalone checks',
+    text: 'Use Show, Guard, Exists, and Empty for one check that stands on its own.',
+  },
+  {
+    group: 'Access',
+    headline: 'Flags and roles',
+    text: 'Use Permission, Feature, and Media to show UI for a role, a flag, or a viewport.',
+  },
+];
+
+function OverviewTopic({ onSelect }: { onSelect: (id: TopicId) => void }) {
   return (
     <div>
       <TopicHeader
@@ -388,56 +416,41 @@ function OverviewTopic() {
         description="Pick a component by the question you already have: a boolean, a value, a promise, or who is allowed to see the UI."
       />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <article className="rounded-2xl border border-line bg-surface p-5">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Condition</p>
-          <h3 className="mt-3 font-display text-xl font-semibold text-text">Boolean branches</h3>
-          <p className="mt-2 text-sm leading-relaxed text-muted">
-            Use it when the question is yes or no and only one branch should render, such as loading, an error, or the page.
-          </p>
-        </article>
-        <article className="rounded-2xl border border-line bg-surface p-5">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Switch</p>
-          <h3 className="mt-3 font-display text-xl font-semibold text-text">Value matching</h3>
-          <p className="mt-2 text-sm leading-relaxed text-muted">
-            Use it when you already have a status, role, or code and each value should render its own UI.
-          </p>
-        </article>
-        <article className="rounded-2xl border border-line bg-surface p-5">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Helpers</p>
-          <h3 className="mt-3 font-display text-xl font-semibold text-text">Standalone checks</h3>
-          <p className="mt-2 text-sm leading-relaxed text-muted">
-            Use Show, Guard, Exists, and Empty for one check that stands on its own.
-          </p>
-        </article>
-        <article className="rounded-2xl border border-line bg-surface p-5">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Async</p>
-          <h3 className="mt-3 font-display text-xl font-semibold text-text">Promise slots</h3>
-          <p className="mt-2 text-sm leading-relaxed text-muted">
-            Use it to show a spinner, the data, or the error from one promise.
-          </p>
-        </article>
-        <article className="rounded-2xl border border-line bg-surface p-5">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Access</p>
-          <h3 className="mt-3 font-display text-xl font-semibold text-text">Flags and roles</h3>
-          <p className="mt-2 text-sm leading-relaxed text-muted">
-            Use Permission, Feature, and Media to show UI for a role, a flag, or a viewport.
-          </p>
-        </article>
+        {overviewCards.map((card) => {
+          const topics = navGroups.find((group) => group.title === card.group)?.items ?? [];
+          const single = topics.length === 1;
+
+          return (
+            <article
+              key={card.group}
+              className={`flex flex-col rounded-2xl border border-line bg-surface p-5 ${
+                topics.length > 1 ? 'sm:col-span-2 lg:col-span-3' : ''
+              }`}
+            >
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">{card.group}</p>
+              <h3 className="mt-3 font-display text-xl font-semibold text-text">{card.headline}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{card.text}</p>
+              <div className="mt-auto flex flex-wrap gap-2 pt-4">
+                {topics.map((topic) => (
+                  <button
+                    key={topic.id}
+                    type="button"
+                    onClick={() => onSelect(topic.id)}
+                    className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition hover:border-accent/40 hover:text-accent ${
+                      single
+                        ? 'border-accent/40 bg-accent-soft text-accent'
+                        : 'border-line bg-surface-raised text-text'
+                    }`}
+                  >
+                    {topic.label}
+                    <ArrowRight className="h-3 w-3" strokeWidth={2.25} />
+                  </button>
+                ))}
+              </div>
+            </article>
+          );
+        })}
       </div>
-      <a
-        href="https://www.npmjs.com/package/@glhrmoura/react-conditional"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group mt-8 inline-flex max-w-full cursor-pointer items-center gap-3 rounded-2xl border border-line bg-surface-raised px-3 py-2.5 transition duration-200 hover:border-accent/45 hover:bg-accent-soft"
-      >
-        <span className="shrink-0 rounded-md border border-[#9b2c2c] bg-[#cb3837] px-2 py-1 font-mono text-[11px] font-bold leading-none tracking-wide text-white">
-          npm
-        </span>
-        <span className="min-w-0 truncate font-mono text-sm text-text transition group-hover:text-accent">
-          @glhrmoura/react-conditional
-        </span>
-        <ExternalLink className="h-3.5 w-3.5 shrink-0 text-muted transition group-hover:text-accent" strokeWidth={2.25} />
-      </a>
     </div>
   );
 }
@@ -2103,10 +2116,129 @@ function SidebarNav({
   );
 }
 
+function NpmLink() {
+  return (
+    <a
+      href="https://www.npmjs.com/package/@glhrmoura/react-conditional"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group inline-flex min-w-0 max-w-full cursor-pointer items-center gap-3 rounded-2xl border border-line bg-surface-raised px-3 py-2.5 transition duration-200 hover:border-accent/45 hover:bg-accent-soft"
+    >
+      <span className="shrink-0 rounded-md border border-[#9b2c2c] bg-[#cb3837] px-2 py-1 font-mono text-[11px] font-bold leading-none tracking-wide text-white">
+        npm
+      </span>
+      <span className="min-w-0 truncate font-mono text-sm text-text transition group-hover:text-accent">
+        @glhrmoura/react-conditional
+      </span>
+      <ExternalLink className="h-3.5 w-3.5 shrink-0 text-muted transition group-hover:text-accent" strokeWidth={2.25} />
+    </a>
+  );
+}
+
+function SiteHeader({
+  onHome,
+  mobileNavOpen,
+  onToggleNav,
+}: {
+  onHome: () => void;
+  mobileNavOpen: boolean;
+  onToggleNav: () => void;
+}) {
+  return (
+    <header className="sticky top-0 z-40 border-b border-line bg-canvas/95 backdrop-blur">
+      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-3 px-4 py-4 sm:px-6">
+        <button type="button" onClick={onHome} className="flex min-w-0 cursor-pointer items-center gap-3 text-left">
+          <img src="/logo.png" alt="" className="h-10 w-10 shrink-0 rounded-full" />
+          <span className="min-w-0">
+            <span className="block truncate font-display text-lg font-bold tracking-tight text-text">React Conditional</span>
+            <span className="mt-0.5 block text-xs text-muted">Declarative branches for React</span>
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={onToggleNav}
+          className="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 text-sm text-muted lg:hidden"
+          aria-expanded={mobileNavOpen}
+          aria-label="Toggle topics"
+        >
+          {mobileNavOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          Topics
+        </button>
+        <div className="flex w-full min-w-0 justify-end sm:ml-auto sm:w-auto">
+          <NpmLink />
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function MobileDrawer({
+  open,
+  topic,
+  onClose,
+  onSelect,
+}: {
+  open: boolean;
+  topic: TopicId;
+  onClose: () => void;
+  onSelect: (id: TopicId) => void;
+}) {
+  return (
+    <div
+      inert={open ? undefined : true}
+      className={`fixed inset-0 z-50 lg:hidden ${open ? '' : 'pointer-events-none'}`}
+    >
+      <button
+        type="button"
+        aria-label="Close topics"
+        onClick={onClose}
+        className={`absolute inset-0 bg-black/60 transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0'}`}
+      />
+      <aside
+        className={`absolute inset-y-0 right-0 flex w-[min(20rem,88vw)] flex-col border-l border-line bg-canvas shadow-2xl transition-transform duration-300 ease-out ${
+          open ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-4">
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="" className="h-9 w-9 rounded-full" />
+            <p className="font-display text-base font-bold tracking-tight text-text">Topics</p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-line bg-surface p-2 text-muted"
+            aria-label="Close topics"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="overflow-y-auto overscroll-contain px-3 py-5">
+          <SidebarNav topic={topic} onSelect={onSelect} />
+        </div>
+      </aside>
+    </div>
+  );
+}
+
 function App() {
   const [topic, setTopic] = useState<TopicId>('overview');
   const [userType, setUserType] = useState<UserType>('basic');
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileNavOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [mobileNavOpen]);
 
   const onSelectTopic = (id: TopicId) => {
     setTopic(id);
@@ -2116,53 +2248,29 @@ function App() {
 
   return (
     <div className="flex min-h-screen w-full flex-col">
+      <SiteHeader
+        onHome={() => onSelectTopic('overview')}
+        mobileNavOpen={mobileNavOpen}
+        onToggleNav={() => setMobileNavOpen((open) => !open)}
+      />
+      <MobileDrawer
+        open={mobileNavOpen}
+        topic={topic}
+        onClose={() => setMobileNavOpen(false)}
+        onSelect={onSelectTopic}
+      />
       <div className="mx-auto flex w-full max-w-6xl flex-1 gap-0 px-4 py-6 sm:px-6 lg:gap-10 lg:py-10">
         <aside className="hidden w-60 shrink-0 lg:block">
-          <div className="sticky top-8">
-            <div className="mb-8">
-              <div className="flex items-center gap-3">
-                <img src="/logo.png" alt="React Conditional" className="h-10 w-10 rounded-full" />
-                <div>
-                  <p className="font-display text-lg font-bold tracking-tight text-text">React Conditional</p>
-                  <p className="mt-1 text-xs text-muted">Docs & playground</p>
-                </div>
-              </div>
-            </div>
+          <div className="sticky top-28">
             <SidebarNav topic={topic} onSelect={onSelectTopic} />
           </div>
         </aside>
 
         <div className="min-w-0 flex-1">
-          <div className="mb-6 flex items-center justify-between gap-3 lg:hidden">
-            <div className="flex items-center gap-3">
-              <img src="/logo.png" alt="React Conditional" className="h-9 w-9 rounded-full" />
-              <div>
-                <p className="font-display text-lg font-bold tracking-tight text-text">React Conditional</p>
-                <p className="text-xs text-muted">Docs & playground</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setMobileNavOpen((open) => !open)}
-              className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 text-sm text-muted"
-              aria-expanded={mobileNavOpen}
-              aria-label="Toggle topics"
-            >
-              {mobileNavOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-              Topics
-            </button>
-          </div>
-
-          {mobileNavOpen ? (
-            <div className="mb-6 rounded-2xl border border-line bg-surface p-4 lg:hidden">
-              <SidebarNav topic={topic} onSelect={onSelectTopic} />
-            </div>
-          ) : null}
-
           <main>
             <Condition>
               <If case={topic === 'overview'}>
-                <OverviewTopic />
+                <OverviewTopic onSelect={onSelectTopic} />
               </If>
               <ElseIf case={topic === 'install'}>
                 <InstallTopic />
