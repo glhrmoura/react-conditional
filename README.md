@@ -14,7 +14,7 @@ Declarative conditional rendering for React with a slots API, helpers, portals, 
 
 ### Documentation
 
-[**React Conditional**](https://glhrmoura-react-conditional.netlify.app)
+[**React Conditional: Documentation**](https://glhrmoura-react-conditional.netlify.app)
 
 ### Install
 
