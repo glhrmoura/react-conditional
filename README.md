@@ -165,6 +165,28 @@ const App = ({ ready, open }) => (
 );
 ```
 
+#### Delay / Debounce / Throttle
+
+`Delay` waits `ms` before treating a true `case` as ready (optional `msOut` for false). `Debounce` waits until `case` stays stable for `ms`. `Throttle` limits how often the ready value can change.
+
+```jsx
+import { Delay, Debounce, Throttle } from '@glhrmoura/react-conditional';
+
+const App = ({ isLoading, isTyping, isOnline }) => (
+  <>
+    <Delay case={isLoading} ms={200} fallback={null}>
+      <Spinner />
+    </Delay>
+    <Debounce case={isTyping} ms={300} fallback={<IdleHint />}>
+      <LivePreview />
+    </Debounce>
+    <Throttle case={isOnline} ms={1000} fallback={<OfflineBanner />}>
+      <OnlineBadge />
+    </Throttle>
+  </>
+);
+```
+
 #### Portal
 
 ```jsx
@@ -276,6 +298,9 @@ import {
   useMedia,
   usePermission,
   useFeature,
+  useDelay,
+  useDebounce,
+  useThrottle,
 } from '@glhrmoura/react-conditional';
 
 function usePanelFlags(user, role) {
@@ -288,13 +313,29 @@ function usePanelFlags(user, role) {
   const desktop = useMedia(768);
   const canEdit = usePermission({ can: 'edit' });
   const beta = useFeature('beta');
-  return { visible, isAdmin, hasUser, noItems, allowed, adult, desktop, canEdit, beta };
+  const delayedLoading = useDelay(Boolean(user?.loading), 200);
+  const stableSearch = useDebounce(Boolean(user?.searching), 300);
+  const throttledOnline = useThrottle(Boolean(user?.online), 1000);
+  return {
+    visible,
+    isAdmin,
+    hasUser,
+    noItems,
+    allowed,
+    adult,
+    desktop,
+    canEdit,
+    beta,
+    delayedLoading,
+    stableSearch,
+    throttledOnline,
+  };
 }
 ```
 
 #### asChild
 
-`Show`, `Guard`, `Toggle`, `Compare`, `Includes`, `Once`, `Lazy`, `ErrorBoundary`, `Permission`, `Media`, and `Feature` accept `asChild` to return a single element without an extra fragment wrapper when possible.
+`Show`, `Guard`, `Toggle`, `Compare`, `Includes`, `Once`, `Lazy`, `Delay`, `Debounce`, `Throttle`, `ErrorBoundary`, `Permission`, `Media`, and `Feature` accept `asChild` to return a single element without an extra fragment wrapper when possible.
 
 #### Function Children
 
@@ -302,7 +343,7 @@ Pass a function as children for lazy evaluation. Prefer this for heavy trees and
 
 #### SSR and streaming
 
-Function children help with SSR and React streaming: unevaluated branches stay cold until selected. `Portal` falls back to inline render when `document` is unavailable. `Once` and `Lazy` use client state (`useRef`) and should only gate client-only UI. `Media` and `Async` also use client effects; `Media` treats the query as unmatched during SSR.
+Function children help with SSR and React streaming: unevaluated branches stay cold until selected. `Portal` falls back to inline render when `document` is unavailable. `Once` and `Lazy` use client state (`useRef`) and should only gate client-only UI. `Delay`, `Debounce`, `Throttle`, `Media`, and `Async` also use client effects; `Media` treats the query as unmatched during SSR.
 
 ### API Reference
 
@@ -315,12 +356,13 @@ Function children help with SSR and React streaming: unevaluated branches stay c
 | `Compare`, `Includes` | Relational / membership checks |
 | `Exists`, `Empty`, `Every`, `Some`, `Fallback` | Nullish, empty, combined cases |
 | `Once`, `Lazy`, `Portal` | Sticky, cached, and portal render |
+| `Delay`, `Debounce`, `Throttle` | Timed `case` gates |
 | `ErrorBoundary` | Catch child errors when `case` is true |
 | `Async`, `Await`, `Pending`, `Resolved`, `Rejected` | Promise pending / success / error |
 | `Permission`, `PermissionProvider` | Capability and role gates |
 | `Media` | Viewport `min` / `max` |
 | `Feature`, `FeatureProvider` | Feature flags |
-| `useShow`, `useMatch`, `useExists`, `useEmpty`, `useIncludes`, `useCompare`, `useMedia`, `usePermission`, `useFeature` | Hook mirrors |
+| `useShow`, `useMatch`, `useExists`, `useEmpty`, `useIncludes`, `useCompare`, `useMedia`, `usePermission`, `useFeature`, `useDelay`, `useDebounce`, `useThrottle` | Hook mirrors |
 
 Development builds warn when `Else` / `ElseIf` render outside `Condition`, or `Match` / `Default` render outside `Switch`.
 
