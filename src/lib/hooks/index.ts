@@ -7,6 +7,9 @@ import { MediaBound, buildMediaQuery, matchMediaQuery } from '@/lib/utils/media-
 import { useMediaMatch } from '@/lib/components/Media';
 import { usePermissionContext } from '@/lib/components/Permission';
 import { useFeatureFlags } from '@/lib/components/Feature';
+import { useDelay, useDebounce, useThrottle } from '@/lib/hooks/timing';
+
+export { useDelay, useDebounce, useThrottle };
 
 export function useShow(condition: boolean): boolean {
   return Boolean(condition);
