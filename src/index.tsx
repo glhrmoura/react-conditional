@@ -24,6 +24,9 @@ import {
   Includes,
   Once,
   Lazy,
+  Delay,
+  Debounce,
+  Throttle,
   Portal,
   ErrorBoundary,
   Async,
@@ -40,6 +43,9 @@ import {
   useMedia,
   usePermission,
   useFeature,
+  useDelay,
+  useDebounce,
+  useThrottle,
 } from "@glhrmoura/react-conditional";
 import {
   User,
@@ -80,6 +86,7 @@ type TopicId =
   | "either"
   | "compare"
   | "once"
+  | "timing"
   | "portal"
   | "error-boundary"
   | "async"
@@ -142,6 +149,11 @@ const navGroups: NavGroup[] = [
         id: "compare",
         label: "Compare / Includes",
         description: "Relations & lists",
+      },
+      {
+        id: "timing",
+        label: "Delay / Debounce / Throttle",
+        description: "Timed case gates",
       },
       {
         id: "either",
@@ -483,7 +495,7 @@ const overviewCards: { group: string; headline: string; text: string }[] = [
   {
     group: "Helpers",
     headline: "Standalone checks",
-    text: "Use Show, Guard, Exists, and Empty for one check that stands on its own.",
+    text: "Use Show, Guard, Exists, Empty, and Delay for one check that stands on its own, including timed gates.",
   },
   {
     group: "Access",
@@ -1773,6 +1785,146 @@ const App = ({ open }) => (
   );
 }
 
+function TimingTopic() {
+  const [loading, setLoading] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [online, setOnline] = useState(true);
+
+  return (
+    <div>
+      <TopicHeader
+        eyebrow="API"
+        title="Delay / Debounce / Throttle"
+        description="Delay waits before a true case. Debounce waits for a stable case. Throttle limits how often the ready value can change."
+      />
+      <Purpose
+        items={[
+          {
+            name: "Delay",
+            text: "Waits ms before treating a true case as ready. Optional msOut delays a false case. Use it so a spinner appears only after loading lasts long enough.",
+          },
+          {
+            name: "Debounce",
+            text: "Updates only after case stays the same for ms. Use it when rapid toggles should settle before the UI flips.",
+          },
+          {
+            name: "Throttle",
+            text: "Lets the ready value change at most once per ms window. Use it to cap how often a banner or badge reacts to flapping state.",
+          },
+        ]}
+      />
+      <div className="mb-8 overflow-hidden rounded-[1.75rem] border border-line bg-surface">
+        <div className="flex flex-wrap gap-3 border-b border-line p-5 sm:p-8">
+          <button
+            type="button"
+            onClick={() => setLoading((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            loading = {String(loading)}
+          </button>
+          <button
+            type="button"
+            onClick={() => setTyping((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            typing = {String(typing)}
+          </button>
+          <button
+            type="button"
+            onClick={() => setOnline((value) => !value)}
+            className="cursor-pointer rounded-xl border border-line bg-surface-raised px-4 py-2.5 text-sm font-medium text-text transition hover:border-accent/40 hover:text-accent"
+          >
+            online = {String(online)}
+          </button>
+        </div>
+        <div className="grid gap-4 p-5 sm:grid-cols-3 sm:p-8">
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+              Delay 200ms
+            </p>
+            <Delay
+              case={loading}
+              ms={200}
+              fallback={<p className="text-muted">Idle</p>}
+            >
+              <p className="font-display text-lg font-semibold text-gold">
+                Spinner
+              </p>
+            </Delay>
+          </div>
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+              Debounce 300ms
+            </p>
+            <Debounce
+              case={typing}
+              ms={300}
+              fallback={<p className="text-muted">Idle hint</p>}
+            >
+              <p className="font-display text-lg font-semibold text-accent">
+                Live preview
+              </p>
+            </Debounce>
+          </div>
+          <div className="rounded-2xl border border-line bg-canvas px-5 py-6 text-center">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+              Throttle 1000ms
+            </p>
+            <Throttle
+              case={online}
+              ms={1000}
+              fallback={
+                <p className="font-display text-lg font-semibold text-rose">
+                  Offline
+                </p>
+              }
+            >
+              <p className="font-display text-lg font-semibold text-accent">
+                Online
+              </p>
+            </Throttle>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-5">
+        <Snippet
+          title="Delay"
+          description="The spinner waits 200ms after loading becomes true, so short loads never flash."
+          code={`import { Delay } from '@glhrmoura/react-conditional';
+
+const App = ({ isLoading }) => (
+  <Delay case={isLoading} ms={200} fallback={null}>
+    <Spinner />
+  </Delay>
+);`}
+        />
+        <Snippet
+          title="Debounce"
+          description="Live preview appears only after typing stays true for 300ms."
+          code={`import { Debounce } from '@glhrmoura/react-conditional';
+
+const App = ({ isTyping }) => (
+  <Debounce case={isTyping} ms={300} fallback={<IdleHint />}>
+    <LivePreview />
+  </Debounce>
+);`}
+        />
+        <Snippet
+          title="Throttle"
+          description="Online state can flip the badge at most once per second."
+          code={`import { Throttle } from '@glhrmoura/react-conditional';
+
+const App = ({ isOnline }) => (
+  <Throttle case={isOnline} ms={1000} fallback={<OfflineBanner />}>
+    <OnlineBadge />
+  </Throttle>
+);`}
+        />
+      </div>
+    </div>
+  );
+}
+
 function PortalTopic() {
   const [open, setOpen] = useState(false);
 
@@ -1837,6 +1989,9 @@ function HooksReadout() {
   const desktop = useMedia(768);
   const canEdit = usePermission({ can: "edit", permissions: ["edit"] });
   const beta = useFeature("beta");
+  const delayed = useDelay(true, 200);
+  const debounced = useDebounce(true, 300);
+  const throttled = useThrottle(true, 1000);
 
   return (
     <div className="mb-8 rounded-2xl border border-line bg-canvas px-5 py-6">
@@ -1854,6 +2009,15 @@ function HooksReadout() {
       </p>
       <p className="mt-2 font-mono text-sm text-muted">
         useFeature('beta') → {String(beta)}
+      </p>
+      <p className="mt-2 font-mono text-sm text-muted">
+        useDelay(true, 200) → {String(delayed)}
+      </p>
+      <p className="mt-2 font-mono text-sm text-muted">
+        useDebounce(true, 300) → {String(debounced)}
+      </p>
+      <p className="mt-2 font-mono text-sm text-muted">
+        useThrottle(true, 1000) → {String(throttled)}
       </p>
     </div>
   );
@@ -1875,7 +2039,7 @@ function HooksTopic() {
           },
           {
             name: "Names",
-            text: "Each hook follows the component with the same idea: useShow, useMatch, useExists, useEmpty, useIncludes, useCompare, useMedia, usePermission, and useFeature. useCompare takes the operators as an object, such as { gte: 18 }.",
+            text: "Each hook follows the component with the same idea: useShow, useMatch, useExists, useEmpty, useIncludes, useCompare, useMedia, usePermission, useFeature, useDelay, useDebounce, and useThrottle. useCompare takes the operators as an object, such as { gte: 18 }.",
           },
         ]}
       />
@@ -1885,15 +2049,18 @@ function HooksTopic() {
       <Snippet
         title="Hooks"
         description="Each hook returns a boolean you can use outside JSX, for a class, a disabled button, or another condition."
-        code={`import { useMatch, useCompare, useMedia, usePermission, useFeature } from '@glhrmoura/react-conditional';
+        code={`import { useMatch, useCompare, useMedia, usePermission, useFeature, useDelay, useDebounce, useThrottle } from '@glhrmoura/react-conditional';
 
-function useFlags(role, age) {
+function useFlags(role, age, isLoading) {
   const isAdmin = useMatch(role, 'admin', ['owner']);
   const adult = useCompare(age, { gte: 18 });
   const desktop = useMedia(768);
   const canEdit = usePermission({ can: 'edit' });
   const beta = useFeature('beta');
-  return { isAdmin, adult, desktop, canEdit, beta };
+  const delayedLoading = useDelay(isLoading, 200);
+  const stableSearch = useDebounce(isLoading, 300);
+  const throttledOnline = useThrottle(isLoading, 1000);
+  return { isAdmin, adult, desktop, canEdit, beta, delayedLoading, stableSearch, throttledOnline };
 }`}
       />
     </div>
@@ -2710,6 +2877,9 @@ function App() {
               </ElseIf>
               <ElseIf case={topic === "once"}>
                 <OnceTopic />
+              </ElseIf>
+              <ElseIf case={topic === "timing"}>
+                <TimingTopic />
               </ElseIf>
               <ElseIf case={topic === "portal"}>
                 <PortalTopic />
