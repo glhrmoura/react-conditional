@@ -1,6 +1,6 @@
 {
   "name": "@glhrmoura/react-conditional",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "Declarative conditional rendering for React with slots, async, permissions, media, timing gates, and hooks",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
