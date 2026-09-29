@@ -30,6 +30,12 @@ import { Once } from '@/lib/components/Once';
 import type { OnceProps } from '@/lib/components/Once';
 import { Lazy } from '@/lib/components/Lazy';
 import type { LazyProps } from '@/lib/components/Lazy';
+import { Delay } from '@/lib/components/Delay';
+import type { DelayProps } from '@/lib/components/Delay';
+import { Debounce } from '@/lib/components/Debounce';
+import type { DebounceProps } from '@/lib/components/Debounce';
+import { Throttle } from '@/lib/components/Throttle';
+import type { ThrottleProps } from '@/lib/components/Throttle';
 import { Portal } from '@/lib/components/Portal';
 import type { PortalProps } from '@/lib/components/Portal';
 import { ErrorBoundary } from '@/lib/components/ErrorBoundary';
@@ -64,6 +70,9 @@ import {
   useMedia,
   usePermission,
   useFeature,
+  useDelay,
+  useDebounce,
+  useThrottle,
 } from '@/lib/hooks';
 
 export {
@@ -91,6 +100,9 @@ export {
   Includes,
   Once,
   Lazy,
+  Delay,
+  Debounce,
+  Throttle,
   Portal,
   ErrorBoundary,
   Async,
@@ -112,6 +124,9 @@ export {
   useMedia,
   usePermission,
   useFeature,
+  useDelay,
+  useDebounce,
+  useThrottle,
 };
 
 export type {
@@ -140,6 +155,9 @@ export type {
   IncludesProps,
   OnceProps,
   LazyProps,
+  DelayProps,
+  DebounceProps,
+  ThrottleProps,
   PortalProps,
   ErrorBoundaryProps,
   ErrorFallback,
