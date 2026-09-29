@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "release": {
-      "command": "node",
-      "args": ["mcp/release/dist/index.js"]
-    }
-  }
-}
