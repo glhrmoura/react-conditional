@@ -30,7 +30,7 @@
     "preview": "vite preview",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
-    "prepublishOnly": "yarn bump && yarn build",
+    "prepublishOnly": "node scripts/bump-version.mjs && node scripts/build.js",
     "publish:npm": "npm publish",
     "mcp:build": "npm run build --prefix mcp/release"
   },
