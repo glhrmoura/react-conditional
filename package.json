@@ -1,7 +1,7 @@
 {
   "name": "@glhrmoura/react-conditional",
   "version": "0.10.0",
-  "description": "Declarative conditional rendering for React with slots, async, permissions, media, and hooks",
+  "description": "Declarative conditional rendering for React with slots, async, permissions, media, timing gates, and hooks",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -19,7 +19,6 @@
   },
   "homepage": "https://glhrmoura-react-conditional.netlify.app/",
   "license": "MIT",
-  "private": false,
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -80,7 +79,10 @@
     "async",
     "permission",
     "media",
-    "feature-flag"
+    "feature-flag",
+    "delay",
+    "debounce",
+    "throttle"
   ],
   "files": [
     "dist",
