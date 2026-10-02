@@ -2657,7 +2657,7 @@ function NpmLink() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="@glhrmoura/react-conditional on npm"
-      className="group inline-flex min-w-0 max-w-full cursor-pointer items-center gap-3 rounded-2xl border border-line bg-surface-raised p-2.5 transition duration-200 hover:border-accent/45 hover:bg-accent-soft sm:px-3"
+      className="group inline-flex min-w-0 max-w-full cursor-pointer items-center gap-2.5 rounded-2xl border border-line bg-surface-raised p-1.5 transition duration-200 hover:border-accent/45 hover:bg-accent-soft sm:gap-3 sm:p-2.5 sm:px-3"
     >
       <span className="shrink-0 rounded-md border border-[#9b2c2c] bg-[#cb3837] px-2 py-1 font-mono text-[11px] font-bold leading-none tracking-wide text-white">
         npm
@@ -2680,7 +2680,7 @@ function GithubLink() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="glhrmoura/react-conditional on GitHub"
-      className="group inline-flex min-w-0 max-w-full cursor-pointer items-center gap-3 rounded-2xl border border-line bg-surface-raised p-2.5 transition duration-200 hover:border-accent/45 hover:bg-accent-soft sm:px-3"
+      className="group inline-flex min-w-0 max-w-full cursor-pointer items-center gap-2.5 rounded-2xl border border-line bg-surface-raised p-1.5 transition duration-200 hover:border-accent/45 hover:bg-accent-soft sm:gap-3 sm:p-2.5 sm:px-3"
     >
       <span className="inline-flex shrink-0 items-center justify-center rounded-md border border-[#1b1f23] bg-[#24292f] px-2 py-1 text-white">
         <svg
@@ -2714,33 +2714,33 @@ function SiteHeader({
 }) {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-canvas/95 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-3 px-4 py-4 sm:px-6">
+      <div className="mx-auto flex w-full min-w-0 max-w-6xl items-center justify-between gap-2 px-4 py-4 sm:gap-4 sm:px-6">
         <button
           type="button"
           onClick={onHome}
-          className="flex min-w-0 cursor-pointer items-center gap-3 text-left"
+          className="flex min-w-0 cursor-pointer items-center gap-2 overflow-hidden text-left sm:gap-3"
         >
           <img
             src="/logo.png"
             alt=""
-            className="h-10 w-10 shrink-0 rounded-full"
+            className="h-9 w-9 shrink-0 rounded-full sm:h-10 sm:w-10"
           />
-          <span className="min-w-0">
-            <span className="block truncate font-display text-lg font-bold tracking-tight text-text">
+          <span className="min-w-0 overflow-hidden">
+            <span className="block truncate font-display text-base font-bold tracking-tight whitespace-nowrap text-text sm:text-lg">
               React Conditional
             </span>
-            <span className="mt-0.5 block text-xs text-muted">
+            <span className="mt-0.5 hidden truncate text-xs text-muted sm:block">
               Declarative branches for React
             </span>
           </span>
         </button>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <NpmLink />
           <GithubLink />
           <button
             type="button"
             onClick={onToggleNav}
-            className="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 text-sm text-muted lg:hidden"
+            className="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-line bg-surface p-2 text-sm text-muted sm:px-3 sm:py-2 lg:hidden"
             aria-expanded={mobileNavOpen}
             aria-label="Toggle topics"
           >
@@ -2749,7 +2749,7 @@ function SiteHeader({
             ) : (
               <Menu className="h-4 w-4" />
             )}
-            Topics
+            <span className="hidden sm:inline">Topics</span>
           </button>
         </div>
       </div>
