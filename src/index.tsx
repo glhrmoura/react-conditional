@@ -106,6 +106,44 @@ type NavGroup = {
   items: NavItem[];
 };
 
+const topicIds: TopicId[] = [
+  "overview",
+  "install",
+  "playground",
+  "condition",
+  "switch",
+  "unless",
+  "show",
+  "guard",
+  "exists",
+  "empty",
+  "compose",
+  "fallback",
+  "either",
+  "compare",
+  "once",
+  "timing",
+  "portal",
+  "error-boundary",
+  "async",
+  "permission",
+  "media",
+  "feature",
+  "hooks",
+];
+
+function topicToPath(id: TopicId): string {
+  return id === "overview" ? "/" : `/${id}`;
+}
+
+function pathToTopic(pathname: string): TopicId {
+  const segment = pathname.replace(/^\/+|\/+$/g, "");
+  if (!segment) return "overview";
+  return topicIds.includes(segment as TopicId)
+    ? (segment as TopicId)
+    : "overview";
+}
+
 const navGroups: NavGroup[] = [
   {
     title: "Start",
@@ -536,10 +574,13 @@ function OverviewTopic({ onSelect }: { onSelect: (id: TopicId) => void }) {
               </p>
               <div className="mt-auto flex flex-wrap gap-2 pt-4">
                 {topics.map((topic) => (
-                  <button
+                  <a
                     key={topic.id}
-                    type="button"
-                    onClick={() => onSelect(topic.id)}
+                    href={topicToPath(topic.id)}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      onSelect(topic.id);
+                    }}
                     className={`inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition hover:border-accent/40 hover:text-accent ${
                       single
                         ? "border-accent/40 bg-accent-soft text-accent"
@@ -548,7 +589,7 @@ function OverviewTopic({ onSelect }: { onSelect: (id: TopicId) => void }) {
                   >
                     {topic.label}
                     <ArrowRight className="h-3 w-3" strokeWidth={2.25} />
-                  </button>
+                  </a>
                 ))}
               </div>
             </article>
@@ -2622,14 +2663,18 @@ function SidebarNav({
               const active = topic === item.id;
               return (
                 <li key={item.id}>
-                  <button
-                    type="button"
-                    onClick={() => onSelect(item.id)}
-                    className={`w-full cursor-pointer border-l-2 py-2.5 pl-3 text-left transition ${
+                  <a
+                    href={topicToPath(item.id)}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      onSelect(item.id);
+                    }}
+                    className={`block w-full border-l-2 py-2.5 pl-3 text-left transition ${
                       active
                         ? "border-accent bg-accent-soft/60 text-accent"
                         : "border-transparent text-text hover:border-line-strong hover:bg-surface-raised"
                     }`}
+                    aria-current={active ? "page" : undefined}
                   >
                     <span className="block text-sm font-semibold tracking-tight">
                       {item.label}
@@ -2639,7 +2684,7 @@ function SidebarNav({
                     >
                       {item.description}
                     </span>
-                  </button>
+                  </a>
                 </li>
               );
             })}
@@ -2715,9 +2760,12 @@ function SiteHeader({
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-canvas/95 backdrop-blur">
       <div className="mx-auto flex w-full min-w-0 max-w-6xl items-center justify-between gap-2 px-4 py-4 sm:gap-4 sm:px-6">
-        <button
-          type="button"
-          onClick={onHome}
+        <a
+          href="/"
+          onClick={(event) => {
+            event.preventDefault();
+            onHome();
+          }}
           className="flex min-w-0 cursor-pointer items-center gap-2 overflow-hidden text-left sm:gap-3"
         >
           <img
@@ -2733,7 +2781,7 @@ function SiteHeader({
               Declarative branches for React
             </span>
           </span>
-        </button>
+        </a>
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <NpmLink />
           <GithubLink />
@@ -2818,9 +2866,26 @@ function MobileDrawer({
 }
 
 function App() {
-  const [topic, setTopic] = useState<TopicId>("overview");
+  const [topic, setTopic] = useState<TopicId>(() =>
+    pathToTopic(window.location.pathname),
+  );
   const [userType, setUserType] = useState<UserType>("basic");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  useEffect(() => {
+    const id = pathToTopic(window.location.pathname);
+    const path = topicToPath(id);
+    if (window.location.pathname !== path) {
+      window.history.replaceState(null, "", path);
+    }
+
+    const onPopState = () => {
+      setTopic(pathToTopic(window.location.pathname));
+      window.scrollTo({ top: 0 });
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
 
   useEffect(() => {
     if (!mobileNavOpen) return;
@@ -2837,6 +2902,10 @@ function App() {
   }, [mobileNavOpen]);
 
   const onSelectTopic = (id: TopicId) => {
+    const path = topicToPath(id);
+    if (window.location.pathname !== path) {
+      window.history.pushState(null, "", path);
+    }
     setTopic(id);
     setMobileNavOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
